@@ -1,0 +1,157 @@
+[{
+	"id": "n_ZIAe7Rdt9y8QmGSyRC1qZT3n",
+	"name": "American Cancer Society",
+	"ein": "131788491",
+	"pending_payout_amount": 0,
+	"socials": {
+		"facebook": "AmericanCancerSociety",
+		"instagram": "americancancersociety",
+		"twitter": "americancancer"
+	},
+	"email": null,
+	"display_impact": [],
+	"crypto": {
+		"solana_address": "CM4e4cBaX99Krz1Reit7xXxga3FSRGdeg7HtwT8L2zMQ",
+		"ethereum_address": "0x25931a127bD65dcD4D9A5b718255A5fe27d8b84e"
+	},
+	"icon_url": "https://d2m0e1zy3fwxmp.cloudfront.net/healthcare.png",
+	"impact_stats": [],
+	"pending_payout_amounts": {},
+	"address_line": "250 WILLIAMS ST STE 400",
+	"city": "ATLANTA",
+	"classification": "G300",
+	"mission": "Through our six geographic regions, we save lives, celebrate lives, and fight for a world without cancer.",
+	"state": "GA",
+	"website": "www.cancer.org",
+	"zip_code": "30303-1032",
+	"category": "healthcare",
+	"cover_image_url": null,
+	"logo_url": "https://d2jyzh4ah9xf6q.cloudfront.net/cnstmm3xa8dknadazzvearsh9ju4"
+}, {
+	"id": "n_IfEoPCaPqVsFAUI5xl0CBUOx",
+	"name": "Watsi",
+	"ein": "453236734",
+	"pending_payout_amount": 0,
+	"socials": {
+		"facebook": "Watsi.org",
+		"instagram": "watsi",
+		"twitter": "watsi"
+	},
+	"email": "connect@watsi.org",
+	"display_impact": [],
+	"crypto": {
+		"solana_address": "4oWy3vnHgAyZsx4rXgWcSfFgok2x5MQAv25tiZsvJsQx",
+		"ethereum_address": "0x9b6C3e33f7263A861e127533D29eE822C10f1618"
+	},
+	"icon_url": "https://d2m0e1zy3fwxmp.cloudfront.net/healthcare.png",
+	"impact_stats": [],
+	"pending_payout_amounts": {},
+	"address_line": "548 Market St # 75903",
+	"city": "San Francisco",
+	"classification": "E12",
+	"mission": "Directly connecting people through technology to provide global access to healthcare.",
+	"state": "CA",
+	"website": "https://watsi.org/",
+	"zip_code": "94104",
+	"category": "healthcare",
+	"cover_image_url": null,
+	"logo_url": "https://d2jyzh4ah9xf6q.cloudfront.net/pjq574qe30ummxwbpdg7ky8ol4vk"
+}, {
+	"id": "n_RicJNF99vJAI4YTTJqtAREpg",
+	"name": "Humane Society Of The United States",
+	"ein": "530225390",
+	"pending_payout_amount": 0,
+	"socials": {
+		"facebook": "humanesociety",
+		"instagram": "humanesociety",
+		"twitter": "HumaneSociety",
+		"youtube": "user/hsus"
+	},
+	"email": null,
+	"display_impact": [],
+	"crypto": {
+		"solana_address": "89BJKdQbN5QTVydfN3KFZ8GdGwCGTZrrXoPxDTTAE5gN",
+		"ethereum_address": "0xBEB6E22e51A929B562aC5F502103232a94E5BA38"
+	},
+	"icon_url": "https://d2m0e1zy3fwxmp.cloudfront.net/animals.png",
+	"impact_stats": [],
+	"pending_payout_amounts": {},
+	"address_line": "1255 23RD ST NW STE 450",
+	"city": "WASHINGTON",
+	"classification": "D200",
+	"mission": "The humane society of the united states seeks to prevent and end cruelty to animals in all forms, and to celebrate and strengthen the human-animal bond. Its programs focus on companion animals, wild animals and their habitat, captive animal concerns, resolution of human-wildlife conflict, farm animal welfare, marine mammal protection, animals in research, equine issues, and emergency preparedness and response.",
+	"state": "DC",
+	"website": "WWW.HUMANESOCIETY.ORG",
+	"zip_code": "20037-1168",
+	"category": "animals",
+	"cover_image_url": null,
+	"logo_url": "https://d2jyzh4ah9xf6q.cloudfront.net/hi0q4ahtiwc17e3doxv2xjxowe0x"
+}, {
+	"id": "n_MUjmT5yhdf4smx1ykRwO2ovt",
+	"name": "One Tree Planted",
+	"ein": "464664562",
+	"pending_payout_amount": 0,
+	"socials": {
+		"facebook": "onetreeplanted",
+		"instagram": "onetreeplanted",
+		"twitter": "onetreeplanted",
+		"youtube": "channel/UCSyNWLnxtob29DOoPGpT1Ug"
+	},
+	"email": "hello@onetreeplanted.org",
+	"display_impact": ["$1 sponsors 1 tree"],
+	"crypto": {
+		"solana_address": "DoVC88Sq2Y4d7Fihv2kXwhZrDyBh8pC8Sz7ouoroe94Z",
+		"ethereum_address": "0xe74900c3aa427c365fEE7F55B9F941f61c173CD5"
+	},
+	"icon_url": "https://d2m0e1zy3fwxmp.cloudfront.net/public-benefit.png",
+	"impact_stats": [{
+		"action": "sponsors",
+		"action_past_tense": "sponsored",
+		"impact": "tree",
+		"impact_plural": "trees",
+		"price": 100,
+		"amount": 1,
+		"type": "dynamic",
+		"cover_photo_url": null,
+		"id": null
+	}],
+	"pending_payout_amounts": {},
+	"address_line": "145 PINE HAVEN SHORES RD",
+	"city": "SHELBURNE",
+	"classification": "T22",
+	"mission": "One tree planted is on a global reforestation mission. Its goal is to make it easy for people to understand the importance of trees and give them the ability to easily plant a tree in an area that needs support.",
+	"state": "VT",
+	"website": "WWW.ONETREEPLANTED.ORG",
+	"zip_code": "05482-7703",
+	"category": "public benefit",
+	"cover_image_url": null,
+	"logo_url": "https://d2jyzh4ah9xf6q.cloudfront.net/ki92kbvmz3dj6vc7gja94aj7jhsn"
+}, {
+	"id": "n_UO3DO3yxvkJpu63elPPvKGcg",
+	"name": "Kids Cancer Alliance",
+	"ein": "611256743",
+	"pending_payout_amount": 0,
+	"socials": {
+		"facebook": "KidsCancerAlliance",
+		"instagram": "kidscanceralliance"
+	},
+	"email": null,
+	"display_impact": [],
+	"crypto": {
+		"solana_address": "52HiG2sMCsoPGNC1tRK6WHQt3AB4LyXHdonbDPbJhTke",
+		"ethereum_address": "0xb508296e753b0Bf796b7235bb786DCb7e62FDA0E"
+	},
+	"icon_url": "https://d2m0e1zy3fwxmp.cloudfront.net/public-benefit.png",
+	"impact_stats": [],
+	"pending_payout_amounts": {},
+	"address_line": "611 W MAIN ST STE 300",
+	"city": "LOUISVILLE",
+	"classification": "W12",
+	"mission": "To enhance the quality of life for children with cancer and their families through recreational support programs.",
+	"state": "KY",
+	"website": "KIDSCANCERALLIANCE.ORG",
+	"zip_code": "40202-2963",
+	"category": "public benefit",
+	"cover_image_url": null,
+	"logo_url": "https://d2jyzh4ah9xf6q.cloudfront.net/69atgammx9dtndz722sqnrqol5ui"
+}]

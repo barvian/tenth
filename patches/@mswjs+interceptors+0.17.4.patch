@@ -1,0 +1,13 @@
+diff --git a/node_modules/@mswjs/interceptors/lib/interceptors/fetch/index.js b/node_modules/@mswjs/interceptors/lib/interceptors/fetch/index.js
+index 73e9770..f1b946b 100644
+--- a/node_modules/@mswjs/interceptors/lib/interceptors/fetch/index.js
++++ b/node_modules/@mswjs/interceptors/lib/interceptors/fetch/index.js
+@@ -112,7 +112,7 @@ var FetchInterceptor = /** @class */ (function (_super) {
+                         return [4 /*yield*/, request.clone().arrayBuffer()];
+                     case 1:
+                         body = _b.sent();
+-                        isomorphicRequest = new IsomorphicRequest_1.IsomorphicRequest(new URL(url, location.origin), {
++                        isomorphicRequest = new IsomorphicRequest_1.IsomorphicRequest(new URL(url), {
+                             body: body,
+                             method: method,
+                             headers: new headers_polyfill_1.Headers(request.headers),
