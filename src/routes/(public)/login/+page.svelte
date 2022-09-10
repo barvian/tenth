@@ -1,10 +1,3 @@
-<script lang="ts" context="module">
-	import type { Load } from './__types/login';
-	import { withLoadNoAuth } from '~/lib/auth';
-
-	export const load: Load = withLoadNoAuth();
-</script>
-
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';

@@ -1,13 +1,12 @@
-import type { Load } from '@sveltejs/kit';
-import { browser } from '$app/env';
-import { session } from '$app/stores';
+import { redirect, type Load } from '@sveltejs/kit';
+import { page } from '$app/stores'
 
 // Wait for login to be synced with server (i.e. before redirect)
 export const waitForSessionUser = () => new Promise((resolve, reject) => {
-  const unsubscribe = session.subscribe(s => {
-    if (s.user?.id && browser) {
+  const unsubscribe = page.subscribe(p => {
+    if (p.data?.session?.user?.id) {
       unsubscribe()
-      resolve(s.user)
+      resolve(p.data.session.user)
     }
   })
 })
@@ -15,33 +14,25 @@ export const waitForSessionUser = () => new Promise((resolve, reject) => {
 // Redirect if not logged in
 export function withLoadAuth<L extends Load>(fn?: L): Load {
     return async (event) => {
-        if (!event.session.user) {
-          return {
-            redirect: `/login?next=${encodeURIComponent(event.url.pathname)}`,
-            status: 303
-          }
+        const data = await event.parent()
+        
+        if (!data.user) {
+          throw redirect(303, `/login?next=${encodeURIComponent(event.url.pathname)}`)
         }
         
         if (fn instanceof Function) return fn(event)
-        return {
-          status: 200
-        }
     }
 }
 
 // Redirect if already logged in
 export function withLoadNoAuth<L extends Load>(fn?: L): Load {
   return async (event) => {
-      if (event.session.user) {
-        return {
-          redirect: event.url.searchParams.get('next') ?? '/dashboard',
-          status: 303
-        }
+      const data = await event.parent()
+
+      if (data.user) {
+        throw redirect(303, event.url.searchParams.get('next') ?? '/dashboard')
       }
       
       if (fn instanceof Function) return fn(event)
-      return {
-        status: 200
-      }
   }
 }

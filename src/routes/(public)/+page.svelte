@@ -1,42 +1,19 @@
-<script lang="ts" context="module">
-    import type { Load } from './__types/index@with-footer';
-
-    export const prerender = true
-    
-    const POPULAR_CHARITIES = [
-        'n_ZIAe7Rdt9y8QmGSyRC1qZT3n',
-        'n_IfEoPCaPqVsFAUI5xl0CBUOx',
-        'n_RicJNF99vJAI4YTTJqtAREpg',
-        'n_MUjmT5yhdf4smx1ykRwO2ovt',
-        'n_UO3DO3yxvkJpu63elPPvKGcg'
-    ]
-    
-    export const load: Load = async ({ fetch }) => ({
-        props: {
-            popular: await Promise.all(POPULAR_CHARITIES.map(id =>
-                fetch(`/api/charities/${id}.json`).then(res => res.json())
-            )),
-            faqs: await fetch('/api/faqs.json').then(res => res.json())
-        }
-	})
-</script>
-
 <script lang="ts">
     import { beforeNavigate } from '$app/navigation';
     import type { Nonprofit } from 'types/change';
+    import type { PageData } from './$types';
     import theme from '~/../tailwind.colors.json';
     import Donut from "~/components/Donut.svelte";
     import Grid from "~/components/Grid.svelte";
     import Logo from '~/components/icons/Logo.svelte';
     import Nav from "~/components/Nav.svelte";
     import { inview, stepIn, stepOut, type StepDirection } from '~/lib/transition';
-    import Percentage from './_Percentage.svelte';
-    import SignUp from './_SignUp.svelte';
-    import VerifyOtp from './_VerifyOTP.svelte';
-import Shadow from '~/components/Shadow.svelte';
+    import Percentage from './Percentage.svelte';
+    import SignUp from './SignUp.svelte';
+    import VerifyOtp from './VerifyOTP.svelte';
+    import Shadow from '~/components/Shadow.svelte';
 
-    export let faqs: Record<string, string>[]
-    export let popular: Nonprofit[]
+    export let data: PageData
     let designated: Nonprofit[] = []
     
     const steps = ['charities', 'signup', 'verify'] as const
@@ -86,7 +63,7 @@ import Shadow from '~/components/Shadow.svelte';
         </Grid>
         {#if step === 'charities'}
             <div class="md:pt-[4vh] relative z-10" in:stepIn|local={{direction}} out:stepOut|local={{direction}}>
-                <Percentage bind:percent bind:designated {popular} on:submit={() => step = 'signup'} />                
+                <Percentage bind:percent bind:designated popular={data.popular} on:submit={() => step = 'signup'} />                
             </div>
         {:else if step === 'signup'}
             <div class="md:pt-[4vh] relative z-10" in:stepIn|local={{direction}} out:stepOut|local={{direction}}>
@@ -232,7 +209,7 @@ import Shadow from '~/components/Shadow.svelte';
         <section class="pt-section">
             <h2 class="text-3xl leading-tight font-bold mb-7 text-center">FAQs</h2>
             <div class="inner grid gap-y-6 lg:grid-cols-2 lg:gap-x-10 round-3xl items-start">
-                {#each faqs as {q, a}}
+                {#each data.faqs as {q, a}}
                     <details class="rounded-3xl border">
                         <summary class="text-xl font-medium p-8">{q}</summary>
                         <div class="p-8 pt-4">{@html a}</div>
