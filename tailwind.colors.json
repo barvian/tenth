@@ -1,0 +1,23 @@
+{
+  "current": "currentColor",
+  "inherit": "inherit",
+  "transparent": "transparent",
+  "white": "#fff",
+  "black": "#000",
+  "dark": "#210D32",
+  "dim": "#5A5A5A",
+  "lightgray": "#E9E9E9",
+  "primary": "#FE7761",
+  "amber": {
+    "50": "#FFF7F1",
+    "100": "#FEF2E8",
+    "400": "#C5A384"
+  },
+  "red": {
+    "50": "#F7EDEB",
+    "75": "#EEDBD6",
+    "100": "#D6C4C0",
+    "400": "#FF756B",
+    "500": "#FF2825"
+  }
+}
