@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { writable } from 'svelte/store'
-	import { page } from '$app/stores'
-	import { supabaseClient } from '~/lib/db';
-	import { SupaAuthHelper } from '@supabase/auth-helpers-svelte';
 	import '~/app.css';
+	import '$lib/db';
+	import { startSupabaseSessionSync } from '@supabase/auth-helpers-sveltekit';
+	import { invalidateAll } from '$app/navigation';
+	import { page } from '$app/stores';
 
-	const session = writable()
-	$: $session = $page.data.session
+	// this sets up automatic token refreshing
+	startSupabaseSessionSync({
+		page,
+		handleRefresh: () => invalidateAll()
+	});
 </script>
 
-<SupaAuthHelper {supabaseClient} {session}>
-	<slot />
-</SupaAuthHelper>
+<slot />

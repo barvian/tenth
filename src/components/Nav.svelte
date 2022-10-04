@@ -1,5 +1,5 @@
 <script>
-    import { session, page } from '$app/stores';
+    import { page } from '$app/stores';
     import Logo from './icons/Logo.svelte';
 
     let cls = ''
@@ -11,7 +11,7 @@
         <Logo />
     </a>
 
-    {#if $session?.user?.id}
+    {#if $page.data.session.user?.id}
         <a href="/api/auth/logout">Sign out</a>
     {:else}
         <a class="text-dim text-sm" href="/login">Sign in</a>

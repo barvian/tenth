@@ -47,8 +47,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@supabase/auth-helpers-svelte": "latest",
-    "@supabase/auth-helpers-sveltekit": "latest",
+    "@supabase/auth-helpers-sveltekit": "^0.7.1",
     "@supabase/supabase-js": "^1.35.3",
     "jose": "^4.8.1",
     "lodash": "^4.17.21",

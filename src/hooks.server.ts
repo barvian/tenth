@@ -1,10 +1,4 @@
-import { handleAuth } from '@supabase/auth-helpers-sveltekit';
-import type { Handle } from '@sveltejs/kit';
-import { sequence } from '@sveltejs/kit/hooks';
-import '~/../mocks'
+import '$lib/db'; // make sure the supabase instance is initialized on the server
+import { auth } from '@supabase/auth-helpers-sveltekit/server';
 
-export const handle: Handle = sequence(
-	...handleAuth({
-		cookieOptions: { lifetime: 1 * 365 * 24 * 60 * 60 }
-	})
-);
+export const handle = auth();
