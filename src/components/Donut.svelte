@@ -29,7 +29,7 @@
     $: [outlineEndX, outlineEndY] = getCoordinatesForPercent(.99)
 </script>
 
-<div class="in-view:animate-fly-l in-view {cls}">
+<div class={cls}>
     <svg class="w-full -scale-x-100 rotate-90" viewBox="-1 -1 2 2">
         <defs>
             <radialGradient id="grad" gradientUnits="userSpaceOnUse" cx="0px" cy="0px" r="1px">

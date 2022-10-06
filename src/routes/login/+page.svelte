@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { error, isLoading } from '@supabase/auth-helpers-svelte';
 	import { supabaseClient } from '~/lib/db';
 	import theme from '~/../tailwind.colors.json'
 	import Nav from '~/components/Nav.svelte';
@@ -43,12 +42,8 @@
 	<Nav />
 </header>
 
-{#if $error}
-	<p>{$error.message}</p>
-{/if}
-
 <main class="self-center justify-self-center flex flex-col items-center gap-8 pb-section">
-	<FlipCard bind:flipped={enteringOTP} loading={$isLoading} complete={false}>
+	<FlipCard bind:flipped={enteringOTP} complete={false}>
 		<form slot="front" action="javascript:void(0);" on:submit={login} class="h-full flex flex-col">
 			<h1 class="text-2xl font-bold text-center mb-5">Sign in to Tenth</h1>
 			<Input required showRequired={false} type="email" name="email" label="Email" bind:value={email}>
