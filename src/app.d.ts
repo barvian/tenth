@@ -3,11 +3,12 @@
 // See https://kit.svelte.dev/docs/typescript
 // for information about these interfaces
 declare namespace App {
-	interface Locals {
-	  session: import('@supabase/auth-helpers-sveltekit').SupabaseSession;
-	}
+	interface Supabase {
+		Database: import('../types/supabase').Database;
+		SchemaName: 'public';
+	  }
 	interface PageData {
-	  session: import('@supabase/auth-helpers-sveltekit').SupabaseSession;
+		session: import('@supabase/supabase-js').Session | null;
 	}
 	// interface Error {}
 	// interface Platform {}

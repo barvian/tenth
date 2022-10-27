@@ -1,5 +1,5 @@
 import { compile } from 'mdsvex'
-import faqs from '~/data/faqs.yml'
+import faqs from '~/../data/faqs.yml'
 import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit'
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { applyAction, enhance, type SubmitFunction } from '$app/forms';
     import { beforeNavigate } from '$app/navigation';
     import type { Nonprofit } from 'types/change';
     import theme from '~/../tailwind.colors.json';
@@ -7,7 +8,7 @@
     import Logo from '~/components/icons/Logo.svelte';
     import Nav from "~/components/Nav.svelte";
     import Shadow from '~/components/Shadow.svelte';
-    import { stepIn, stepOut, type StepDirection } from '~/lib/transition';
+    import type { StepDirection } from '~/lib/transition';
     import type { PageData } from './$types';
     import Percentage from './Percentage.svelte';
     import SignUp from './SignUp.svelte';
@@ -20,17 +21,16 @@
     type OnboardingStep = typeof steps[number]
     let step: OnboardingStep = 'charities', lastStep: OnboardingStep | null = null, direction: StepDirection
     let percent = '10'
-    let firstName = '', lastName = '', email = ''
 
     function beforeUnload(event: BeforeUnloadEvent) {
-        if (step === 'charities' || (!firstName && !lastName && !email)) return
-
-        event.preventDefault();
-        return event.returnValue = `Are you sure you want to exit? You'll have to start the sign-up process over.`;
+        if (step !== 'charities') {
+            event.preventDefault();
+            return event.returnValue = `Are you sure you want to exit? You'll have to start the sign-up process over.`;
+        }
     }
 
-    beforeNavigate(({ from, to, cancel }) => {
-        if (from?.origin === to?.origin && to?.pathname === '/') {
+    beforeNavigate(({ from, to }) => {
+        if (from?.url.origin === to?.url.origin && to?.url.pathname === '/') {
             step = 'charities'
         }
     })
@@ -39,6 +39,18 @@
         if (!lastStep) direction = 'forward'
         else direction = steps.indexOf(step) > steps.indexOf(lastStep) ? 'forward' : 'backward'
         lastStep = step
+    }
+
+    let loading = false
+    const register: SubmitFunction = ({ action }) => {
+        loading = true
+        return async ({ result }) => {
+            applyAction(result)
+            if (result.type === 'success' && action.href.endsWith('/send')) {
+                step = 'verify'
+            }
+            loading = false
+        }
     }
 
     let showingBreakdowns = false
@@ -61,19 +73,17 @@
                 <Donut {percent} class="absolute top-0 left-0 w-[200%]" />
             </div>
         </Grid>
-        {#if step === 'charities'}
-            <div class="md:pt-[4vh] relative z-10" in:stepIn|local={{direction}} out:stepOut|local={{direction}}>
-                <Percentage bind:percent bind:designated popular={data.popular} on:submit={() => step = 'signup'} />                
+        <form class="md:pt-[4vh] relative z-10 overlap" action="javascript:void(0)" use:enhance={register}>
+            <div>
+                <Percentage bind:percent bind:designated active={step === 'charities'} popular={data.popular} on:continue={() => step = 'signup'} />                
             </div>
-        {:else if step === 'signup'}
-            <div class="md:pt-[4vh] relative z-10" in:stepIn|local={{direction}} out:stepOut|local={{direction}}>
-                <SignUp bind:firstName bind:lastName bind:email on:submit={() => step = 'verify'} />
+            <div>
+                <SignUp {loading} active={step === 'signup'} />
             </div>
-        {:else}
-            <div class="md:pt-[4vh] relative z-10" in:stepIn|local={{direction}} out:stepOut|local={{direction}}>
-                <VerifyOtp {email} on:changeemail={() => step = 'signup'} />
+            <div>
+                <VerifyOtp {loading} active={step === 'verify'} on:changeemail={() => step = 'signup'} />
             </div>
-        {/if}
+        </form>
     </div>
 </header>
 <main class="bg-white bg-noise-white" id="benefits">
@@ -135,8 +145,8 @@
                 <details class="rounded bg-white border group relative px-8" bind:open={showingBreakdowns}>
                     <summary class="text-center p-12">
                         <Logo class="text-dim inline-block h-3" />
-                        <span class="block mt-3 text-red-500 text-5xl font-bold text-border">1.5% + 30¢</span>
-                        <span class="block mt-2 text-sm">per donation, + $1.75 one-time setup fee</span>
+                        <span class="block mt-3 text-red-500 text-5xl font-bold text-border">1.5% + 15¢</span>
+                        <span class="block mt-2 text-sm">per donation, + $1.55 one-time setup fee</span>
                         <div class="absolute inset-x-0 bottom-0">Show breakdown</div>
                     </summary>
                     <table class="table-auto mb-8">
@@ -160,21 +170,21 @@
                                 <h4>Account balance fee</h4>
                                 <p class="text-dim">The fee we incur to check a bank account balance.</p>
                             </td>
-                            <td class="py-2.5 align-top text-right border-b border-dim/25">10¢</td>
+                            <td class="py-2.5 align-top text-right border-b border-dim/25">15¢</td>
                           </tr>
-                          <tr>
+                          <!-- <tr>
                             <td class="pr-4 border-b border-dim/25 py-2.5">
                                 <h4>Tenth fee</h4>
                                 <p class="text-dim">Our fee, to help cover server costs and updates.</p>
                             </td>
                             <td class="py-2.5 align-top text-right border-b border-dim/25">20¢</td>
-                          </tr>
+                          </tr> -->
                           <tr>
                             <td class="pr-4 py-2.5">
                                 <h4>Setup fee</h4>
                                 <p class="text-dim">The fee we incur to link your bank account with our platform, only charged one time after successfully linking a checking account.</p>
                             </td>
-                            <td class="py-2.5 align-top text-right">$1.75</td>
+                            <td class="py-2.5 align-top text-right">$1.55</td>
                           </tr>
                         </tbody>
                       </table>
@@ -206,12 +216,12 @@
                   </table>
             </details>
         </Grid>
-        <section class="pt-section">
+        <section class="pt-hero">
             <h2 class="text-3xl leading-tight font-bold mb-7 text-center">FAQs</h2>
             <div class="inner grid gap-y-6 lg:grid-cols-2 lg:gap-x-10 round-3xl items-start">
                 {#each data.faqs as {q, a}}
                     <details class="rounded-3xl border">
-                        <summary class="text-xl font-medium p-8">{q}</summary>
+                        <summary class="text-lg font-medium p-8">{q}</summary>
                         <div class="p-8 pt-4">{@html a}</div>
                     </details>
                 {/each}

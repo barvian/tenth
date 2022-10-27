@@ -19,9 +19,10 @@
   "devDependencies": {
     "@rollup/plugin-yaml": "^3.1.0",
     "@sveltejs/adapter-auto": "next",
-    "@sveltejs/kit": "1.0.0-next.480",
+    "@sveltejs/kit": "^1.0.0-next.525",
     "@tailwindcss/forms": "^0.5.2",
     "@tailwindcss/typography": "^0.5.4",
+    "@types/lodash": "^4.14.186",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "autoprefixer": "^10.4.8",
@@ -47,8 +48,8 @@
   },
   "type": "module",
   "dependencies": {
-    "@supabase/auth-helpers-sveltekit": "^0.7.1",
-    "@supabase/supabase-js": "^1.35.3",
+    "@supabase/auth-helpers-sveltekit": "^0.8.3",
+    "@supabase/supabase-js": "^2.0.4",
     "jose": "^4.8.1",
     "lodash": "^4.17.21",
     "motion": "^10.14.1"

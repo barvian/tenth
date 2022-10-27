@@ -1,16 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
-import { setupSupabaseHelpers } from '@supabase/auth-helpers-sveltekit';
-import { dev } from '$app/environment';
+import { createClient } from '@supabase/auth-helpers-sveltekit';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
-export const supabaseClient = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
-	persistSession: false,
-	autoRefreshToken: false
-});
-
-setupSupabaseHelpers({
-	supabaseClient,
-	cookieOptions: {
-		secure: !dev
-	}
-});
+export default createClient(
+  PUBLIC_SUPABASE_URL as string,
+  PUBLIC_SUPABASE_ANON_KEY as string
+);

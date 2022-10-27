@@ -53,7 +53,7 @@
         {/if} -->
     </svelte:element>
     {#if editable}
-        <button on:click={handleRemoveClick} class="rounded-full p-2 bg-red-400 text-white absolute -top-1 -right-1 transition-transform hover:-translate-y-0.5 active:translate-y-0 active:transition-none">
+        <button type="button" on:click={handleRemoveClick} class="rounded-full p-2 bg-red-400 text-white absolute -top-1 -right-1 transition-transform hover:-translate-y-0.5 active:translate-y-0 active:transition-none">
             <svg class="h-3.5" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M16.625 2.5L2.625 16.5" stroke="currentColor" vector-effect="non-scaling-stroke" stroke-width="3" stroke-linecap="square" stroke-linejoin="round"/>
                 <path d="M16.625 16.5L2.625 2.5" stroke="currentColor" vector-effect="non-scaling-stroke" stroke-width="3" stroke-linecap="square" stroke-linejoin="round"/>

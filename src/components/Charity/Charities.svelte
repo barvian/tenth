@@ -19,7 +19,7 @@
     export let recommended: Nonprofit[]
     export let designated: Nonprofit[] = []
     let results: Nonprofit[] | null
-    let searching = false, term = '', searchInput: HTMLInputElement | null = null
+    let searching = false, loading = false, term = '', searchInput: HTMLInputElement | null = null
 
     const limit = 50
 
@@ -37,6 +37,7 @@
             limit: limit.toString()
         }), { signal }).then(res => res.json())
         results = response.nonprofits
+        loading = false
     }, 500, { maxWait: 1000 })
 
     function handleSearch(term: string) {
@@ -44,7 +45,11 @@
             search.cancel()
             controller?.abort()
             results = null
-        } else search(term)
+            loading = false
+        } else {
+            loading = true
+            search(term)
+        }
     }
     
     $: handleSearch(term)
@@ -68,7 +73,7 @@
 
 
 <div class="inner mb-3">
-    <Input bind:value={term} bind:input={searchInput} width="2/5" type="search" label={designated?.length > 0 ? 'Designate another charity (name, EIN)' : 'Which charity do you want to support?'} name="search" shadow on:focus={() => searching = true} on:blur={() => searching = false} />
+    <Input bind:value={term} bind:input={searchInput} {loading} width="w-2/5" type="search" label={designated?.length > 0 ? 'Designate another charity (name, EIN)' : 'Which charity do you want to support?'} name="search" shadow on:focus={() => searching = true} on:blur={() => searching = false} />
         <h2 class="mt-7 text-xl font-medium">
             {#if view === 'results'}
                 <span in:fade|local={{duration: 250, delay: 250}} out:fade|local={{duration:250}}>
@@ -82,7 +87,7 @@
 </div>
 <div class="overlap">
     {#if view === 'results'}
-        <CharityList on:mousedown={(e) => {e.preventDefault()}}>
+        <CharityList on:mousedown={e => e.preventDefault()}>
             {#each results as charity (charity.id)}
                 <Charity {charity} on:click={(e) => addCharity(charity)} />
             {/each}

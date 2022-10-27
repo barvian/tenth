@@ -1,24 +1,25 @@
 <script lang="ts">
-    import Input from "~/components/Input.svelte";
+    import { page } from '$app/stores';
     import Button from "~/components/Button/Button.svelte";
     import Grid from "~/components/Grid.svelte";
+    import Input from "~/components/Input.svelte";
 
-    export let firstName: string, lastName: string, email: string
+    export let active = false
+    export let loading = false
 </script>
 
-
 <Grid>
-    <form class="lg:col-span-7" action="javascript:void(0);" on:submit>
+    <fieldset class="lg:col-span-7" hidden={!active}>
         <h1 class="text-3xl font-bold mb-7">Create an account</h1>
         <div class="grid grid-cols-2 gap-6">
-            <Input bind:value={firstName} required shadow type="text" name="first" label="First name" />
-            <Input bind:value={lastName} required shadow type="text" name="last" label="Last name" />
-            <Input bind:value={email} class="col-span-full" required shadow type="email" name="email" label="Email">
+            <Input value={$page.form?.values.firstName ?? ''} required shadow type="text" name="first-name" label="First name" />
+            <Input value={$page.form?.values.lastName ?? ''} required shadow type="text" name="last-name" label="Last name" />
+            <Input value={$page.form?.values.email ?? ''} class="col-span-full" required shadow type="email" name="email" label="Email">
                 We'll send you a code to verify your email address.
             </Input>
         </div>
-        <Button type="submit" class="mt-4" shadow>
+        <Button {loading} type="submit" formaction="/register?/send" class="mt-8" shadow>
             Continue
         </Button>
-    </form>
+    </fieldset>
 </Grid>
