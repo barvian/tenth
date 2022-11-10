@@ -21,17 +21,17 @@ import Nav from "~/components/Nav.svelte";
 <main class="pb-hero">
     <Grid>
         <header class="col-span-5">
-            <h1 class="text-4xl font-medium">Request a nonprofit</h1>
+            <h1 class="text-4xl font-medium">Request a charity</h1>
             <p class="text-xl mt-5 text-dim">
-                Use the form to request that a nonprofit be added to the Change network, which Tenth uses. Please fill out as many fields as possible; missing information may cause processing delays.
+                Use the form to request that a charity be added to the Change network, which Tenth uses. Please fill out as many fields as possible; missing information may cause processing delays.
             </p>
             <p class="mt-7 bg-dark/5 bg-svg-wave-lightgray rounded-3xl p-9">
-                If you're a member of a nonprofit and wish to accept donations from Tenth, you can <a class="font-medium text-red-400" href="https://getchange.io/nonprofits/">claim your nonprofit on the Change network</a>.</p>
+                If you're a member of a charity and wish to accept donations from Tenth, you can <a class="font-medium text-red-400" href="https://getchange.io/nonprofits/">claim your charity on the Change network</a>.</p>
         </header>
         <form method="POST" class="col-span-6 col-start-7 grid grid-cols-3 gap-6">
-            <Input class="col-span-full" autocomplete="off" type="text" name="name" shadow label="Nonprofit's name" required />
+            <Input class="col-span-full" autocomplete="off" type="text" name="name" shadow label="Charity name" required />
             <Input class="col-span-full" autocomplete="off" type="text" name="ein" shadow label="Employer Identification Number" placeholder="e.g. 41-1627391" required>
-                Not sure where to find this? Search for your nonprofit on <a class="text-red-400 font-medium link" href="http://www.guidestar.org/" target="_blank">Guidestar</a>.
+                Not sure where to find this? Search for your charity on <a class="text-red-400 font-medium link" href="http://www.guidestar.org/" target="_blank">Guidestar</a>.
             </Input>
             <Input class="col-span-full" autocomplete="off" type="text" name="address" shadow label="Address line" placeholder="e.g. 1452 DoGood Lane" />
             <Input class="col-span-2" autocomplete="off" type="text" name="city" shadow label="City" />

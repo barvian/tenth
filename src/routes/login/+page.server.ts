@@ -3,6 +3,14 @@ import { invalid, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
+	async back(event) {
+		const { request } = event;
+
+		const formData = await request.formData();
+		const email = formData.get('email') as string;
+
+		return { flipped: false, values: { email } }
+	},
 	async send(event) {
 		const { request } = event;
 		const { supabaseClient } = await getSupabase(event);
@@ -22,7 +30,7 @@ export const actions: Actions = {
 			});
         }
 
-		return { type: 'success', values: { email } }
+		return { flipped: true, values: { email } }
 	},
     async verify(event) {
         const { request } = event;
@@ -36,6 +44,7 @@ export const actions: Actions = {
 		console.log('did something happen', error)
         if (error) {
             return invalid(500, {
+				flipped: true,
 				error: 'Server error. Try again later.',
 				values: {
 					email, token

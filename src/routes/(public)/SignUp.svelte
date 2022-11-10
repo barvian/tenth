@@ -4,12 +4,11 @@
     import Grid from "~/components/Grid.svelte";
     import Input from "~/components/Input.svelte";
 
-    export let active = false
     export let loading = false
 </script>
 
 <Grid>
-    <fieldset class="lg:col-span-7" hidden={!active}>
+    <fieldset class="lg:col-span-7">
         <h1 class="text-3xl font-bold mb-7">Create an account</h1>
         <div class="grid grid-cols-2 gap-6">
             <Input value={$page.form?.values.firstName ?? ''} required shadow type="text" name="first-name" label="First name" />

@@ -1,6 +1,7 @@
 <script>
     import Grid from '~/components/Grid.svelte';
     import Logo from '~/components/icons/Logo.svelte';
+    import { page } from '$app/stores';
 </script>
 
 <slot />
@@ -27,7 +28,11 @@
             <a class="link" href="/request">Request a charity</a>
         </nav>
         <nav class="col-span-2 lg:col-span-3 text-lg flex flex-col gap-2 items-start font-medium relative">
-            <a class="link" href="/login">Sign in</a>
+            <!-- {#if $page.data.session}
+                <a class="link" href="/dashboard">Dashboard</a>
+            {:else}
+                <a class="link" href="/login">Sign in</a>
+            {/if} -->
             <a class="link" href="mailto:hi@tenth.to">Contact</a>
             <a class="link" href="/privacy">Privacy Policy</a>
             <a class="link" href="/terms">Terms of Service</a>

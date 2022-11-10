@@ -10,12 +10,11 @@
     export let designated: Nonprofit[]
     export let popular: Nonprofit[]
     export let percent: string
-    export let active = false
 
     const dispatch = createEventDispatcher()
 </script>
 
-<fieldset hidden={!active}>
+<fieldset>
     <Grid class="mb-7">
         <div class="lg:col-span-7">
             <h1 class="text-4xl leading-tight font-bold">

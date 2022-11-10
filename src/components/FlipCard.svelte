@@ -4,7 +4,9 @@
     import Shadow from './Shadow.svelte';
 
     export let flipped = false
-    export let complete = false
+    export let backAction: string
+    export let backValidate = false
+    // export let complete = false
 
     const updateFlipping = () => $mounted
     // @ts-ignore flipped triggers reactive statement but its value is unused
@@ -18,9 +20,9 @@
             <slot name="front" />
         </div>
         <div class="backface-hidden bg-white relative rounded p-10 border rotate-y-180">
-            <div class="absolute transition-[clip-path] inset-0 rounded border-t-primary border-t-4 {complete ? 'clip-[inset(0_0_0_0)]' : 'clip-[inset(0_50%_0_0)]'}" />
+            <div class="absolute transition-[clip-path] inset-0 rounded border-t-primary border-t-4 clip-[inset(0_50%_0_0)]" />
+            <button formaction={backAction} formnovalidate={!backValidate} type="submit" class="absolute top-6 left-5"><Arrow class="h-4 transition-transform hover:-translate-x-0.5" /></button>
             <slot name="back" />
-            <button type="button" class="absolute top-6 left-5" on:click={() => flipped = false}><Arrow class="h-4 transition-transform hover:-translate-x-0.5" /></button>
             <div role="presentation" class="motion-reduce:hidden shade absolute transition-opacity duration-[600ms] pointer-events-none inset-0 bg-gradient-to-r from-black/30 to-black/60" class:opacity-0={flipped} />
         </div>
     </div>

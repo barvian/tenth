@@ -16,7 +16,7 @@
 </script>
 
 <div class="inner flex items-center justify-between {cls}">
-    <a href="/" data-sveltekit-reload={$page.url.pathname === '/' ? 'off' : ''} class="block w-min">
+    <a href="/" class="block w-min">
         <Logo />
     </a>
 

@@ -1,23 +1,22 @@
 <script lang="ts">
+	import { enhance, type SubmitFunction } from '$app/forms';
 	import { page } from '$app/stores';
-	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
 	import theme from '~/../tailwind.colors.json';
 	import Button from '~/components/Button/Button.svelte';
 	import FlipCard from '~/components/FlipCard.svelte';
 	import Input from '~/components/Input.svelte';
 	import Nav from '~/components/Nav.svelte';
-	import { values } from 'lodash';
 
 	let loading = false
-    const login: SubmitFunction = ({ action }) => {
+    const login: SubmitFunction = () => {
         loading = true
-        return async ({ result }) => {
-            applyAction(result)
+        return async ({ update }) => {
+            update()
             loading = false
         }
     }
 
-	$: flipped = $page.form?.values.email && !$page.form?.values.token
+	$: flipped = !!$page.form?.flipped
 </script>
 
 <svelte:head>
@@ -34,7 +33,7 @@
 
 <main class="justify-center flex flex-col items-center">
 	<form action="?/verify" method="POST" use:enhance={login}>
-		<FlipCard {flipped}>
+		<FlipCard {flipped} backAction="?/back">
 			<fieldset slot="front" class="h-full flex flex-col">
 				<h1 class="text-2xl font-bold text-center mb-5">Sign in to Tenth</h1>
 				<Input required showRequired={false} type="email" name="email" label="Email" value={$page.form?.values.email ?? ''}>
