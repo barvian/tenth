@@ -138,8 +138,8 @@
                 <details class="rounded bg-white border group relative px-8" bind:open={showingBreakdowns}>
                     <summary class="text-center p-12">
                         <Logo class="text-dim inline-block h-3" />
-                        <span class="block mt-3 text-red-500 text-5xl font-bold text-border">2.3% + 30¢</span>
-                        <span class="block mt-2 text-sm">per donation, + $1.55 one-time setup fee</span>
+                        <span class="block mt-3 text-red-500 text-5xl font-bold text-border">2.3% + 15¢</span>
+                        <span class="block mt-2 text-sm">per donation, + $1.75 one-time setup fee</span>
                         <div class="absolute inset-x-0 bottom-0">Show breakdown</div>
                     </summary>
                     <table class="table-auto mb-8">
@@ -165,19 +165,19 @@
                             </td>
                             <td class="py-2.5 align-top text-right border-b border-dim/25">15¢</td>
                           </tr>
-                          <tr>
+                          <!-- <tr>
                             <td class="pr-4 border-b border-dim/25 py-2.5">
                                 <h4>Tenth fee</h4>
                                 <p class="text-dim">Our fee, to help cover server costs and updates.</p>
                             </td>
                             <td class="py-2.5 align-top text-right border-b border-dim/25">20¢</td>
-                          </tr>
+                          </tr> -->
                           <tr>
                             <td class="pr-4 py-2.5">
                                 <h4>Setup fee</h4>
                                 <p class="text-dim">The fee we incur to link your bank account with our platform, only charged one time after successfully linking a checking account.</p>
                             </td>
-                            <td class="py-2.5 align-top text-right">$1.55</td>
+                            <td class="py-2.5 align-top text-right">$1.75</td>
                           </tr>
                         </tbody>
                       </table>

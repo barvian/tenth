@@ -1,7 +1,12 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { invalid, redirect } from '@sveltejs/kit';
+import { createClient } from '@supabase/supabase-js';
 import type { Nonprofit } from 'types/change';
 import type { Actions } from './$types';
+import stripe from 'stripe'
+import { SECRET_STRIPE_KEY, SUPABASE_SERVICE_ROLE_KEY } from '$env/static/private'
+import { PUBLIC_SUPABASE_URL } from '$env/static/public';
+
 
 const getValues = (formData: FormData) => ({
 	percentage: +(formData.get('percentage') as string)/100,
@@ -51,26 +56,43 @@ export const actions: Actions = {
 		}
 	},
     async create(event) {
-        const { request, url } = event;
-        const { supabaseClient } = await getSupabase(event);
+        const { request } = event;
+		const { supabaseClient } = await getSupabase(event);
+		const stripeClient = new stripe(SECRET_STRIPE_KEY, {
+			apiVersion: '2022-08-01'
+		})
 		const values = getValues(await request.formData())
-
+		
         const { error: verifyError } = await supabaseClient.auth.verifyOtp({
 			email: values.email,
 			token: values.token,
 			type: 'magiclink'
 		})
         if (verifyError) {
-            return invalid(500, {
+			return invalid(500, {
 				error: 'Could not verify one-time code. Try again.',
 				values
 			});
         }
 		
 		const { data: { user } } = await supabaseClient.auth.getUser()
-		await Promise.allSettled([
+		if (!user) {
+			return invalid(500, {
+				error: 'Something went wrong. Try again.',
+				values
+			});
+        }
+		
+		const stripeCustomer = await stripeClient.customers.create()
+		const supabaseServiceClient = createClient(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+
+		await Promise.all([
+			supabaseServiceClient.from('data').upsert({
+				user_id: user.id,
+				stripe_id: stripeCustomer.id
+			}),
 			supabaseClient.from('profiles').upsert({
-				user_id: user!.id,
+				user_id: user.id,
 				first_name: values.firstName,
 				last_name: values.lastName,
 				percentage: values.percentage
@@ -79,7 +101,7 @@ export const actions: Actions = {
 				.then(() => supabaseClient.from('designated').insert(
 					values.designated.map(c => ({
 						change_id: c.id,
-						user_id: user!.id
+						user_id: user.id
 					}))
 				))
 		])

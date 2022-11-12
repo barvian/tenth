@@ -19,7 +19,7 @@
         <div class="lg:col-span-7">
             <h1 class="text-4xl leading-tight font-bold">
                 Donate
-                <Select name="percent" bind:value={percent}>
+                <Select name="percentage" bind:value={percent}>
                     <option value="33">33%</option>
                     <option value="25">25%</option>
                     <option value="20">20%</option>
