@@ -1,19 +1,17 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { invalid, redirect } from '@sveltejs/kit';
-import { createClient } from '@supabase/supabase-js';
-import type { Nonprofit } from 'types/change';
 import type { Actions } from './$types';
 import stripe from 'stripe'
-import { SECRET_STRIPE_KEY, SUPABASE_SERVICE_ROLE_KEY } from '$env/static/private'
-import { PUBLIC_SUPABASE_URL } from '$env/static/public';
-
+import { SECRET_STRIPE_KEY, SECRET_CHANGE_KEY } from '$env/static/private'
+import { PUBLIC_CHANGE_KEY } from '$env/static/public'
+const changeCreds = Buffer.from(PUBLIC_CHANGE_KEY+':'+SECRET_CHANGE_KEY).toString('base64')
 
 const getValues = (formData: FormData) => ({
 	percentage: +(formData.get('percentage') as string)/100,
 	email: formData.get('email') as string,
 	firstName: formData.get('first-name') as string,
 	lastName: formData.get('last-name') as string,
-	designated: JSON.parse(formData.get('designated') as string || '[]') as Nonprofit[],
+	designated: JSON.parse(formData.get('designated') as string || '[]') as string[],
 	token: formData.get('token') as string
 })
 
@@ -44,6 +42,7 @@ export const actions: Actions = {
 			}
 		})
         if (signInError) {
+			console.log(signInError)
             return invalid(500, {
 				error: 'Server error. Try again later.',
 				values
@@ -72,39 +71,32 @@ export const actions: Actions = {
 			return invalid(500, {
 				error: 'Could not verify one-time code. Try again.',
 				values
-			});
-        }
-		
-		const { data: { user } } = await supabaseClient.auth.getUser()
-		if (!user) {
-			return invalid(500, {
-				error: 'Something went wrong. Try again.',
-				values
-			});
+			})
         }
 		
 		const stripeCustomer = await stripeClient.customers.create()
-		const supabaseServiceClient = createClient(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
-
-		await Promise.all([
-			supabaseServiceClient.from('data').upsert({
-				user_id: user.id,
-				stripe_id: stripeCustomer.id
-			}),
-			supabaseClient.from('profiles').upsert({
-				user_id: user.id,
-				first_name: values.firstName,
-				last_name: values.lastName,
-				percentage: values.percentage
-			}),
-			supabaseClient.from('designated').delete().eq('user_id', user!.id)
-				.then(() => supabaseClient.from('designated').insert(
-					values.designated.map(c => ({
-						change_id: c.id,
-						user_id: user.id
-					}))
-				))
-		])
+		const changeAccount = await fetch(`https://api.getchange.io/api/v1/accounts`, {
+			method: 'POST',
+			headers: { 'Authorization': `Basic ${changeCreds}`},
+			body: JSON.stringify({
+				email: values.email
+			})
+		}).then(r => r.json())
+		const { error: registerError } = await supabaseClient.rpc('register', {
+			stripe_id: stripeCustomer.id,
+			change_id: changeAccount.id,
+			first_name: values.firstName,
+			last_name: values.lastName,
+			percentage: values.percentage,
+			designated: values.designated
+		})
+		if (registerError) {
+			await stripeClient.customers.del(stripeCustomer.id)
+			return invalid(500, {
+				error: 'Could not register. Please try again later.',
+				values
+			})
+		}
 		
 		throw redirect(303, '/dashboard')
     }

@@ -38,7 +38,7 @@
         </div>
     </Grid>
     <Charities bind:designated recommended={popular} />
-    <input type="hidden" name="designated" value={JSON.stringify(designated)} />
+    <input type="hidden" name="designated" value={JSON.stringify(designated.map(c => c.id))} />
     {#if designated?.length > 0}
         <div in:fly|local={{y: 50}} class="inner mt-8">
             <Button shadow on:click={e => dispatch('continue', e)}>Get started</Button>
