@@ -130,27 +130,27 @@
     <section class="bg-red-50 bg-noise-white bg-blend-color-burn py-hero" id="pricing">
         <header class=" mb-12">
             <h2 class="text-3xl leading-tight font-bold mb-7 text-center">Pricing</h2>
-            <p class="text-dim text-lg max-w-prose text-center mx-auto">Tenth's fees are (usually) lower than what you'd pay with monthly credit card donations.</p>
+            <p class="text-dim text-lg max-w-prose text-center mx-auto">Tenth's fees are <!--(usually) -->lower than what you'd pay with monthly credit card donations.</p>
         </header>
         <Grid class="lg:gap-x-10 round-3xl items-start">
             <div class=" relative md:col-span-6">
                 <Shadow class="left-1.5 top-2" />
-                <details class="rounded bg-white border group relative px-8" bind:open={showingBreakdowns}>
-                    <summary class="text-center p-12">
+                <div class="rounded bg-white border group relative px-8">
+                    <div class="text-center p-12">
                         <Logo class="text-dim inline-block h-3" />
-                        <span class="block mt-3 text-red-500 text-5xl font-bold text-border">2.3% + 15¢</span>
-                        <span class="block mt-2 text-sm">per donation, + $1.75 one-time setup fee</span>
-                        <div class="absolute inset-x-0 bottom-0">Show breakdown</div>
-                    </summary>
+                        <span class="block mt-3 text-red-500 text-5xl font-bold text-border">1.5% + 15¢</span>
+                        <span class="block mt-2 text-sm">per donation, + $1.55 one-time setup fee</span>
+                        <!-- <div class="absolute inset-x-0 bottom-0">Show breakdown</div> -->
+                    </div>
                     <table class="table-auto mb-8">
                         <tbody>
-                          <tr>
+                          <!-- <tr>
                             <td class="pr-4 border-b border-dim/25 pb-2.5">
                                 <h4>ACH transaction fees</h4>
                                 <p class="text-dim">The fees incurred to transfer money from a bank account.</p>
                             </td>
                             <td class="pb-2.5 align-top text-right border-b border-dim/25">0.8%</td>
-                          </tr>
+                          </tr> -->
                           <tr>
                             <td class="pr-4 border-b border-dim/25 py-2.5">
                                 <h4>Change fees</h4>
@@ -177,18 +177,18 @@
                                 <h4>Setup fee</h4>
                                 <p class="text-dim">The fee we incur to link your bank account with our platform, only charged one time after successfully linking a checking account.</p>
                             </td>
-                            <td class="py-2.5 align-top text-right">$1.75</td>
+                            <td class="py-2.5 align-top text-right">$1.55</td>
                           </tr>
                         </tbody>
                       </table>
-                </details>
+                </div>
             </div>
-            <details class="rounded bg-red-75 group md:col-span-6 relative px-8" bind:open={showingBreakdowns}>
-                <summary class="text-center p-12">
+            <div class="rounded bg-red-75 group md:col-span-6 relative px-8">
+                <div class="text-center p-12">
                     <h3>Recurring Credit Card Donation Fees</h3>
                     <span class="block mt-3 text-red-100 text-5xl font-bold text-border-[rgba(0,0,0,0.4)]">3.7–7.8% + 30¢</span>
                     <span class="block mt-2 text-sm">per donation</span>
-                </summary>
+                </div>
                 <table class="table-auto mb-8">
                     <tbody>
                       <tr>
@@ -207,7 +207,7 @@
                       </tr>
                     </tbody>
                   </table>
-            </details>
+            </div>
         </Grid>
         <section class="pt-hero" id="faqs">
             <h2 class="text-3xl leading-tight font-bold mb-7 text-center">FAQs</h2>
