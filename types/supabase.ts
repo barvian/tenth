@@ -52,11 +52,61 @@ export interface Database {
           change_id?: string
         }
       }
+      requests: {
+        Row: {
+          change_id: string
+          user_id: string | null
+          email: unknown | null
+        }
+        Insert: {
+          change_id: string
+          user_id?: string | null
+          email?: unknown | null
+        }
+        Update: {
+          change_id?: string
+          user_id?: string | null
+          email?: unknown | null
+        }
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      citext:
+        | {
+            Args: { "": string }
+            Returns: unknown
+          }
+        | {
+            Args: { "": boolean }
+            Returns: unknown
+          }
+        | {
+            Args: { "": unknown }
+            Returns: unknown
+          }
+      citext_hash: {
+        Args: { "": unknown }
+        Returns: number
+      }
+      citextin: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      citextout: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      citextrecv: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      citextsend: {
+        Args: { "": unknown }
+        Returns: string
+      }
       email_exists: {
         Args: { email: string }
         Returns: boolean

@@ -7,9 +7,9 @@ export const GET: RequestHandler = async ({ params }) => {
 	const creds = Buffer.from(PUBLIC_CHANGE_KEY+':'+SECRET_CHANGE_KEY).toString('base64')
 	const res = await fetch(`https://api.getchange.io/api/v1/nonprofits/${params.id}`, {
 		headers: { 'Authorization': `Basic ${creds}`}
-	})
+	}).then(r => r.ok ? r.json() : Promise.reject(r))
 
-	return json(await res.json(), {
+	return json(res, {
 		headers: {
 			'cache-control': 'public, max-age=3600'
 		}

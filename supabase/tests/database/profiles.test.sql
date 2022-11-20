@@ -1,8 +1,19 @@
 begin;
-select plan(6);
+select plan(7);
 
 set local role authenticated;
 set local "request.jwt.claim.sub" to 'b9511b07-87eb-4e02-bfb5-3b7095129c73'; -- unregistered user
+
+select
+    throws_ok(
+        $$
+        insert into public.profiles (user_id, stripe_id, change_id) values
+        ('b9511b07-87eb-4e02-bfb5-3b7095129c73', 'fake-stripe-id', 'fake-change-id');
+        $$,
+        42501,
+        'new row violates row-level security policy for table "profiles"',
+        'A user cannot insert a profile outside register()'
+    );
 
 select
     lives_ok(
@@ -46,23 +57,19 @@ select
   );
 
 select
-    throws_ok(
+    is_empty(
         $$
-        update public.profiles set stripe_id = 'fake-stripe-id';
+        update public.profiles set stripe_id = 'fake-stripe-id' returning *;
         $$,
-        23505,
-        'duplicate key value violates unique constraint "profiles_stripe_id_key"',
-        'A user cannot set their stripe_id to an existing stripe_id'
+        'A user cannot set their stripe_id'
     );
 
 select
-    throws_ok(
+    is_empty(
         $$
-        update public.profiles set change_id = 'fake-change-id';
+        update public.profiles set change_id = 'fake-change-id' returning *;
         $$,
-        23505,
-        'duplicate key value violates unique constraint "profiles_change_id_key"',
-        'A user cannot set their change_id to an existing change_id'
+        'A user cannot set their change_id'
     );
 
 

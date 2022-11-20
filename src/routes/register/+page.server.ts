@@ -75,13 +75,13 @@ export const actions: Actions = {
         }
 		
 		const stripeCustomer = await stripeClient.customers.create()
-		const changeAccount = await fetch(`https://api.getchange.io/api/v1/accounts`, {
+		const changeAccount = await fetch('https://api.getchange.io/api/v1/accounts', {
 			method: 'POST',
 			headers: { 'Authorization': `Basic ${changeCreds}`},
 			body: JSON.stringify({
 				email: values.email
 			})
-		}).then(r => r.json())
+		}).then(r => r.ok ? r.json() : Promise.reject(r))
 		const { error: registerError } = await supabaseClient.rpc('register', {
 			stripe_id: stripeCustomer.id,
 			change_id: changeAccount.id,

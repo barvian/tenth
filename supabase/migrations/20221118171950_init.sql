@@ -3,6 +3,10 @@
 -- and may require manual changes to the script to ensure changes are applied in the correct order.
 -- Please report an issue for any failure with the reproduction steps.
 
+CREATE EXTENSION citext;
+CREATE DOMAIN email AS citext
+  CHECK ( value ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$' );
+
 CREATE OR REPLACE FUNCTION public.register(
 	stripe_id text,
 	change_id text,
@@ -108,6 +112,46 @@ CREATE POLICY "Owner has all permissions"
     TO public
     USING (auth.uid() = user_id);
 
+CREATE TABLE IF NOT EXISTS public.requests
+(
+    change_id text NOT NULL COLLATE pg_catalog."default",
+    user_id uuid,
+    email email,
+    CONSTRAINT requests_pkey PRIMARY KEY (change_id),
+    CONSTRAINT requests_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES auth.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.requests
+    OWNER to postgres;
+
+ALTER TABLE IF EXISTS public.requests
+    ENABLE ROW LEVEL SECURITY;
+
+GRANT ALL ON TABLE public.requests TO anon;
+
+GRANT ALL ON TABLE public.requests TO authenticated;
+
+GRANT ALL ON TABLE public.requests TO postgres;
+
+CREATE POLICY "Anonymous users can create their own"
+ON public.requests
+    AS PERMISSIVE
+    FOR INSERT
+    TO anon
+    WITH CHECK (user_id is null);
+
+CREATE POLICY "Authenticated users can create their own"
+ON public.requests
+    AS PERMISSIVE
+    FOR INSERT
+    TO authenticated
+    WITH CHECK (auth.uid() = user_id and email is null);
+
 CREATE TABLE IF NOT EXISTS public.profiles
 (
     user_id uuid NOT NULL,
@@ -149,4 +193,4 @@ CREATE POLICY "Owner can update own profile"
     AS PERMISSIVE
     FOR UPDATE
     TO public
-    USING (auth.uid() = user_id);
+    USING (auth.uid() = user_id and stripe_id is null and change_id is null);

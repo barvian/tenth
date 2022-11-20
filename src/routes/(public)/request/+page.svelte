@@ -33,10 +33,10 @@ import Nav from "~/components/Nav.svelte";
             <Input class="col-span-full" autocomplete="off" type="text" name="ein" shadow label="Employer Identification Number" placeholder="e.g. 41-1627391" required>
                 Not sure where to find this? Search for your charity on <a class="text-red-400 font-medium link" href="http://www.guidestar.org/" target="_blank">Guidestar</a>.
             </Input>
-            <Input class="col-span-full" autocomplete="off" type="text" name="address" shadow label="Address line" placeholder="e.g. 1452 DoGood Lane" />
+            <Input class="col-span-full" autocomplete="off" type="text" name="address_line" shadow label="Address line" placeholder="e.g. 1452 DoGood Lane" />
             <Input class="col-span-2" autocomplete="off" type="text" name="city" shadow label="City" />
             <Input class="col-span-1 uppercase" autocomplete="off" maxlength={2} type="text" name="state" shadow label="State" placeholder="e.g. IL" />
-            <Input class="col-span-full" autocomplete="off" type="url" name="site" shadow label="Website" placeholder="e.g. http://mycharity.org" />
+            <Input class="col-span-full" autocomplete="off" type="url" name="website" shadow label="Website" placeholder="e.g. http://mycharity.org" />
             <fieldset class="col-span-full">
                 <legend>Social media handles</legend>
                 <div class="grid grid-cols-2 gap-6">

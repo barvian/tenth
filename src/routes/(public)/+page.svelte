@@ -134,15 +134,15 @@
         </header>
         <Grid class="lg:gap-x-10 round-3xl items-start">
             <div class=" relative md:col-span-6">
-                <Shadow class="left-1.5 top-2" />
-                <div class="rounded bg-white border group relative px-8">
-                    <div class="text-center p-12">
+                <Shadow class="left-2 top-3" />
+                <div class="rounded bg-white border group relative px-8 pt-12 pb-10">
+                    <div class="text-center">
                         <Logo class="text-dim inline-block h-3" />
                         <span class="block mt-3 text-red-500 text-5xl font-bold text-border">1.5% + 15¢</span>
                         <span class="block mt-2 text-sm">per donation, + $1.55 one-time setup fee</span>
                         <!-- <div class="absolute inset-x-0 bottom-0">Show breakdown</div> -->
                     </div>
-                    <table class="table-auto mb-8">
+                    <table class="table-auto mt-8">
                         <tbody>
                           <!-- <tr>
                             <td class="pr-4 border-b border-dim/25 pb-2.5">
@@ -152,58 +152,58 @@
                             <td class="pb-2.5 align-top text-right border-b border-dim/25">0.8%</td>
                           </tr> -->
                           <tr>
-                            <td class="pr-4 border-b border-dim/25 py-2.5">
+                            <td class="pr-4 border-b border-dim/25 py-4">
                                 <h4>Change fees</h4>
                                 <p class="text-dim">The fees our donation processor, <a href="https://getchange.io">Change</a>, charges to process donations and pay out to charities.</p>
                             </td>
-                            <td class="py-2.5 align-top text-right border-b border-dim/25">1.5%</td>
+                            <td class="py-4 align-top text-right border-b border-dim/25">1.5%</td>
                           </tr>
                           <tr>
-                            <td class="pr-4 border-b border-dim/25 py-2.5">
+                            <td class="pr-4 border-b border-dim/25 py-4">
                                 <h4>Account balance fee</h4>
                                 <p class="text-dim">The fee we incur to check a bank account balance.</p>
                             </td>
-                            <td class="py-2.5 align-top text-right border-b border-dim/25">15¢</td>
+                            <td class="py-4 align-top text-right border-b border-dim/25">15¢</td>
                           </tr>
                           <!-- <tr>
-                            <td class="pr-4 border-b border-dim/25 py-2.5">
+                            <td class="pr-4 border-b border-dim/25 py-4">
                                 <h4>Tenth fee</h4>
                                 <p class="text-dim">Our fee, to help cover server costs and updates.</p>
                             </td>
-                            <td class="py-2.5 align-top text-right border-b border-dim/25">20¢</td>
+                            <td class="py-4 align-top text-right border-b border-dim/25">20¢</td>
                           </tr> -->
                           <tr>
-                            <td class="pr-4 py-2.5">
+                            <td class="pr-4 py-4">
                                 <h4>Setup fee</h4>
                                 <p class="text-dim">The fee we incur to link your bank account with our platform, only charged one time after successfully linking a checking account.</p>
                             </td>
-                            <td class="py-2.5 align-top text-right">$1.55</td>
+                            <td class="py-4 align-top text-right">$1.55</td>
                           </tr>
                         </tbody>
                       </table>
                 </div>
             </div>
-            <div class="rounded bg-red-75 group md:col-span-6 relative px-8">
-                <div class="text-center p-12">
+            <div class="rounded bg-red-75 group md:col-span-6 relative px-8 pt-12 pb-10">
+                <div class="text-center">
                     <h3>Recurring Credit Card Donation Fees</h3>
                     <span class="block mt-3 text-red-100 text-5xl font-bold text-border-[rgba(0,0,0,0.4)]">3.7–7.8% + 30¢</span>
                     <span class="block mt-2 text-sm">per donation</span>
                 </div>
-                <table class="table-auto mb-8">
+                <table class="table-auto mt-8">
                     <tbody>
                       <tr>
-                        <td class="pr-4 border-b border-dim/25 pb-2.5">
+                        <td class="pr-4 border-b border-dim/25 py-4">
                             <h4>Credit card processing fee</h4>
                             <p class="text-dim">The fees incurred to charge a credit card.</p>
                         </td>
-                        <td class="pb-2.5 align-top text-right border-b border-dim/25 whitespace-nowrap">2.2—2.9% + 30¢</td>
+                        <td class="py-4 align-top text-right border-b border-dim/25 whitespace-nowrap">2.2—2.9% + 30¢</td>
                       </tr>
                       <tr>
-                        <td class="pr-4 py-2.5">
+                        <td class="pr-4 py-4">
                             <h4>Platform fees</h4>
                             <p class="text-dim">The fees incurred by donation platforms to process donations.</p>
                         </td>
-                        <td class="py-2.5 align-top text-right">1.5—4.9%</td>
+                        <td class="py-4 align-top text-right">1.5—4.9%</td>
                       </tr>
                     </tbody>
                   </table>
