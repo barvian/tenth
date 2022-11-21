@@ -4,6 +4,7 @@ import type { Actions } from './$types';
 import stripe from 'stripe'
 import { SECRET_STRIPE_KEY, SECRET_CHANGE_KEY } from '$env/static/private'
 import { PUBLIC_CHANGE_KEY } from '$env/static/public'
+import { ChangeAccountCreationError } from '~/lib/change';
 const changeCreds = Buffer.from(PUBLIC_CHANGE_KEY+':'+SECRET_CHANGE_KEY).toString('base64')
 
 const getValues = (formData: FormData) => ({
@@ -74,24 +75,43 @@ export const actions: Actions = {
 			})
         }
 		
-		const stripeCustomer = await stripeClient.customers.create()
-		const changeAccount = await fetch('https://api.getchange.io/api/v1/accounts', {
-			method: 'POST',
-			headers: { 'Authorization': `Basic ${changeCreds}`},
-			body: JSON.stringify({
-				email: values.email
+		let stripeCustomer: stripe.Customer | undefined, changeAccount
+		try {
+			stripeCustomer = await stripeClient.customers.create()
+
+			changeAccount = await fetch('https://api.getchange.io/api/v1/accounts', {
+				method: 'POST',
+				headers: {
+					'Authorization': `Basic ${changeCreds}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					email: values.email,
+					name: `${values.firstName} ${values.lastName}`
+				})
+			}).then(async r => {
+				if (r.ok) return r.json()
+				throw new ChangeAccountCreationError(await r.text())
 			})
-		}).then(r => r.ok ? r.json() : Promise.reject(r))
-		const { error: registerError } = await supabaseClient.rpc('register', {
-			stripe_id: stripeCustomer.id,
-			change_id: changeAccount.id,
-			first_name: values.firstName,
-			last_name: values.lastName,
-			percentage: values.percentage,
-			designated: values.designated
-		})
-		if (registerError) {
-			await stripeClient.customers.del(stripeCustomer.id)
+
+			console.log('change account', changeAccount)
+			const { error: registerError } = await supabaseClient.rpc('register', {
+				stripe_id: stripeCustomer.id,
+				change_id: changeAccount.id,
+				first_name: values.firstName,
+				last_name: values.lastName,
+				percentage: values.percentage,
+				designated: values.designated
+			})
+			if (registerError) throw registerError
+		} catch (e) {
+			if (stripeCustomer) await stripeClient.customers.del(stripeCustomer.id).catch(e => null)
+
+			if (e instanceof ChangeAccountCreationError) {
+				console.error('Could not create Change account for email %s', values.email, e)
+			} else {
+				console.error('Registration failed for email %s', values.email, e)
+			}
 			return invalid(500, {
 				error: 'Could not register. Please try again later.',
 				values
