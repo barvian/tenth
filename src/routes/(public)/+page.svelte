@@ -135,7 +135,7 @@
         <Grid class="lg:gap-x-10 round-3xl items-start">
             <div class=" relative md:col-span-6">
                 <Shadow class="left-2 top-3" />
-                <div class="rounded bg-white border group relative px-8 pt-12 pb-10">
+                <div class="rounded bg-white border group relative px-8 pt-12 pb-8">
                     <div class="text-center">
                         <Logo class="text-dim inline-block h-3" />
                         <span class="block mt-3 text-red-500 text-5xl font-bold text-border">1.5% + 15¢</span>
@@ -183,7 +183,7 @@
                       </table>
                 </div>
             </div>
-            <div class="rounded bg-red-75 group md:col-span-6 relative px-8 pt-12 pb-10">
+            <div class="rounded bg-red-75 group md:col-span-6 relative px-8 pt-12 pb-8">
                 <div class="text-center">
                     <h3>Recurring Credit Card Donation Fees</h3>
                     <span class="block mt-3 text-red-100 text-5xl font-bold text-border-[rgba(0,0,0,0.4)]">3.7–7.8% + 30¢</span>
