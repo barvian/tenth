@@ -33,7 +33,7 @@
                 of your checking account to charity every year.
             </h1>
             {#if !(designated?.length > 0)}
-                <p in:fly|local={{y: -50}} class="text-xl mt-5 text-dim">Donated in monthly increments. Cancelable anytime.</p>
+                <p in:fly|local={{y: -50}} class="text-xl mt-5 text-amber-800">Donated in monthly increments. Cancelable anytime.</p>
             {/if}
         </div>
     </Grid>

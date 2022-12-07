@@ -1,1 +1,1 @@
-<div role="presentation" class="rounded absolute bg-svg-shadow-black bg-repeat min-w-full min-h-full {$$props.class ?? ''}" />
+<div role="presentation" class="rounded absolute bg-svg-shadow-amber-800 bg-repeat min-w-full min-h-full {$$props.class ?? ''}" />

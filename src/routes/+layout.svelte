@@ -5,9 +5,7 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		const {
-			data: { subscription }
-		} = supabaseClient.auth.onAuthStateChange(() => {
+		const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(() => {
 			invalidate('supabase:auth')
 		})
 
