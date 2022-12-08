@@ -1,65 +1,72 @@
 <script lang="ts">
-	import { enhance, type SubmitFunction } from '$app/forms';
+	import { applyAction, deserialize } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import theme from '~/../tailwind.colors.json';
-	import Button from '~/components/Button/Button.svelte';
-	import FlipCard from '~/components/FlipCard.svelte';
+	import Button from '~/components/Button.svelte';
 	import Input from '~/components/Input.svelte';
-	import Nav from '~/components/Nav.svelte';
+	import MultiStep from '~/components/MultiStep/MultiStep.svelte';
+	import Step from '~/components/MultiStep/Step.svelte';
+	import supabaseClient, { EmailDoesntExistError } from '~/lib/db';
+	import { toast } from '@zerodevx/svelte-toast'
 
-	let loading = false
-    const login: SubmitFunction = () => {
+
+	let multiStep: MultiStep, email = $page.form?.values.email ?? '', loading = false, emailError: string | null | undefined
+    async function login(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
         loading = true
-        return async ({ update }) => {
-            update()
-            loading = false
-        }
-    }
 
-	$: flipped = !!$page.form?.flipped
+		if (multiStep.getStep() === 0) {
+			try {
+                const { data: emailExists, error: checkEmailError } = await supabaseClient.rpc('email_exists', { email }).single()
+                if (checkEmailError) throw checkEmailError
+                else if (!emailExists) throw new EmailDoesntExistError()
+
+                const { error: signInError } = await supabaseClient.auth.signInWithOtp({
+                    email,
+                    options: {
+                        shouldCreateUser: false
+                    }
+                })
+                if (signInError) throw signInError
+
+                multiStep.next()
+            } catch (e) {
+                if (e instanceof EmailDoesntExistError) emailError = `We couldn't find a Tenth account with that email.`
+                else toast.push('Something went wrong. Please try again later.', { classes: ['error'] })
+			}
+		} else {
+			const response = await fetch(event.currentTarget.action, {
+				method: event.currentTarget.method,
+				body: new FormData(event.currentTarget)
+			})
+			const result = deserialize(await response.text())
+			applyAction(result)
+			if (result.type === 'success') await invalidateAll()
+		}
+
+		loading = false
+    }
 </script>
 
-<svelte:head>
-	<meta name="theme-color" content={theme["amber"][50]}>
-	<style>
-		:root { @apply bg-gradient-to-b from-amber-50 to-amber-100 bg-no-repeat }
-		body { @apply grid grid-rows-[min-content_1fr]; }
-	</style>
-</svelte:head>
-
-<header class="pt-9 pb-section">
-	<Nav />
-</header>
-
-<main class="justify-center flex flex-col items-center">
-	<form action="?/verify" method="POST" use:enhance={login}>
-		<FlipCard {flipped} backAction="?/back">
-			<fieldset slot="front" class="h-full flex flex-col">
-				<h1 class="text-2xl font-bold text-center mb-5">Sign in to Tenth</h1>
-				<Input required showRequired={false} type="email" name="email" label="Email" value={$page.form?.values.email ?? ''}>
-					We'll send you a code to get you signed in.
-				</Input>
-				<Button {loading} formaction="?/send" type="submit" fullWidth class="mt-4">
-					Sign in
-				</Button>
-			</fieldset>
-			<fieldset slot="back" class="h-full flex flex-col">
-				<h2 class="text-2xl font-bold text-center mb-[min(auto,theme(space.3))]">Welcome back!</h2>
-				<p class="text-lg text-dim mb-auto leading-snug text-center">Please enter the 6-digit code we sent to <span class="font-medium text-black">{$page.form?.values.email}</span>.</p>
-				<Input required={flipped} showRequired={false} type="text" name="token" label="Code" value={$page.form?.values.token ?? ''}>
-					Didn't get a code? Resend.
-				</Input>
-				<Button {loading} formaction="?/verify" type="submit" fullWidth>
-					Continue
-				</Button>
-			</fieldset>
-		</FlipCard>
-	</form>
-</main>
-<footer class="flex gap-3 inner justify-center text-amber-400 pt-section pb-7">
-	<span>© 2022 Tenth, LLC.</span>
-	<span>·</span>
-	<a href="/privacy">Privacy</a>
-	<span>·</span>
-	<a href="/terms">Terms</a>
-</footer>
+<form method="POST" on:submit|preventDefault={login}>
+	<MultiStep bind:this={multiStep} let:reset>
+		<Step>
+			<h1 class="text-4xl font-bold text-center mb-5">Sign in to Tenth</h1>
+			<Input class="max-w-xs" required bind:error={emailError} showRequired={false} type="email" name="email" label="Email" on:input={reset} bind:value={email}>
+				We'll send you a code to get you signed in.
+			</Input>
+			<Button type="submit" class="max-w-xs mt-7">
+				Sign in
+			</Button>
+		</Step>
+		<Step let:active>
+			<h2 class="text-3xl font-bold text-center mb-[min(auto,theme(space.3))]">Welcome back!</h2>
+			<p class="text-lg text-gray-500 mb-auto leading-snug text-center">Please enter the 6-digit code we sent to <span class="font-medium text-black">{email}</span>.</p>
+			<Input required={active} showRequired={false} type="text" name="token" label="Code" value={$page.form?.values.token ?? ''}>
+				Didn't get a code? Resend.
+			</Input>
+			<Button {loading} type="submit">
+				Continue
+			</Button>
+		</Step>
+	</MultiStep>
+</form>

@@ -20,7 +20,7 @@
   "devDependencies": {
     "@rollup/plugin-yaml": "^3.1.0",
     "@sveltejs/adapter-auto": "next",
-    "@sveltejs/kit": "^1.0.0-next.525",
+    "@sveltejs/kit": "^1.0.0-next.572",
     "@tailwindcss/forms": "^0.5.2",
     "@tailwindcss/typography": "^0.5.4",
     "@types/lodash": "^4.14.186",
@@ -52,8 +52,10 @@
   "dependencies": {
     "@supabase/auth-helpers-sveltekit": "^0.8.3",
     "@supabase/supabase-js": "^2.0.4",
+    "@zerodevx/svelte-toast": "^1.0.0-rc.1",
     "jose": "^4.8.1",
     "lodash": "^4.17.21",
-    "stripe": "^10.17.0"
+    "stripe": "^10.17.0",
+    "svelte-typed-context": "^1.0.1"
   }
 }

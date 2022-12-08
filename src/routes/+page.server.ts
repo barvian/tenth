@@ -17,45 +17,7 @@ const getValues = (formData: FormData) => ({
 })
 
 export const actions: Actions = {
-	async send(event) {
-		const { request } = event;
-		const { supabaseClient } = await getSupabase(event);
-		const values = getValues(await request.formData())
-		const email = values.email
-
-		const { data: emailExists, error: checkEmailError } = await supabaseClient.rpc('email_exists', { email }).single()
-		if (checkEmailError) {
-            return invalid(500, {
-				error: 'Something went wrong. Please try again later.',
-				values
-			})
-        } else if (emailExists) {
-			return invalid(500, {
-				error: 'That email is already in use. Try another.',
-				values
-			})
-		}
-		
-		const { error: signInError } = await supabaseClient.auth.signInWithOtp({
-			email,
-			options: {
-            	shouldCreateUser: true
-			}
-		})
-        if (signInError) {
-			console.log(signInError)
-            return invalid(500, {
-				error: 'Server error. Try again later.',
-				values
-			});
-        }
-		
-		return {
-			type: 'success',
-			values
-		}
-	},
-    async create(event) {
+    async register(event) {
         const { request } = event;
 		const { supabaseClient } = await getSupabase(event);
 		const stripeClient = new stripe(SECRET_STRIPE_KEY, {

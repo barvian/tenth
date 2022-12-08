@@ -22,15 +22,13 @@
 
 @layer base {
     :root {
-        @apply overflow-x-hidden scroll-smooth xl:text-[18px]
-    }
+        @apply overflow-x-hidden scroll-smooth xl:text-[18px];
 
-    body {
-        @apply antialiased min-h-screen flex flex-col
-    }
-
-    main {
-        @apply flex-1
+        --toastBarHeight: 0;
+        --toastContainerRight: 3rem;
+        --toastContainerLeft: 3rem;
+        --toastMargin: 0 auto theme(spacing.6);
+        --toastWidth: min(theme(width.96), 100%);
     }
 
     summary::marker {
@@ -76,4 +74,11 @@
         .link:hover::after {
             transform: scaleX(1)
         }
+}
+
+@layer components {
+    /* Toasts */
+    .error {
+        --toastBackground: theme(colors.red.500);
+    }
 }
