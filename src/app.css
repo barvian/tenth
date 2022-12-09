@@ -27,6 +27,7 @@
         --toastBarHeight: 0;
         --toastContainerRight: 3rem;
         --toastContainerLeft: 3rem;
+        --toastBorderRadius: theme(borderRadius.2xl);
         --toastMargin: 0 auto theme(spacing.6);
         --toastWidth: min(theme(width.96), 100%);
     }

@@ -45,26 +45,12 @@ module.exports = {
       },
       animation: {
         'spin': 'spin 0.9s cubic-bezier(0.62, 0.37, 0.3, 0.63) infinite',
-        'fly-r': 'fly-r 400ms ease',
-        'fly-l': 'fly-l 400ms ease',
-        'fly-t': 'fly-t 400ms ease',
+        'fly-t': 'fly-t 150ms ease-out',
       },
       keyframes: {
-        'fly-r': {
-          '0%': {
-            'transform': 'translateX(calc(-40px - 10%)) rotate(-30deg)',
-            'opacity': 0
-          }
-        },
-        'fly-l': {
-          '0%': {
-            'transform': 'translateX(calc(40px + 10%)) rotate(30deg)',
-            'opacity': 0
-          }
-        },
         'fly-t': {
           '0%': {
-            'transform': 'translateY(calc(40px + 10%))',
+            'transform': 'translateY(1rem)',
             'opacity': 0
           }
         }
