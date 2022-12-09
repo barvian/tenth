@@ -84,13 +84,13 @@
                         {/each}
                     </div>
                 {/if}
-                <div class="text-center py-4 px-2 border-t border-gray-200">
+                <div class="text-center p-4 border-t border-gray-200">
                     {#if results.length <= 0}
                         We couldn't find that charity.
                     {:else}
                         Can't find the charity you're looking for?
                     {/if}
-                    <a class="block font-medium text-orange-500" href="/request">Request it to be added</a>
+                    <a class="block font-medium mt-2 text-orange-500" href="/request">Request it to be added</a>
                 </div>
             </div>
         {/if}
