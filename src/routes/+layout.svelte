@@ -48,7 +48,7 @@
     {/if}
 </nav>
 
-<main class="inner pt-[calc(theme(space.10)+5vh)] pb-[calc(theme(space.20)+10vh)] flex-1 flex flex-col items-center justify-center">
+<main class="inner pt-xl pb-2xl flex-1 flex flex-col items-center justify-center">
 	<slot />
 </main>
 

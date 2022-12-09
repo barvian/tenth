@@ -33,6 +33,10 @@ module.exports = {
       fontSize: {
         '4xl': '2.6rem'
       },
+      spacing: {
+        xl: 'calc(theme(space.10) + 5vh)',
+        '2xl': 'calc(theme(space.20) + 10vh)'
+      },
       padding: {
         'page': '5vw'
       },
@@ -41,18 +45,11 @@ module.exports = {
       },
       animation: {
         'spin': 'spin 0.9s cubic-bezier(0.62, 0.37, 0.3, 0.63) infinite',
-        'ping-lg': 'ping-lg 2s 3s cubic-bezier(0, 0, 0.2, 1) infinite',
         'fly-r': 'fly-r 400ms ease',
         'fly-l': 'fly-l 400ms ease',
         'fly-t': 'fly-t 400ms ease',
       },
       keyframes: {
-        'ping-lg': {
-          '75%, 100%': {
-            'transform': 'scale(4)',
-            'opacity': 0
-          }
-        },
         'fly-r': {
           '0%': {
             'transform': 'translateX(calc(-40px - 10%)) rotate(-30deg)',

@@ -16,7 +16,7 @@
                 {q}
                 <Expander class="-mt-1 ml-auto" />
             </summary>
-            <div class="p-8 pt-4">{@html a}</div>
+            <div class="p-8 pt-0">{@html a}</div>
         </details>
     {/each}
 </div>
