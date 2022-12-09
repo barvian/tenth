@@ -89,7 +89,7 @@
                 {:else}
                     Can't find the charity you're looking for?
                 {/if}
-                <a class="block font-medium mt-1 text-orange-500" href="/request">Request it to be added</a>
+                <a class="block mt-1" href="/request">Request it to be added</a>
             </div>
         </div>
     </div>

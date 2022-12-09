@@ -19,7 +19,7 @@
 <form method="POST" class="max-w-lg grid grid-cols-3 gap-6">
     <Input class="col-span-full" autocomplete="off" type="text" name="name" label="Charity name" required />
     <Input class="col-span-full" autocomplete="off" type="text" name="ein" label="EIN" placeholder="e.g. 41-1627391" required>
-        Not sure where to find this? Search for your charity on <a class="text-red-400 font-medium link" href="http://www.guidestar.org/" target="_blank">Guidestar</a>.
+        Not sure where to find this? Search for your charity on <a rel="external" href="http://www.guidestar.org/" target="_blank">Guidestar</a>.
     </Input>
     <Input class="col-span-full" autocomplete="off" type="text" name="address_line" label="Address line" placeholder="e.g. 1452 DoGood Lane" />
     <Input class="col-span-2" autocomplete="off" type="text" name="city" label="City" />

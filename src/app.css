@@ -49,12 +49,16 @@
         right: 0;
     }
 
+    main a {
+        @apply text-orange-500 font-medium
+    }
+
     svg * { 
         transform-box: fill-box;
         transform-origin: center
     }
 
-    .link {
+    /* .link {
         display: inline-block;
         position: relative;
 
@@ -76,5 +80,5 @@
 
         .link:hover::after {
             transform: scaleX(1)
-        }
+        } */
 }
