@@ -75,24 +75,22 @@
         <div bind:clientHeight={searchInputHeight}>
             <Input bind:value={term} bind:input={searchInput} inconspicuous {loading} type="search" label={designated?.length > 0 ? 'Support another charity' : 'Which charity do you want to support?'} name="search" on:focus={() => searching = true} on:blur={() => searching = false} />
         </div>
-        {#if searching && results}
-            <div class="px-2" on:mousedown|preventDefault>
-                {#if results.length > 0}
-                    <div class="py-2 border-t border-gray-200">
-                        {#each results as charity (charity.id)}
-                            <Charity {charity} on:click={(e) => addCharity(charity)} />
-                        {/each}
-                    </div>
-                {/if}
-                <div class="text-center p-4 border-t border-gray-200">
-                    {#if results.length <= 0}
-                        We couldn't find that charity.
-                    {:else}
-                        Can't find the charity you're looking for?
-                    {/if}
-                    <a class="block font-medium mt-2 text-orange-500" href="/request">Request it to be added</a>
+        <div class="px-2 overflow-hidden transition-[max-height] {searching && results ? 'max-h-[1200px] duration-500' : 'max-h-0 ease-[cubic-bezier(0,1,0,1)]'}" on:mousedown|preventDefault>
+            {#if results && results.length > 0}
+                <div class="py-2 border-t border-gray-200">
+                    {#each results as charity (charity.id)}
+                        <Charity {charity} on:click={(e) => addCharity(charity)} />
+                    {/each}
                 </div>
+            {/if}
+            <div class="text-center p-4 border-t border-gray-200">
+                {#if results && results.length <= 0}
+                    We couldn't find that charity.
+                {:else}
+                    Can't find the charity you're looking for?
+                {/if}
+                <a class="block font-medium mt-2 text-orange-500" href="/request">Request it to be added</a>
             </div>
-        {/if}
+        </div>
     </div>
 </div>
