@@ -50,7 +50,7 @@
 <form method="POST" on:submit|preventDefault={login}>
 	<MultiStep bind:this={multiStep} let:reset>
 		<Step>
-			<h1 class="text-3xl font-bold text-center mb-7">Sign in to Tenth</h1>
+			<h1 class="text-3xl font-bold text-center mb-8">Sign in to Tenth</h1>
 			<Input class="max-w-xs" required bind:error={emailError} showRequired={false} type="email" name="email" label="Email" on:input={reset} bind:value={email}>
 				We'll send you a code to get you signed in.
 			</Input>

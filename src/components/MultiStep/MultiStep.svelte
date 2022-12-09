@@ -49,7 +49,7 @@
 
 <svelte:window on:beforeunload={handleBeforeUnload} />
 
-<div class="fixed top-0 left-0 w-full h-[3px] bg-black origin-left transition-transform duration-300" style="transform: scaleX({step === 0 ? 0 : step / $steps})" />
+<div class="fixed top-0 left-0 w-full h-[3px] bg-black origin-left transition-transform duration-300 z-50" style="transform: scaleX({step === 0 ? 0 : step / $steps})" />
 
 <div class="overlap">
     <slot {next} {prev} {reset} />

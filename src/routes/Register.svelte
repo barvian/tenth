@@ -97,7 +97,7 @@
         </Step>
         <Step let:active>
             <h2 class="text-3xl max-w-xl text-center font-bold mb-5">Verify your email</h2>
-            <p class="text-lg max-w-xl leading-snug mb-5 text-gray-500 text-center">Please enter the 6-digit code we sent to <span class="text-black">{email}</span>.</p>
+            <p class="text-lg max-w-xl leading-snug mb-8 text-gray-500 text-center">Please enter the 6-digit code we sent to <span class="text-black">{email}</span>.</p>
             <Input class="max-w-xs" maxlength={6} required={active} type="text" name="token" label="Code">
                 Didn't receive a code? Resend.
             </Input>

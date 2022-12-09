@@ -36,6 +36,9 @@ module.exports = {
       padding: {
         'page': '5vw'
       },
+      maxWidth: {
+        prose: '54ch'
+      },
       animation: {
         'spin': 'spin 0.9s cubic-bezier(0.62, 0.37, 0.3, 0.63) infinite',
         'ping-lg': 'ping-lg 2s 3s cubic-bezier(0, 0, 0.2, 1) infinite',
@@ -107,6 +110,9 @@ module.exports = {
         },
         '.overlap > *': {
             'grid-area': 'overlap'
+        },
+        '.error': {
+          '--toastBackground': colors.red[500]
         }
       })
 

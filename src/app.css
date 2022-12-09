@@ -75,10 +75,3 @@
             transform: scaleX(1)
         }
 }
-
-@layer components {
-    /* Toasts */
-    .error {
-        --toastBackground: theme(colors.red.500);
-    }
-}

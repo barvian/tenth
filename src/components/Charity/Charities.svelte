@@ -72,11 +72,11 @@
         <input type="hidden" name="designated" value={JSON.stringify(designated.map(c => c.id))} />
     {/if}
     <div class="relative">
-        <div class="bg-white shadow border-x border-t peer border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10" class:border-b={!searching || !results} bind:clientHeight={searchInputHeight} style:border-top-left-radius={searchRadius} style:border-top-right-radius={searchRadius} style:border-bottom-left-radius={searching && results ? null : searchRadius} style:border-bottom-right-radius={searching && results ? null : searchRadius}>
+        <div class="bg-white shadow border peer border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10" class:!border-b-transparent={searching && results} bind:clientHeight={searchInputHeight} style:border-top-left-radius={searchRadius} style:border-top-right-radius={searchRadius} style:border-bottom-left-radius={searching && results ? null : searchRadius} style:border-bottom-right-radius={searching && results ? null : searchRadius}>
             <Input bind:value={term} bind:input={searchInput} inconspicuous {loading} type="search" label={designated?.length > 0 ? 'Support another charity' : 'Which charity do you want to support?'} name="search" on:focus={() => searching = true} on:blur={() => searching = false} />
         </div>
         {#if searching && results}
-            <div class="px-2 bg-white shadow border-x border-b border-black peer-focus-within:border-orange-500 peer-focus-within:shadow-orange-500/10 absolute z-10 top-full left-0 w-full" style:border-bottom-left-radius={searchRadius} style:border-bottom-right-radius={searchRadius} on:mousedown|preventDefault>
+            <div class="px-2 bg-white shadow border-x border-b border-black peer-focus-within:border-orange-500 peer-focus-within:shadow-orange-500/10 absolute z-10 top-full -mt-[1px] left-0 w-full" style:border-bottom-left-radius={searchRadius} style:border-bottom-right-radius={searchRadius} on:mousedown|preventDefault>
                 {#if results.length > 0}
                     <div class="py-2 border-t border-gray-200">
                         {#each results as charity (charity.id)}
