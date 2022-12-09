@@ -55,6 +55,6 @@
     {#if error}
         <p in:fade|local class="text-red-600 leading-snug mt-5">{@html error}</p>
     {:else if $$slots.default}
-        <p in:fade|local class="text-gray-450 leading-snug mt-5"><slot /></p>
+        <p in:fade|local class="text-gray-500 leading-snug mt-5"><slot /></p>
     {/if}
 </div>
