@@ -55,8 +55,8 @@ export const actions: Actions = {
 				if (r.ok) return r.json()
 				throw new ChangeAccountCreationError(await r.text())
 			})
+			console.log(`Created change account for ${values.email}`, changeAccount)
 
-			console.log('change account', changeAccount)
 			const { error: registerError } = await supabaseClient.rpc('register', {
 				stripe_id: stripeCustomer.id,
 				change_id: changeAccount.id,
@@ -80,6 +80,6 @@ export const actions: Actions = {
 			})
 		}
 		
-		throw redirect(303, '/dashboard')
+		throw redirect(303, '/')
     }
 };
