@@ -71,7 +71,7 @@
         </div>
         <input type="hidden" name="designated" value={JSON.stringify(designated.map(c => c.id))} />
     {/if}
-    <div class="relative bg-white shadow border border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10" style:border-radius={searchRadius}>
+    <div class="relative bg-white shadow border transition-all border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10" style:border-radius={searchRadius}>
         <div bind:clientHeight={searchInputHeight}>
             <Input bind:value={term} bind:input={searchInput} inconspicuous {loading} type="search" label={designated?.length > 0 ? 'Support another charity' : 'Which charity do you want to support?'} name="search" on:focus={() => searching = true} on:blur={() => searching = false} />
         </div>

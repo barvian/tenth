@@ -50,7 +50,7 @@
 <form method="POST" on:submit|preventDefault={login}>
 	<MultiStep bind:this={multiStep} let:reset>
 		<Step>
-			<h1 class="text-3xl font-bold text-center mb-8">Sign in to Tenth</h1>
+			<h1 class="text-4xl font-bold text-center mb-8">Sign in to Tenth</h1>
 			<Input class="max-w-xs" required bind:error={emailError} showRequired={false} type="email" name="email" label="Email" on:input={reset} bind:value={email}>
 				We'll send you a code to get you signed in.
 			</Input>
@@ -59,7 +59,7 @@
 			</Button>
 		</Step>
 		<Step let:active>
-			<h2 class="text-3xl font-bold text-center mb-[min(auto,theme(space.3))]">Welcome back!</h2>
+			<h2 class="text-3xl font-bold text-center mb-8">Welcome back!</h2>
 			<p class="text-lg text-gray-500 mb-auto leading-snug text-center">Please enter the 6-digit code we sent to <span class="font-medium text-black">{email}</span>.</p>
 			<Input required={active} showRequired={false} type="text" name="token" label="Code" value={$page.form?.values.token ?? ''}>
 				Didn't get a code? Resend.
