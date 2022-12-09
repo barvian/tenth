@@ -39,8 +39,11 @@
 				body: new FormData(event.currentTarget)
 			})
 			const result = deserialize(await response.text())
-			applyAction(result)
-			if (result.type === 'success') await invalidateAll()
+			if (['redirect', 'success'].includes(result.type)) {
+				multiStep.complete()
+				await invalidateAll()
+			}
+			await applyAction(result)
 		}
 
 		loading = false

@@ -5,7 +5,7 @@
     import key from './key';
 	
     export let leaveAlert: string | undefined = undefined
-	let step = 0, furthest = 0, steps = writable(0), navigating = false
+	let step = 0, furthest = 0, steps = writable(0), navigating = false, done = false, progressBar: HTMLElement | undefined
 	
     export const getStep = () => step
     const goto = (s: number) => {
@@ -19,17 +19,21 @@
 	export const next = () => goto(step+1)
 	export const prev = () => goto(step-1)
     export const reset = () => furthest = step
+    export const complete = () => /*new Promise(resolve => {
+        progressBar?.addEventListener('transitionend', resolve, { once: true })*/
+        done = true
+    // })
 
     beforeNavigate(({ cancel, delta, from, to }) => {
         if (navigating) {} // we initiated this event, so ignore
         else if (delta === -1) prev()
         else if (delta === 1 && step+1 <= furthest) next()
         else if (from?.url.pathname === to?.url.pathname) goto(0) // navigating to the same page, reset
-        else if (step > 0 && from?.url.href !== to?.url.href && leaveAlert && !confirm(leaveAlert)) cancel()
+        else if (step > 0 && from?.url.href !== to?.url.href && !done && leaveAlert && !confirm(leaveAlert)) cancel()
     })
 
     function handleBeforeUnload(event: BeforeUnloadEvent) {
-        if (leaveAlert && step > 0) {
+        if (leaveAlert && step > 0 && !done) {
             event.preventDefault()
             return event.returnValue = leaveAlert
         }
@@ -49,7 +53,7 @@
 
 <svelte:window on:beforeunload={handleBeforeUnload} />
 
-<div class="fixed top-0 left-0 w-full h-[3px] bg-black origin-left transition-transform duration-300 z-50" style="transform: scaleX({step === 0 ? 0 : step / $steps})" />
+<div bind:this={progressBar} class="fixed top-0 left-0 w-full h-[3px] bg-black origin-left transition-transform duration-300 z-50" style="transform: scaleX({done ? 1 : (step === 0 ? 0 : step / $steps)})" />
 
 <div class="overlap">
     <slot {next} {prev} {reset} />

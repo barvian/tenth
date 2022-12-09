@@ -28,6 +28,8 @@
         --toastContainerRight: 3rem;
         --toastContainerLeft: 3rem;
         --toastBorderRadius: theme(borderRadius.2xl);
+        --toastMsgPadding: theme(spacing.4);
+        --toastBtnWidth: calc(var(--toastMsgPadding)*2 + 1rem);
         --toastMargin: 0 auto theme(spacing.6);
         --toastWidth: min(theme(width.96), 100%);
     }
