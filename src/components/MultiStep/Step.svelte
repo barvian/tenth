@@ -2,6 +2,9 @@
 	import { getContext } from 'svelte-typed-context'
     import key from './key'
 
+    let cls = ''
+    export { cls as class }
+
     export let as = 'fieldset'
 
     const context = getContext(key)
@@ -14,6 +17,6 @@
     $: active = $step === i
 </script>
 
-<svelte:element this={as} class="transition-all duration-300 ease-in-out flex flex-col items-center justify-center" class:opacity-0={!active} class:pointer-events-none={!active} class:-translate-x-[20vw]={$step > i} class:translate-x-[20vw]={$step < i}>
+<svelte:element this={as} class="transition-all duration-300 ease-in-out flex flex-col items-center justify-center {cls}" class:opacity-0={!active} class:pointer-events-none={!active} class:-translate-x-[20vw]={$step > i} class:translate-x-[20vw]={$step < i}>
     <slot {active} />
 </svelte:element>

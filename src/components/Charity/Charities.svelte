@@ -10,18 +10,14 @@
 <script lang="ts">
     import { PUBLIC_CHANGE_KEY } from '$env/static/public';
     import debounce from 'lodash/debounce';
-    import { crossfade } from 'svelte/transition';
     import type { Nonprofit, NonprofitSearchResults } from 'types/change';
-    import { freezePadding } from '~/routes/+layout.svelte';
     import Input from '../Input.svelte';
     import Charity from './Charity.svelte';
 
     export let designated: Nonprofit[] = []
     let results: Nonprofit[] | null
     let searching = false, loading = false, term = '', searchInput: HTMLInputElement | null = null, searchInputHeight = 999
-    $: $freezePadding = !!(searching && results)
-
-    const [send, receive] = crossfade({ duration: 400 })
+    $: searchRadius = searchInputHeight/2+'px'
     
     const limit = 10
 
@@ -70,24 +66,33 @@
     {#if designated?.length > 0}
         <div class="space-y-4">
             {#each designated as item (item.id)}
-                <div in:receive={{ key: item.id }}><Charity charity={item} editable on:remove={(e) => removeCharity(item)} /></div>
+                <Charity charity={item} editable on:remove={(e) => removeCharity(item)} />
             {/each}
         </div>
         <input type="hidden" name="designated" value={JSON.stringify(designated.map(c => c.id))} />
     {/if}
-    <div class="bg-white shadow border border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10" style:border-radius={searchInputHeight/2+'px'}>
-        <div bind:clientHeight={searchInputHeight}>
+    <div class="relative">
+        <div class="bg-white shadow border-x border-t peer border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10" class:border-b={!searching || !results} bind:clientHeight={searchInputHeight} style:border-top-left-radius={searchRadius} style:border-top-right-radius={searchRadius} style:border-bottom-left-radius={searching && results ? null : searchRadius} style:border-bottom-right-radius={searching && results ? null : searchRadius}>
             <Input bind:value={term} bind:input={searchInput} inconspicuous {loading} type="search" label={designated?.length > 0 ? 'Support another charity' : 'Which charity do you want to support?'} name="search" on:focus={() => searching = true} on:blur={() => searching = false} />
         </div>
         {#if searching && results}
-            <hr class="mx-2 border-gray-200" />
-            <div class="p-2" on:mousedown|preventDefault>
-                {#each results as charity (charity.id)}
-                    <div out:send={{ key: charity.id }}><Charity {charity} on:click={(e) => addCharity(charity)} /></div>
-                {/each}
+            <div class="px-2 bg-white shadow border-x border-b border-black peer-focus-within:border-orange-500 peer-focus-within:shadow-orange-500/10 absolute z-10 top-full left-0 w-full" style:border-bottom-left-radius={searchRadius} style:border-bottom-right-radius={searchRadius} on:mousedown|preventDefault>
+                {#if results.length > 0}
+                    <div class="py-2 border-t border-gray-200">
+                        {#each results as charity (charity.id)}
+                            <Charity {charity} on:click={(e) => addCharity(charity)} />
+                        {/each}
+                    </div>
+                {/if}
+                <div class="text-center py-4 px-2 border-t border-gray-200">
+                    {#if results.length <= 0}
+                        We couldn't find that charity.
+                    {:else}
+                        Can't find the charity you're looking for?
+                    {/if}
+                    <a class="block font-medium text-orange-500" href="/request">Request it to be added</a>
+                </div>
             </div>
-            <hr class="mx-2 border-gray-200" />
-            not seeing yo shit?
         {/if}
     </div>
 </div>

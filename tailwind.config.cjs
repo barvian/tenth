@@ -34,9 +34,7 @@ module.exports = {
         '4xl': '2.6rem'
       },
       padding: {
-        'page': '5vw',
-        'section': 'calc(theme(space.9) + 5vh)',
-        'hero': 'calc(theme(space.9) + 8vh)'
+        'page': '5vw'
       },
       animation: {
         'spin': 'spin 0.9s cubic-bezier(0.62, 0.37, 0.3, 0.63) infinite',

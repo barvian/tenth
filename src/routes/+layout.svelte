@@ -1,9 +1,3 @@
-<script lang="ts" context="module">
-	import { writable } from 'svelte/store'
-
-	export const freezePadding = writable(false)
-</script>
-
 <script lang="ts">
 	import '~/app.css';
 	import supabaseClient from '~/lib/db';
@@ -23,25 +17,6 @@
 			subscription.unsubscribe()
 		}
 	})
-
-	function freezePaddingY (node: HTMLElement, frozen: boolean) {
-		function update(newFrozen: boolean) {
-			if (newFrozen) {
-				const { paddingTop, paddingBottom } = getComputedStyle(node)
-				node.style.paddingTop = paddingTop
-				node.style.paddingBottom = paddingBottom
-			} else {
-				node.classList.add('transition-[padding-top,padding-bottom]')
-				node.addEventListener('transitionend', () => {
-					node.classList.remove('transition-[padding-top,padding-bottom]')
-				}, { once: true })
-				node.style.removeProperty('padding-top')
-				node.style.removeProperty('padding-bottom')
-			}
-		}
-		if (frozen) update(frozen)
-		return { update }
-	}
 
 	const toastOptions = {
 		intro: { y: 40 }
@@ -73,7 +48,7 @@
     {/if}
 </nav>
 
-<main class="inner pt-section pb-hero flex-1 flex flex-col items-center justify-center" use:freezePaddingY={$freezePadding}>
+<main class="inner pt-[calc(theme(space.12)+5vh)] pb-[calc(theme(space.24)+5vh)] flex-1 flex flex-col items-center justify-center">
 	<slot />
 </main>
 
