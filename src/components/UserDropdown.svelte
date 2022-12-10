@@ -8,7 +8,7 @@
 
     let open = false
 
-    $: active = $page.url.pathname === '/account'
+    $: active = $page.url.pathname === '/profile'
     let email: string
     $: {
         email = $page.data.session!.user.email!
@@ -35,7 +35,7 @@
         <span class="block lg:hidden border-b border-gray-200 p-3 mb-2 text-gray-500">
             {email}
         </span>
-        <a href="/account" role="menuitem" class="block hover:bg-gray-100 p-3 rounded-xl w-full">Edit account</a>
+        <a href="/profile" role="menuitem" class="block hover:bg-gray-100 p-3 rounded-xl w-full">Edit profile</a>
         <form action="/logout" method="POST" use:enhance>
             <button type="submit" class="block hover:bg-gray-100 p-3 w-full text-left rounded-xl">Log out</button>
         </form>

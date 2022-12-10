@@ -5,7 +5,7 @@
     let cls = ''
     export { cls as class }
 
-    export let as = 'fieldset'
+    export let as = 'div'
 
     const context = getContext(key)
     if (!context) {

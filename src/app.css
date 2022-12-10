@@ -40,6 +40,10 @@
         @apply !shadow
     }
 
+    mark {
+        @apply bg-transparent text-black;
+    }
+
     summary::marker {
         display: none;
     }

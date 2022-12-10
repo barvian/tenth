@@ -1,10 +1,11 @@
+import { SECRET_CHANGE_KEY } from '$env/static/private';
+import { PUBLIC_CHANGE_KEY } from '$env/static/public';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { invalid, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
-import stripe from 'stripe'
-import { SECRET_STRIPE_KEY, SECRET_CHANGE_KEY } from '$env/static/private'
-import { PUBLIC_CHANGE_KEY } from '$env/static/public'
+import type stripe from 'stripe';
 import { ChangeAccountCreationError } from '~/lib/change';
+import stripeClient from '~/lib/stripe';
+import type { Actions, PageServerLoad } from './$types';
 const changeCreds = Buffer.from(PUBLIC_CHANGE_KEY+':'+SECRET_CHANGE_KEY).toString('base64')
 
 const getValues = (formData: FormData) => ({
@@ -16,13 +17,25 @@ const getValues = (formData: FormData) => ({
 	token: formData.get('token') as string
 })
 
+export const load: PageServerLoad = async (event) => {
+	const { supabaseClient, session } = await getSupabase(event)
+
+    if (session) {
+		// Check if the Stripe customer is fully configured (aka the linking process is complete)
+        const { data: profile, error: profileError } = await supabaseClient.from('profiles').select(
+            'stripe_id'
+        ).single()
+		if (profile?.stripe_id) {
+			const stripeCustomer = await stripeClient.customers.retrieve(profile?.stripe_id)
+			if (!stripeCustomer?.default_source) throw redirect(303, '/link')
+		} else throw profileError
+	}
+}
+
 export const actions: Actions = {
     async register(event) {
         const { request } = event;
 		const { supabaseClient } = await getSupabase(event);
-		const stripeClient = new stripe(SECRET_STRIPE_KEY, {
-			apiVersion: '2022-08-01'
-		})
 		const values = getValues(await request.formData())
 		
         const { error: verifyError } = await supabaseClient.auth.verifyOtp({
@@ -66,21 +79,25 @@ export const actions: Actions = {
 				designated: values.designated
 			})
 			if (registerError) throw registerError
-
-			return { success: true }
 		} catch (e) {
-			await supabaseClient.auth.signOut()
-			if (stripeCustomer) await stripeClient.customers.del(stripeCustomer.id).catch(e => null)
-
 			if (e instanceof ChangeAccountCreationError) {
 				console.error('Could not create Change account for email %s', values.email, e)
 			} else {
 				console.error('Registration failed for email %s', values.email, e)
 			}
+
+			try {
+				await supabaseClient.auth.signOut()
+	
+				if (stripeCustomer) await stripeClient.customers.del(stripeCustomer.id).catch(e => null)
+			} catch {}
+
 			return invalid(500, {
 				error: 'Could not register. Please try again later.',
 				values
 			})
 		}
+		
+		throw redirect(303, '/link')
     }
 };

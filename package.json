@@ -25,6 +25,7 @@
     "@tailwindcss/typography": "^0.5.4",
     "@types/crypto-js": "^4.1.1",
     "@types/lodash": "^4.14.186",
+    "@types/plaid-link": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "autoprefixer": "^10.4.8",
@@ -57,7 +58,11 @@
     "crypto-js": "^4.1.1",
     "jose": "^4.8.1",
     "lodash": "^4.17.21",
+    "plaid": "^12.1.0",
     "stripe": "^10.17.0",
     "svelte-typed-context": "^1.0.1"
+  },
+  "msw": {
+    "workerDirectory": "static"
   }
 }

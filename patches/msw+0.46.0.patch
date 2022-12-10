@@ -15,7 +15,7 @@ index 1b341e9..d9879fb 100644
  
  // src/node/setupServer.ts
 -var setupServer = createSetupServer(import_ClientRequest.ClientRequestInterceptor, import_XMLHttpRequest.XMLHttpRequestInterceptor);
-+var setupServer = createSetupServer(/*import_ClientRequest.ClientRequestInterceptor, import_XMLHttpRequest.XMLHttpRequestInterceptor, */import_Fetch.FetchInterceptor);
++var setupServer = createSetupServer(import_ClientRequest.ClientRequestInterceptor, import_XMLHttpRequest.XMLHttpRequestInterceptor, import_Fetch.FetchInterceptor);
  // Annotate the CommonJS export names for ESM import in node:
  0 && (module.exports = {
    setupServer

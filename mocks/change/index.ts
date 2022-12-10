@@ -15,6 +15,11 @@ export default [
       res(ctx.json(account))
   ),
   rest.post(
+    'https://api.getchange.io/api/v1/accounts/attach_bank_account',
+    async (req, res, ctx) =>
+      res(ctx.json({ ...account, active: true }))
+  ),
+  rest.post(
     'https://api.getchange.io/api/v1/nonprofit_requests',
     async (req, res, ctx) =>
       res(ctx.json(request))

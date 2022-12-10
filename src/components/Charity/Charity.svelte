@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import type { Nonprofit } from 'types/change';
+	import X from "../icons/X.svelte";
 
     export let charity: Nonprofit | null = null
     let url: URL | null, location: String
@@ -46,10 +47,7 @@
     {/if} -->
     {#if editable}
         <button type="button" on:click={handleRemoveClick} class="py-2 pl-2 transition-colors text-gray-300 hover:text-red-500">
-            <svg class="h-3.5" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16.625 2.5L2.625 16.5" stroke="currentColor" vector-effect="non-scaling-stroke" stroke-width="3" stroke-linecap="square" stroke-linejoin="round"/>
-                <path d="M16.625 16.5L2.625 2.5" stroke="currentColor" vector-effect="non-scaling-stroke" stroke-width="3" stroke-linecap="square" stroke-linejoin="round"/>
-            </svg>
+            <X class="h-3.5" />
         </button>
     {/if}
 </div>

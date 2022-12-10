@@ -37,7 +37,7 @@
     }
 </script>
 
-<h1 class="text-4xl font-bold text-center mb-8 max-w-2xl">Your account</h1>
+<h1 class="text-4xl font-bold text-center mb-8 max-w-2xl">Your profile</h1>
 <form method="POST" action="?/update" class="max-w-sm w-full" use:enhance={save}>
     <Input class="mb-3" label="First name" name="first" value={data.profile.first_name} disabled />
     <Input label="Last name" name="last" value={data.profile.last_name} disabled>

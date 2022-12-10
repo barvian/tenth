@@ -35,7 +35,7 @@ module.exports = {
       },
       spacing: {
         xl: 'calc(theme(space.10) + 5vh)',
-        '2xl': 'calc(theme(space.20) + 10vh)'
+        '2xl': 'calc(theme(space.16) + 10vh)'
       },
       padding: {
         'page': '5vw'

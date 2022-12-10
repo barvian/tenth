@@ -163,6 +163,8 @@ CREATE TABLE IF NOT EXISTS public.profiles
     change_id text NOT NULL COLLATE pg_catalog."default" UNIQUE,
     plaid_institution_id text COLLATE pg_catalog."default" UNIQUE,
     plaid_account_mask text COLLATE pg_catalog."default" UNIQUE,
+    plaid_account_type text COLLATE pg_catalog."default" UNIQUE,
+    plaid_account_subtype text COLLATE pg_catalog."default" UNIQUE,
     CONSTRAINT profiles_pkey PRIMARY KEY (user_id),
     CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id)
         REFERENCES auth.users (id) MATCH SIMPLE

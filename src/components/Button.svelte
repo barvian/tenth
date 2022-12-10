@@ -15,6 +15,6 @@
 <div class="relative {width} {cls}">
     <svelte:element this={href ? 'a' : 'button'} {href} disabled={loading || disabled} {type} class="{width} {loading || disabled ? 'cursor-not-allowed': inconspicuous ? '' : 'hover:-translate-y-1 hover:shadow-elevated active:shadow active:translate-y-0 active:transition-none'} disabled:cursor-not-allowed {color} whitespace-nowrap overlap justify-items-center relative text-lg {inconspicuous ? '' : 'bg-black shadow rounded-2xl px-6 py-4 disabled:bg-gray-200 disabled:shadow-transparent'} transition-all font-medium" on:click>
         <span class:invisible={loading}><slot /></span>
-        {#if loading}<Spinner />{/if}
+        {#if loading}<Spinner class="h-5" />{/if}
     </svelte:element>
 </div>

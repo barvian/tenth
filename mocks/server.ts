@@ -1,11 +1,9 @@
 import { dev } from '$app/environment';
 import { setupServer } from 'msw/node';
-import changeHandlers from './change';
+import handlers from './handlers';
 
 if (dev) {
-  const server = setupServer(
-    ...changeHandlers
-  )
+  const server = setupServer(...handlers)
   
   server.listen({onUnhandledRequest: 'bypass'})
   console.info('🔶 Mock server installed')

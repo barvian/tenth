@@ -1,9 +1,9 @@
-import { SECRET_STRIPE_KEY, SUPABASE_SERVICE_ROLE_KEY } from '$env/static/private';
+import { SUPABASE_SERVICE_ROLE_KEY } from '$env/static/private';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { createClient } from '@supabase/supabase-js';
 import { invalid, redirect } from '@sveltejs/kit';
-import stripe from 'stripe';
+import stripeClient from '~/lib/stripe';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
@@ -27,9 +27,6 @@ export const actions: Actions = {
     async delete(event) {
         const { session, supabaseClient } = await getSupabase(event)
         const supabaseServiceRoleClient = createClient(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
-        const stripeClient = new stripe(SECRET_STRIPE_KEY, {
-			apiVersion: '2022-08-01'
-		})
 
         const { data: profile, error: profileError } = await supabaseClient.from('profiles').select('stripe_id').single()
         if (profileError) {
@@ -38,7 +35,7 @@ export const actions: Actions = {
 			})
         } else if (profile.stripe_id) {
             try {
-                await stripeClient.customers.del(profile?.stripe_id)
+                await stripeClient.customers.del(profile.stripe_id)
             } catch (e) {
                 return invalid(500, {
                     error: 'Could not delete account. Try again later.'

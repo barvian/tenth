@@ -4,6 +4,7 @@
     import { writable } from 'svelte/store';
     import key from './key';
 	
+    export let inconspicuous = true
     export let leaveAlert: string | undefined = undefined
 	let step = 0, furthest = 0, steps = writable(0), navigating = false, done = false, progressBar: HTMLElement | undefined
 	
@@ -53,7 +54,7 @@
 
 <svelte:window on:beforeunload={handleBeforeUnload} />
 
-<div bind:this={progressBar} class="fixed top-0 left-0 w-full h-[3px] bg-black origin-left transition-transform duration-300 z-50" style="transform: scaleX({done ? 1 : (step === 0 ? 0 : step / $steps)})" />
+<div bind:this={progressBar} class="fixed top-0 left-0 w-full h-[3px] bg-black origin-left transition-transform duration-300 z-50" style="transform: scaleX({(done ? 1 : inconspicuous ? step / $steps : $steps === 0 ? 0 : (step+1) / ($steps+1)) || 0})" />
 
 <div class="overlap">
     <slot {next} {prev} {reset} />

@@ -64,7 +64,7 @@
 
 <form action="?/register" method="POST" on:submit|preventDefault={register}>
     <MultiStep bind:this={multiStep} let:next let:prev let:reset leaveAlert="Are you sure you want to exit? You'll have to start the sign-up process again.">
-        <Step>
+        <Step as="fieldset">
             <h1 class="text-4xl max-w-2xl text-center leading-tight font-bold">
                 Donate
                 <Select name="percentage" bind:value={percent}>
@@ -88,7 +88,7 @@
                 </div>
             {/if}
         </Step>
-        <Step let:active>
+        <Step as="fieldset" let:active>
             <h2 class="text-3xl max-w-2xl font-bold mb-8 text-center">Create an account</h2>
             <div class="grid grid-cols-2 gap-6 max-w-md w-full">
                 <Input required={active} type="text" name="first-name" label="First name" />
@@ -101,9 +101,9 @@
                 Continue
             </Button>
         </Step>
-        <Step let:active>
+        <Step as="fieldset" let:active>
             <h2 class="text-3xl max-w-xl text-center font-bold mb-5">Verify your email</h2>
-            <p class="text-lg max-w-xl leading-snug mb-8 text-gray-500 text-center">Please enter the 6-digit code we sent to <span class="text-black">{email}</span>.</p>
+            <p class="text-lg max-w-xl leading-snug mb-8 text-gray-500 text-center">Please enter the 6-digit code we sent to <mark>{email}</mark>.</p>
             <Input class="max-w-xs" maxlength={6} required={active} type="text" name="token" label="Code" />
             <Button {loading} type="submit" class="mt-8 max-w-xs">
                 Continue

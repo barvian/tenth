@@ -13,17 +13,17 @@ export interface Database {
         Row: {
           id: number
           user_id: string
-          change_id: string | null
+          change_id: string
         }
         Insert: {
           id?: number
           user_id: string
-          change_id?: string | null
+          change_id: string
         }
         Update: {
           id?: number
           user_id?: string
-          change_id?: string | null
+          change_id?: string
         }
       }
       profiles: {
@@ -34,6 +34,10 @@ export interface Database {
           percentage: number | null
           stripe_id: string
           change_id: string
+          plaid_institution_id: string | null
+          plaid_account_mask: string | null
+          plaid_account_type: string | null
+          plaid_account_subtype: string | null
         }
         Insert: {
           user_id: string
@@ -42,6 +46,10 @@ export interface Database {
           percentage?: number | null
           stripe_id: string
           change_id: string
+          plaid_institution_id?: string | null
+          plaid_account_mask?: string | null
+          plaid_account_type?: string | null
+          plaid_account_subtype?: string | null
         }
         Update: {
           user_id?: string
@@ -50,23 +58,30 @@ export interface Database {
           percentage?: number | null
           stripe_id?: string
           change_id?: string
+          plaid_institution_id?: string | null
+          plaid_account_mask?: string | null
+          plaid_account_type?: string | null
+          plaid_account_subtype?: string | null
         }
       }
       requests: {
         Row: {
+          id: number
           change_id: string
-          user_id: string | null
           email: unknown | null
+          user_id: string | null
         }
         Insert: {
+          id?: number
           change_id: string
-          user_id?: string | null
           email?: unknown | null
+          user_id?: string | null
         }
         Update: {
+          id?: number
           change_id?: string
-          user_id?: string | null
           email?: unknown | null
+          user_id?: string | null
         }
       }
     }
