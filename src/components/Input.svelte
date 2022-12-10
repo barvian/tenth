@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher, SvelteComponent } from "svelte";
     import { fade, scale } from "svelte/transition";
+	import { afterUpdate } from "~/lib/component";
     import Search from "./icons/Search.svelte";
     import Spinner from "./icons/Spinner.svelte";
 
@@ -27,12 +28,13 @@
 
     const dispatch = createEventDispatcher()
     
-    let lastError: string, errorValue: string // the value at the time of the error
-    $: if (error) {
-        lastError = error
-        updateErrorValue()
-    }
-    const updateErrorValue = () => errorValue = value // don't react to value changes
+    let lastError: string | null | undefined, errorValue: string // the value at the time of the error
+    afterUpdate(() => {
+        if (error) {
+            lastError = error
+            errorValue = value
+        }
+    }, () => [error])
 
     function handleInput(e: Event & { currentTarget: HTMLInputElement }) {
         value = e.currentTarget?.value

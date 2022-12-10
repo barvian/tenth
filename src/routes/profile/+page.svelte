@@ -1,18 +1,16 @@
 <script lang="ts">
-	import type { ActionData, PageData } from "./$types";
-    import Input from "~/components/Input.svelte";
-    import Button from "~/components/Button.svelte";
 	import { applyAction, enhance, type SubmitFunction } from "$app/forms";
-    import { page } from '$app/stores'
-	import { fade } from "svelte/transition";
+	import Button from "~/components/Button.svelte";
+	import Input from "~/components/Input.svelte";
+	import { afterUpdate } from "~/lib/component";
+	import type { ActionData, PageData } from "./$types";
 
     export let data: PageData
     export let form: ActionData
 
     let email = data.session?.user.email
     let error: string | undefined
-    $: form?.error && updateError()
-    const updateError = () => error = form?.error // ignore form error changes
+    afterUpdate(() => error = form?.error, () => [form?.error])
     
     let saving = false
     const save: SubmitFunction = ({}) => {
