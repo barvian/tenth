@@ -88,12 +88,12 @@
                 </div>
             {/if}
         </Step>
-        <Step>
+        <Step let:active>
             <h2 class="text-3xl max-w-2xl font-bold mb-8 text-center">Create an account</h2>
             <div class="grid grid-cols-2 gap-6 max-w-md w-full">
-                <Input required type="text" name="first-name" label="First name" />
-                <Input required type="text" name="last-name" label="Last name" />
-                <Input bind:error={emailError} bind:value={email} on:input={reset} class="col-span-full" required type="email" name="email" label="Email">
+                <Input required={active} type="text" name="first-name" label="First name" />
+                <Input required={active} type="text" name="last-name" label="Last name" />
+                <Input bind:error={emailError} bind:value={email} on:input={reset} class="col-span-full" required={active} type="email" name="email" label="Email">
                     We'll send you a code to verify your email address.
                 </Input>
             </div>
@@ -104,9 +104,7 @@
         <Step let:active>
             <h2 class="text-3xl max-w-xl text-center font-bold mb-5">Verify your email</h2>
             <p class="text-lg max-w-xl leading-snug mb-8 text-gray-500 text-center">Please enter the 6-digit code we sent to <span class="text-black">{email}</span>.</p>
-            <Input class="max-w-xs" maxlength={6} required={active} type="text" name="token" label="Code">
-                Didn't receive a code? Resend.
-            </Input>
+            <Input class="max-w-xs" maxlength={6} required={active} type="text" name="token" label="Code" />
             <Button {loading} type="submit" class="mt-8 max-w-xs">
                 Continue
             </Button>

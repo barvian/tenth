@@ -69,6 +69,7 @@ export const actions: Actions = {
 
 			return { success: true }
 		} catch (e) {
+			await supabaseClient.auth.signOut()
 			if (stripeCustomer) await stripeClient.customers.del(stripeCustomer.id).catch(e => null)
 
 			if (e instanceof ChangeAccountCreationError) {
