@@ -66,6 +66,8 @@ export const actions: Actions = {
 				designated: values.designated
 			})
 			if (registerError) throw registerError
+
+			return { success: true }
 		} catch (e) {
 			if (stripeCustomer) await stripeClient.customers.del(stripeCustomer.id).catch(e => null)
 
