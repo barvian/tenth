@@ -3,6 +3,7 @@
     import { invalidateAll } from '$app/navigation';
     import { toast } from '@zerodevx/svelte-toast';
     import { fade } from 'svelte/transition';
+    import { page } from '$app/stores'
     import type { Nonprofit } from 'types/change';
     import Button from '~/components/Button.svelte';
     import Charities from '~/components/Charity/Charities.svelte';
@@ -18,6 +19,8 @@
     $: if (multiStep && designated.length === 0) multiStep.reset()
     let percent = '10'
     let email = ''
+
+    $: if ($page.form?.error) toast.push(`Couldn't register. Please try again later.`, { classes: ['error'] })
 
     let loading = false, emailError: string | null | undefined
     async function register(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {

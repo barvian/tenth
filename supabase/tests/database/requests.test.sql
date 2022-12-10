@@ -20,6 +20,15 @@ select throws_ok(
 
 select throws_ok(
     $$
+    insert into public.requests (change_id) values ('fake-change-id');
+    $$,
+    42501,
+    'new row violates row-level security policy for table "requests"',
+    'An anonymous user cannot create requests without an email'
+);
+
+select throws_ok(
+    $$
     insert into public.requests (change_id, user_id) values ('fake-change-id', '6ce7faef-966c-40f3-bb32-d7852c6e8430');
     $$,
     42501,
@@ -36,15 +45,6 @@ select lives_ok(
 
 set local role authenticated;
 set local "request.jwt.claim.sub" to '6ce7faef-966c-40f3-bb32-d7852c6e8430';
-
-select throws_ok(
-    $$
-    insert into public.requests (change_id) values ('fake-change-id2');
-    $$,
-    42501,
-    'new row violates row-level security policy for table "requests"',
-    'An authenticated user cannot create requests without a user_id'
-);
 
 select throws_ok(
     $$

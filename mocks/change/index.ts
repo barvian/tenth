@@ -1,6 +1,7 @@
 import { rest } from 'msw'
 import data from './data/charities.json'
 import account from './data/account.json'
+import request from './data/request.json'
 
 export default [
   rest.get(
@@ -12,5 +13,10 @@ export default [
     'https://api.getchange.io/api/v1/accounts',
     async (req, res, ctx) =>
       res(ctx.json(account))
+  ),
+  rest.post(
+    'https://api.getchange.io/api/v1/nonprofit_requests',
+    async (req, res, ctx) =>
+      res(ctx.json(request))
   )
 ]
