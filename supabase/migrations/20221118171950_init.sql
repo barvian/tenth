@@ -193,4 +193,4 @@ CREATE POLICY "Owner can update own profile"
     AS PERMISSIVE
     FOR UPDATE
     TO public
-    USING (auth.uid() = user_id and stripe_id is null and change_id is null);
+    USING (auth.uid() = user_id);

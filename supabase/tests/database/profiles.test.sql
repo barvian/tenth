@@ -1,5 +1,5 @@
 begin;
-select plan(7);
+select plan(8);
 
 insert into auth.users (id, email) values
 ('b9511b07-87eb-4e02-bfb5-3b7095129c73', 'unregistered@test.com'),
@@ -60,18 +60,32 @@ select is_empty(
     'A user cannot delete any profiles'
 );
 
-select is_empty(
+select throws_ok(
     $$
     update public.profiles set stripe_id = 'fake-stripe-id' returning *;
     $$,
-    'A user cannot set their stripe_id'
+    23505,
+    'duplicate key value violates unique constraint "profiles_stripe_id_key"',
+    'A user cannot set their stripe_id to an existing one'
 );
 
-select is_empty(
+select throws_ok(
     $$
     update public.profiles set change_id = 'fake-change-id' returning *;
     $$,
-    'A user cannot set their change_id'
+    23505,
+    'duplicate key value violates unique constraint "profiles_change_id_key"',
+    'A user cannot set their change_id to an existing one'
+);
+
+select results_eq(
+    $$
+    update public.profiles set percentage = 0.333 returning percentage;
+    $$,
+    $$
+    values(0.333)
+    $$,
+    'A user can update their percentage'
 );
 
 
