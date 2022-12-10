@@ -13,9 +13,8 @@ export const actions: Actions = {
         const values: Record<string, string> = {}
         formData.forEach((value, key) => values[key] = value as string)
 
-        let changeRequest
         try {
-            changeRequest = await fetch('/api/v1/nonprofit_requests', {
+            const changeRequest = await fetch('/api/v1/nonprofit_requests', {
                 method: 'POST',
                 headers: { 'Authorization': `Basic ${changeCreds}`},
                 body: JSON.stringify({
@@ -33,23 +32,17 @@ export const actions: Actions = {
                     }
                 })
             }).then(r => r.ok ? r.json() : Promise.reject(r))
+
+            await supabaseClient.from('requests').insert({
+                change_id: changeRequest.result.id
+            })
+
+            return { type: 'success' }
         } catch (e) {
             return invalid(500, {
 				error: 'Could not complete request. Please try again later.',
 				values
 			})
         }
-        if (changeRequest.result?.id) {
-            await supabaseClient.from('requests').insert({
-                change_id: changeRequest.result.id,
-            })
-        } else {
-            return invalid(500, {
-				error: 'Something went wrong. Please try again later.',
-				values
-			})
-        }
-
-        return { type: 'success' }
     }
 }

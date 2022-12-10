@@ -79,7 +79,5 @@ export const actions: Actions = {
 				values
 			})
 		}
-		
-		throw redirect(303, '/')
     }
 };

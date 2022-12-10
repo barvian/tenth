@@ -13,7 +13,7 @@ export const waitForSession = () => new Promise(resolve => {
 })
 
 // Redirect if not logged in
-export function withLoadAuth<L extends Load>(fn?: L): Load {
+export function withLoadAuth<L>(fn?: L): Load {
     return async (event) => {
         const { session } = await getSupabase(event)
         if (!session) {
@@ -25,7 +25,7 @@ export function withLoadAuth<L extends Load>(fn?: L): Load {
     }
     
 // Redirect if already logged in
-export function withLoadNoAuth<L extends Load>(fn?: L): Load {
+export function withLoadNoAuth<L>(fn?: L): Load {
   return async (event) => {
     const { session } = await getSupabase(event)
     if (session) {

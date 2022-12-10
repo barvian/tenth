@@ -58,6 +58,8 @@
 <footer class="flex gap-3 inner justify-center text-gray-500">
 	<span>© 2022 Tenth, LLC.</span>
 	<span>·</span>
+	<a href="/about" class="font-medium {$page.url.pathname === '/about' ? '!text-black' : 'text-gray-450'}">About</a>
+	<span>·</span>
 	<a href="/privacy" class="font-medium {$page.url.pathname === '/privacy' ? '!text-black' : 'text-gray-450'}">Privacy</a>
 	<span>·</span>
 	<a href="/terms" class="font-medium {$page.url.pathname === '/terms' ? '!text-black' : 'text-gray-450'}">Terms</a>

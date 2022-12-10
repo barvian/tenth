@@ -10,6 +10,7 @@
     export let value = ''
     export let required = false
     export let showRequired = true
+    export let showDescription = true
     export let inconspicuous = false
     export let icon: typeof SvelteComponent | null = null
     export let error: string | null | undefined = undefined
@@ -17,6 +18,7 @@
     export let placeholder = ''
     export let autocomplete = 'on'
     export let maxlength = 524288
+    export let disabled = false
     let cls = ''
     export { cls as class }
     export let spellcheck = true
@@ -25,16 +27,23 @@
 
     const dispatch = createEventDispatcher()
     
+    let lastError: string, errorValue: string // the value at the time of the error
+    $: if (error) {
+        lastError = error
+        updateErrorValue()
+    }
+    const updateErrorValue = () => errorValue = value // don't react to value changes
+
     function handleInput(e: Event & { currentTarget: HTMLInputElement }) {
         value = e.currentTarget?.value
-        error = null
+        error = (value === errorValue) ? lastError : null
         dispatch('input', e);
     }
 </script>
 
 <div class="w-full {cls}">
     <div class="group relative">
-        <input bind:this={input} {maxlength} {autocomplete} {spellcheck} {name} {required} id={name} {type} {value} on:input={handleInput} on:focus on:blur placeholder={label || placeholder} class="w-full {inconspicuous ? 'bg-transparent border-none' : 'bg-white shadow border-black focus:border-orange-500 focus:shadow-orange-500/10'} peer text-lg inherit-case placeholder:normal-case {type === 'search' ? 'pl-12 pr-5 pb-3.5 pt-4 text-center placeholder:text-gray-450' : (icon || !label ? 'pl-11 py-4 pr-4 placeholder:text-gray-450' : 'px-4 pb-2 pt-6 placeholder-shown:py-4 placeholder:text-transparent')} placeholder:font-normal relative transition-all focus:ring-0 focus:ring-offset-0 {type === 'search' ? 'rounded-full' : 'rounded-2xl'} font-medium {!inconspicuous && error ? '!border-red-500 !shadow-red-500/10' : ''}" />
+        <input bind:this={input} {disabled} {maxlength} {autocomplete} {spellcheck} {name} {required} id={name} {type} {value} on:input={handleInput} on:focus on:blur placeholder={label || placeholder} class="w-full disabled:border-gray-200 disabled:shadow-transparent disabled:cursor-not-allowed {inconspicuous ? 'bg-transparent border-none' : 'bg-white shadow border-black focus:border-orange-500 focus:shadow-orange-500/10'} peer text-lg inherit-case placeholder:normal-case {type === 'search' ? 'pl-12 pr-5 pb-3.5 pt-4 text-center placeholder:text-gray-450' : (icon || !label ? 'pl-11 py-4 pr-4 placeholder:text-gray-450' : 'px-4 pb-2 pt-6 placeholder-shown:py-4 placeholder:text-transparent')} placeholder:font-normal relative transition-all focus:ring-0 focus:ring-offset-0 {type === 'search' ? 'rounded-full' : 'rounded-2xl'} font-medium {!inconspicuous && error ? '!border-red-500 !shadow-red-500/10' : ''}" />
         {#if loading && (icon || type === 'search')}
             <div transition:scale|local class="absolute top-1/2 left-5 -translate-y-1/2 text-gray-500 peer-focus:text-orange-500">
                 <Spinner />
@@ -54,7 +63,7 @@
     </div>
     {#if error}
         <p in:fade|local class="text-red-600 leading-snug mt-5">{@html error}</p>
-    {:else if $$slots.default}
+    {:else if $$slots.default && showDescription}
         <p in:fade|local class="text-gray-500 leading-snug mt-5"><slot /></p>
     {/if}
 </div>

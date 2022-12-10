@@ -4,12 +4,15 @@
 	import Caret from "./icons/Caret.svelte";
     import md5 from 'crypto-js/md5'
 	import { clickOutside } from "~/lib/actions";
+	import { afterNavigate } from "$app/navigation";
 
     let open = false
 
     $: active = $page.url.pathname === '/profile'
     $: email = $page.data.session!.user.email!
     $: [username, domain] = email.split('@')
+
+    afterNavigate(() => open = false)
 
     function handleWindowKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Escape') open = false
@@ -24,7 +27,7 @@
         <span class="hidden lg:inline">{username.length > 9 ? username.charAt(0) + '..' + username.slice(-1) : username}@{domain}</span>
         <Caret strokeWidth={1} class="inline-block align-middle md:ml-1 h-1.5" />
     </summary>
-    <div class="rounded-2xl text-left border p-2 z-50 bg-white right-0 absolute top-full mt-2 min-w-[240px] shadow animate-fly-t" role="menu">
+    <div class="rounded-2xl text-left border p-2 z-50 bg-white right-0 absolute top-full mt-4 min-w-[200px] shadow animate-fly-t" role="menu">
         <a href="/profile" role="menuitem" class="block hover:bg-gray-100 p-3 rounded-xl w-full">Edit profile</a>
         <form action="/logout" method="POST" use:enhance>
             <button type="submit" class="block hover:bg-gray-100 p-3 w-full text-left rounded-xl">Log out</button>

@@ -16,7 +16,7 @@
         If you're a member of a charity and wish to accept donations from Tenth, you can <a class="font-medium text-red-400" href="https://getchange.io/nonprofits/">claim your charity on the Change network</a>.
     </p>
 </header>
-<form method="POST" class="max-w-lg grid grid-cols-3 gap-6">
+<form method="POST" class="max-w-lg w-full grid grid-cols-3 gap-6">
     <Input class="col-span-full" autocomplete="off" type="text" name="name" label="Charity name" required />
     <Input class="col-span-full" autocomplete="off" type="text" name="ein" label="EIN" placeholder="e.g. 41-1627391" required>
         Not sure where to find this? Search for your charity on <a rel="external" href="http://www.guidestar.org/" target="_blank">Guidestar</a>.

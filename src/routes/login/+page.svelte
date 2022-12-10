@@ -63,7 +63,7 @@
 		</Step>
 		<Step let:active>
 			<h2 class="text-3xl font-bold text-center mb-5">Welcome back!</h2>
-			<p class="text-lg text-gray-500 mb-8 leading-snug text-center">Please enter the 6-digit code we sent to <span class="font-medium text-black">{email}</span>.</p>
+			<p class="text-lg text-gray-500 mb-8 leading-snug text-center">Please enter the 6-digit code we sent to <span class="text-black">{email}</span>.</p>
 			<Input class="max-w-xs" required={active} showRequired={false} type="text" name="token" label="Code" value={$page.form?.values.token ?? ''}>
 				Didn't get a code? Resend.
 			</Input>
