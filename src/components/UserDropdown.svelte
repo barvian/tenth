@@ -8,7 +8,7 @@
 
     let open = false
 
-    $: active = $page.url.pathname === '/profile'
+    $: active = $page.url.pathname === '/account'
     $: email = $page.data.session!.user.email!
     $: [username, domain] = email.split('@')
 
@@ -28,7 +28,7 @@
         <Caret strokeWidth={1} class="inline-block align-middle md:ml-1 h-1.5" />
     </summary>
     <div class="rounded-2xl text-left border p-2 z-50 bg-white right-0 absolute top-full mt-4 min-w-[200px] shadow animate-fly-t" role="menu">
-        <a href="/profile" role="menuitem" class="block hover:bg-gray-100 p-3 rounded-xl w-full">Edit profile</a>
+        <a href="/account" role="menuitem" class="block hover:bg-gray-100 p-3 rounded-xl w-full">Edit account</a>
         <form action="/logout" method="POST" use:enhance>
             <button type="submit" class="block hover:bg-gray-100 p-3 w-full text-left rounded-xl">Log out</button>
         </form>

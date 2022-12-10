@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { stringify } from "postcss";
     import { createEventDispatcher, SvelteComponent } from "svelte";
     import { fade, scale } from "svelte/transition";
 	import { afterUpdate } from "~/lib/component";
@@ -28,18 +29,15 @@
 
     const dispatch = createEventDispatcher()
     
-    let lastError: string | null | undefined, errorValue: string // the value at the time of the error
+    const errors: Record<string, string> = {}
     afterUpdate(() => {
-        if (error) {
-            lastError = error
-            errorValue = value
-        }
+        if (error) errors[value] = error
     }, () => [error])
 
     function handleInput(e: Event & { currentTarget: HTMLInputElement }) {
         value = e.currentTarget?.value
-        error = (value === errorValue) ? lastError : null
-        dispatch('input', e);
+        error = errors[value] ?? null
+        dispatch('input', e)
     }
 </script>
 
