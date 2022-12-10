@@ -24,6 +24,7 @@
     :root {
         @apply overflow-x-hidden scroll-smooth xl:text-[18px];
 
+        --toastBackground: theme(colors.black);
         --toastBarHeight: 0;
         --toastContainerRight: 3rem;
         --toastContainerLeft: 3rem;
@@ -32,6 +33,11 @@
         --toastBtnWidth: calc(var(--toastMsgPadding)*2 + 1rem);
         --toastMargin: 0 auto theme(spacing.6);
         --toastWidth: min(theme(width.96), 100%);
+    }
+
+    /* ugly but theme(boxShadow) doesn't work in this case */
+    [class*="toastItem"] {
+        @apply !shadow
     }
 
     summary::marker {
@@ -81,4 +87,11 @@
         .link:hover::after {
             transform: scaleX(1)
         } */
+}
+
+@layer utilities {
+    .error {
+        @apply shadow-red-500/10;
+        --toastBackground: theme(colors.red[500])
+    }
 }

@@ -93,9 +93,6 @@ module.exports = {
         },
         '.overlap > *': {
             'grid-area': 'overlap'
-        },
-        '.error': {
-          '--toastBackground': colors.red[500]
         }
       })
 
