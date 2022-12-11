@@ -1,36 +1,37 @@
 <script lang="ts">
 	import { applyAction, enhance, type SubmitFunction } from "$app/forms";
+	import { toast } from '@zerodevx/svelte-toast';
 	import Button from "~/components/Button.svelte";
 	import Input from "~/components/Input.svelte";
-    import { toast } from '@zerodevx/svelte-toast';
-	import { afterUpdate } from "~/lib/component";
+    import { page } from '$app/stores'
 	import type { ActionData, PageData } from "./$types";
 
     export let data: PageData
     export let form: ActionData
+    $: updated = Boolean($page.status === 200 && form?.values)
 
     let email = data.session?.user.email
-    let emailError: string | undefined
-    afterUpdate(() => {
-        if (form?.error && form?.values?.email) emailError = form?.error
-    }, () => [form])
     
-    let saving = false
+    let saving = false, emailError: string | undefined
     const save: SubmitFunction = ({}) => {
         saving = true
         return async ({ result }) => {
+            if (result.type === 'invalid') {
+                emailError = `Couldn't update email. Please try again later.`
+            }
             await applyAction(result) // no need to invalidate anything
             saving = false
         }
     }
 
-    $: if (form?.error && !form?.values?.email) toast.push(`Something went wrong. Please try again later.`, { classes: ['error'] })
-
     let destroying = false
     const destroy: SubmitFunction = ({cancel}) => {
         if (!confirm('Are you sure you want to delete your account?')) return cancel()
         destroying = true
-        return async ({ update }) => {
+        return async ({ update, result }) => {
+            if (result.type === 'invalid') {
+                toast.push(`Couldn't delete account. Please try again later.`, { classes: ['error'] })
+            }
             await update()
             destroying = false
         }
@@ -43,10 +44,10 @@
     <Input label="Last name" name="last" value={data.profile.last_name} disabled>
         You're not able to change your name right now.
     </Input>
-    <Input class="mt-6" label="Email" name="email" bind:value={email} bind:error={emailError} disabled={form?.success} showDescription={!form?.success && email !== data.session?.user.email}>
+    <Input class="mt-6" type="email" label="Email" name="email" bind:value={email} bind:error={emailError} disabled={updated} showDescription={!updated && email !== data.session?.user.email}>
         We'll send you a confirmation to complete your email change.
     </Input>
-    <Button class="mt-8" type="submit" disabled={emailError || form?.success || email === data.session?.user.email} loading={saving}>
+    <Button class="mt-8" type="submit" disabled={Boolean(emailError) || updated || email === data.session?.user.email} loading={saving}>
         Save profile
     </Button>
 </form>

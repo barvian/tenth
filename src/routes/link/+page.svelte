@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { invalidateAll } from "$app/navigation";
+	import { enhance, type SubmitFunction } from "$app/forms";
+import { invalidateAll } from "$app/navigation";
 	import { toast } from "@zerodevx/svelte-toast";
+	import { result } from "lodash";
 	import { onDestroy } from "svelte";
 	import Button from "~/components/Button.svelte";
 	import Change from "~/components/icons/Change.svelte";
@@ -13,6 +15,7 @@
 	import type { PageData } from "./$types";
 
     export let data: PageData
+    export let form: ActionData
     
     let multiStep: MultiStep
     
@@ -92,23 +95,18 @@
     }
 
     let unlinking = false
-    async function unlink() {
-        if (!confirm('Are you sure you want to unlink this account?')) return
-
+    const unlink: SubmitFunction = ({ cancel }) => {
+        if (!confirm('Are you sure you want to unlink this account?')) return cancel()
         unlinking = true
-        const { error } = await supabaseClient.from('profiles').update({
-            plaid_institution_id: null,
-            plaid_account_mask: null,
-            plaid_account_type: null,
-            plaid_account_subtype: null
-        }).eq('user_id', data.session?.user.id)
-        if (error) {
-            toast.push(`Couldn't unlink bank account. Please try again later.`, { classes: ['error'] })
-        } else {
-            multiStep.reset()
-            await invalidateAll()
+        return async ({ update, result }) => {
+            if (result.type === 'success') {
+                multiStep.reset()
+            } else {
+                toast.push(`Couldn't unlink bank account. Please try again later.`, { classes: ['error'] })
+            }
+            await update()
+            unlinking = false
         }
-        unlinking = false
     }
 
     onDestroy(() => {
@@ -138,13 +136,11 @@
                         </span>
                     </div>
                 </div>
-                {#if unlinking}
-                    <Spinner class="text-red-500 h-5" />
-                {:else}
-                    <button type="button" on:click={unlink} class="py-2 pl-2 transition-colors text-gray-300 hover:text-red-500">
+                <form action="?/unlink" method="POST" use:enhance={unlink}>
+                    <Button inconspicuous type="submit" loading={unlinking} color="text-gray-300 hover:text-red-500 transition-color" class="py-2 pl-2">
                         <X class="h-3.5" />
-                    </button>
-                {/if}
+                    </Button>
+                </form>
             </div>
             <Button class="max-w-xs" on:click={next}>
                 Continue

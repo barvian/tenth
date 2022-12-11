@@ -39,15 +39,12 @@ export const actions: Actions = {
                 email: formData.get('email') ?? undefined
             })
 
-            return { success: true, values: { email: formData.get('email') } }
+            return { values: { email: formData.get('email') } }
         } catch (e) {
             const values: Record<string, string> = {}
             formData.forEach((value, key) => values[key] = value as string)
 
-            return invalid(500, {
-				error: 'Could not complete request. Please try again later.',
-				values
-			})
+            return invalid(500, { values })
         }
     }
 }

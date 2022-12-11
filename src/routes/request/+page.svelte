@@ -8,22 +8,25 @@
     import Input from "~/components/Input.svelte";
 	import type { ActionData, PageData } from "./$types";
     import { toast } from '@zerodevx/svelte-toast';
+    import { page } from '$app/stores'
 
     export let data: PageData
     export let form: ActionData
-    $: if (form?.error) toast.push(`Couldn't submit request. Please try again later.`, { classes: ['error'] })
 
     let requesting = false
     const request: SubmitFunction = ({}) => {
         requesting = true
-        return async ({ result }) => {
-            await applyAction(result)
+        return async ({ update, result }) => {
+            if (result.type === 'invalid') {
+                toast.push(`Couldn't submit request. Please try again later.`, { classes: ['error'] })
+            }
+            await update()
             requesting = false
         }
     }
 </script>
 
-{#if form?.success}
+{#if form?.values && $page.status === 200}
     <h2 class="text-3xl max-w-xl text-center font-bold mb-5">We received your request!</h2>
     <p class="text-lg max-w-xl leading-snug mb-8 text-gray-500 text-center">
         {#if form.values.email}

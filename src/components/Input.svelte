@@ -31,8 +31,8 @@
     
     const errors: Record<string, string> = {}
     afterUpdate(() => {
-        if (error) errors[value] = error
-    }, () => [error])
+        if (error) errors[value] = error 
+    }, () => [error]) // ignore value changes
 
     function handleInput(e: Event & { currentTarget: HTMLInputElement }) {
         value = e.currentTarget?.value

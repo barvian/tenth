@@ -1,9 +1,7 @@
 <script lang="ts">
-    import { applyAction, deserialize } from '$app/forms';
-    import { invalidateAll } from '$app/navigation';
+    import { enhance, type SubmitFunction } from '$app/forms';
     import { toast } from '@zerodevx/svelte-toast';
     import { fade } from 'svelte/transition';
-    import { page } from '$app/stores'
     import type { Nonprofit } from 'types/change';
     import Button from '~/components/Button.svelte';
     import Charities from '~/components/Charity/Charities.svelte';
@@ -17,16 +15,19 @@
     
     let multiStep: MultiStep
     $: if (multiStep && designated.length === 0) multiStep.reset()
-    let percent = '10'
+    
     let email = ''
 
-    $: if ($page.form?.error) toast.push(`Couldn't register. Please try again later.`, { classes: ['error'] })
-
-    let loading = false, emailError: string | null | undefined
-    async function register(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
+    let loading = false, emailError: string | null | undefined, tokenError: string | null | undefined
+    const register: SubmitFunction = async ({ cancel }) => {
         loading = true
 
-		if (multiStep.getStep() === 1) {
+        if (multiStep.getStep() === 0) {
+            cancel()
+            multiStep.next()
+            loading = false
+		} else if (multiStep.getStep() === 1) {
+            cancel()
             try {
                 const { data: emailExists, error: checkEmailError } = await supabaseClient.rpc('email_exists', { email }).single()
                 if (checkEmailError) throw checkEmailError
@@ -45,29 +46,27 @@
                 if (e instanceof EmailExistsError) emailError = `That email is already in use. Try another.`
                 else toast.push('Something went wrong. Please try again later.', { classes: ['error'] })
             }
-        } else if (multiStep.getStep() === 2) {
-			const response = await fetch(event.currentTarget.action, {
-				method: event.currentTarget.method,
-				body: new FormData(event.currentTarget)
-			})
-			const result = deserialize(await response.text())
-            if (['redirect', 'success'].includes(result.type)) {
-				multiStep.complete()
-                await invalidateAll()
+            loading = false
+        }
+        
+        return async ({ update, result }) => {
+            if (result.type === 'success' || result.type === 'redirect') {
+                multiStep.complete()
+            } else {
+                toast.push(`Couldn't register. Please try again later.`, { classes: ['error'] })
             }
-			await applyAction(result)
-		}
-
-		loading = false
+            await update()
+            loading = false
+        }
     }
 </script>
 
-<form action="?/register" method="POST" on:submit|preventDefault={register}>
+<form action="?/register" method="POST" use:enhance={register}>
     <MultiStep bind:this={multiStep} let:next let:prev let:reset leaveAlert="Are you sure you want to exit? You'll have to start the sign-up process again.">
         <Step as="fieldset">
             <h1 class="text-4xl max-w-2xl text-center leading-tight font-bold">
                 Donate
-                <Select name="percentage" bind:value={percent}>
+                <Select name="percentage">
                     <option value="33">33%</option>
                     <option value="25">25%</option>
                     <option value="20">20%</option>
@@ -84,7 +83,7 @@
             <Charities bind:designated />
             {#if designated.length > 0}
                 <div in:fade|local class="mt-8 max-w-md w-full">
-                    <Button on:click={next}>Get started</Button>
+                    <Button type="submit">Get started</Button>
                 </div>
             {/if}
         </Step>

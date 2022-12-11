@@ -44,7 +44,7 @@
 		}
 		
 		return async ({ result, update }) => {
-			if (['redirect', 'success'].includes(result.type)) {
+			if (result.type === 'success' || result.type === 'redirect') {
 				multiStep.complete()
 			} else if (result.type === 'invalid' && result.status === 401) {
 				tokenError = result.data?.error
@@ -64,7 +64,7 @@
 			<Input class="max-w-xs" required bind:error={emailError} showRequired={false} type="email" name="email" label="Email" on:input={reset} bind:value={email}>
 				We'll send you a code to get you signed in.
 			</Input>
-			<Button type="submit" disabled={emailError} class="max-w-xs mt-7">
+			<Button type="submit" disabled={Boolean(emailError)} class="max-w-xs mt-7">
 				Sign in
 			</Button>
 		</Step>

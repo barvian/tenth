@@ -43,12 +43,7 @@ export const actions: Actions = {
 			token: values.token,
 			type: 'magiclink'
 		})
-        if (verifyError) {
-			return invalid(500, {
-				error: 'Could not verify one-time code. Try again.',
-				values
-			})
-        }
+        if (verifyError) return invalid(401, { values })
 		
 		let stripeCustomer: stripe.Customer | undefined, changeAccount
 		try {
@@ -79,6 +74,8 @@ export const actions: Actions = {
 				designated: values.designated
 			})
 			if (registerError) throw registerError
+
+			throw redirect(303, '/link')
 		} catch (e) {
 			if (e instanceof ChangeAccountCreationError) {
 				console.error('Could not create Change account for email %s', values.email, e)
@@ -86,18 +83,11 @@ export const actions: Actions = {
 				console.error('Registration failed for email %s', values.email, e)
 			}
 
-			try {
-				await supabaseClient.auth.signOut()
-	
-				if (stripeCustomer) await stripeClient.customers.del(stripeCustomer.id).catch(e => null)
-			} catch {}
+			await supabaseClient.auth.signOut()
 
-			return invalid(500, {
-				error: 'Could not register. Please try again later.',
-				values
-			})
+			if (stripeCustomer) await stripeClient.customers.del(stripeCustomer.id).catch(e => null)
+
+			return invalid(500, { values })
 		}
-		
-		throw redirect(303, '/link')
     }
 };

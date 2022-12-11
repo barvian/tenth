@@ -11,45 +11,32 @@ export const actions: Actions = {
         const { request } = event;
         const { supabaseClient } = await getSupabase(event);
 
-        const formData = await request.formData();
-        const email = formData.get('email') as string;
+        const formData = await request.formData()
+        const email = formData.get('email') as string
 
         const { error } = await supabaseClient.auth.updateUser({ email })
-        if (error) {
-            return invalid(500, {
-				error: 'Server error. Try again later.',
-                values: { email }
-			});
-        }
+        if (error) return invalid(422, { values: { email } })
 
-        return { success: true }
+        return { values: { email }}
     },
     async delete(event) {
         const { session, supabaseClient } = await getSupabase(event)
         const supabaseServiceRoleClient = createClient(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
-        const { data: profile, error: profileError } = await supabaseClient.from('profiles').select('stripe_id').single()
-        if (profileError) {
-            return invalid(500, {
-				error: 'Server error. Try again later.'
-			})
-        } else if (profile.stripe_id) {
-            try {
-                await stripeClient.customers.del(profile.stripe_id)
-            } catch (e) {
-                return invalid(500, {
-                    error: 'Could not delete account. Try again later.'
-                })
-            }
+        try {
+            const { data: profile, error: profileError } = await supabaseClient.from('profiles').select('stripe_id').single()
+            if (profileError) throw profileError
+    
+            await stripeClient.customers.del(profile.stripe_id)
+    
+            await supabaseClient.auth.signOut() // don't handle errors I guess
+    
+            const { error } = await supabaseServiceRoleClient.auth.admin.deleteUser(session?.user.id!)        
+            if (error) throw error
+        } catch (e) {
+            return invalid(500)
         }
-
-        await supabaseClient.auth.signOut()
-
-        const { error } = await supabaseServiceRoleClient.auth.admin.deleteUser(session?.user.id!)        
-        if (error) return invalid(500, {
-            error: 'Could not delete account. Try again later.'
-        })
-
+        
         throw redirect(303, '/')
     }
 }
