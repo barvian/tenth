@@ -8,7 +8,7 @@
     import Input from '~/components/Input.svelte';
     import MultiStep from "~/components/MultiStep/MultiStep.svelte";
     import Step from "~/components/MultiStep/Step.svelte";
-    import Select from "~/components/Select.svelte";
+    import Percentage from "~/components/Percentage.svelte";
     import supabaseClient, { EmailExistsError } from '~/lib/db';
 
     let designated: Nonprofit[] = []
@@ -64,21 +64,9 @@
 <form action="?/register" method="POST" use:enhance={register}>
     <MultiStep bind:this={multiStep} let:next let:prev let:reset leaveAlert="Are you sure you want to exit? You'll have to start the sign-up process again.">
         <Step as="fieldset">
-            <h1 class="text-4xl max-w-2xl text-center leading-tight font-bold">
-                Donate
-                <Select name="percentage">
-                    <option value="33">33%</option>
-                    <option value="25">25%</option>
-                    <option value="20">20%</option>
-                    <option value="15">15%</option>
-                    <option value="10">10%</option>
-                    <option value="5">5%</option>
-                    <option value="3">3%</option>
-                    <option value="2">2%</option>
-                    <option value="1">1%</option>
-                </Select>%
-                of your checking account to charity every year.
-            </h1>
+            <div role="heading" aria-level={1} class="text-4xl max-w-2xl text-center leading-tight font-bold">
+                Donate <Percentage /> of your checking account to charity every year.
+            </div>
             <p class="text-xl max-w-2xl text-center text-gray-500 mt-5 mb-8">Donated in monthly increments. Cancelable anytime.</p>
             <Charities bind:designated />
             {#if designated.length > 0}

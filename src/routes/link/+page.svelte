@@ -1,21 +1,17 @@
 <script lang="ts">
 	import { enhance, type SubmitFunction } from "$app/forms";
-import { invalidateAll } from "$app/navigation";
+	import { goto, invalidateAll } from "$app/navigation";
 	import { toast } from "@zerodevx/svelte-toast";
-	import { result } from "lodash";
 	import { onDestroy } from "svelte";
 	import Button from "~/components/Button.svelte";
 	import Change from "~/components/icons/Change.svelte";
-	import Spinner from "~/components/icons/Spinner.svelte";
 	import X from "~/components/icons/X.svelte";
 	import MultiStep from "~/components/MultiStep/MultiStep.svelte";
 	import Step from "~/components/MultiStep/Step.svelte";
 	import { loadScript } from "~/lib/component";
-	import supabaseClient from '~/lib/db';
 	import type { PageData } from "./$types";
 
     export let data: PageData
-    export let form: ActionData
     
     let multiStep: MultiStep
     
@@ -87,7 +83,7 @@ import { invalidateAll } from "$app/navigation";
                 })
             }).then(r => r.ok ? r.json() : Promise.reject(r))
             multiStep.complete()
-            await invalidateAll()
+            await goto('/')
         } catch (e) {
             if (e) toast.push(e.display_message ?? 'Could not link bank account', { classes: ['error'] })
         }

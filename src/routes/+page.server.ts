@@ -8,6 +8,32 @@ import stripeClient from '~/lib/stripe';
 import type { Actions, PageServerLoad } from './$types';
 const changeCreds = Buffer.from(PUBLIC_CHANGE_KEY+':'+SECRET_CHANGE_KEY).toString('base64')
 
+export const load: PageServerLoad = async (event) => {
+	const { supabaseClient, session } = await getSupabase(event)
+    if (!session) return
+
+	// Check if the Stripe customer is fully configured (aka the linking process is complete)
+	const { data: profile, error: profileError } = await supabaseClient.from('profiles').select(
+		'stripe_id, plaid_institution_id, plaid_account_mask'
+	).single()
+	if (!profile?.plaid_institution_id) throw redirect(303, '/link')
+	if (profile?.stripe_id) {
+		const stripeCustomer = await stripeClient.customers.retrieve(profile?.stripe_id)
+		if (!stripeCustomer?.default_source) throw redirect(303, '/link')
+	} else throw profileError
+
+	const institution = await event.fetch(`/api/plaid/institutions/${profile?.plaid_institution_id}.json`)
+		.then(r => r.ok ? r.json() : Promise.reject(r))
+        
+	return {
+		profile: { 
+			plaid_institution_id: profile.plaid_institution_id,
+			plaid_account_mask: profile.plaid_account_mask,
+		},
+		institution
+	}
+}
+
 const getValues = (formData: FormData) => ({
 	percentage: +(formData.get('percentage') as string)/100,
 	email: formData.get('email') as string,
@@ -16,21 +42,6 @@ const getValues = (formData: FormData) => ({
 	designated: JSON.parse(formData.get('designated') as string || '[]') as string[],
 	token: formData.get('token') as string
 })
-
-export const load: PageServerLoad = async (event) => {
-	const { supabaseClient, session } = await getSupabase(event)
-
-    if (session) {
-		// Check if the Stripe customer is fully configured (aka the linking process is complete)
-        const { data: profile, error: profileError } = await supabaseClient.from('profiles').select(
-            'stripe_id'
-        ).single()
-		if (profile?.stripe_id) {
-			const stripeCustomer = await stripeClient.customers.retrieve(profile?.stripe_id)
-			if (!stripeCustomer?.default_source) throw redirect(303, '/link')
-		} else throw profileError
-	}
-}
 
 export const actions: Actions = {
     async register(event) {
