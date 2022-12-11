@@ -13,13 +13,20 @@ export const actions: Actions = {
 
         const { error } = await supabaseClient.auth.verifyOtp({ email, token, type: 'magiclink' })
 
-        if (error) {
+        if (error?.name === 'AuthApiError') {
+            return invalid(401, {
+                error: `Couldn't log in. Please re-check your code.`,
+                values: {
+                    email, token
+                }
+            })
+        } else if (error) {
             return invalid(500, {
-				error: 'Server error. Try again later.',
-				values: {
-					email, token
-				}
-			});
+                error: `Couldn't log in. Please try again later.`,
+                values: {
+                    email, token
+                }
+            })
         }
 
 		throw redirect(303, event.url.searchParams.get('next') ?? '/')
