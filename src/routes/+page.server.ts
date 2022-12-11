@@ -14,7 +14,7 @@ export const load: PageServerLoad = async (event) => {
 
 	// Check if the Stripe customer is fully configured (aka the linking process is complete)
 	const { data: profile, error: profileError } = await supabaseClient.from('profiles').select(
-		'stripe_id, plaid_institution_id, plaid_account_mask'
+		'stripe_id, plaid_institution_id, plaid_account_mask, percentage'
 	).single()
 	if (!profile?.plaid_institution_id) throw redirect(303, '/link')
 	if (profile?.stripe_id) {
@@ -29,13 +29,14 @@ export const load: PageServerLoad = async (event) => {
 		profile: { 
 			plaid_institution_id: profile.plaid_institution_id,
 			plaid_account_mask: profile.plaid_account_mask,
+			percentage: profile.percentage
 		},
 		institution
 	}
 }
 
 const getValues = (formData: FormData) => ({
-	percentage: +(formData.get('percentage') as string)/100,
+	percentage: +(formData.get('percentage') as string),
 	email: formData.get('email') as string,
 	firstName: formData.get('first-name') as string,
 	lastName: formData.get('last-name') as string,
@@ -85,8 +86,6 @@ export const actions: Actions = {
 				designated: values.designated
 			})
 			if (registerError) throw registerError
-
-			throw redirect(303, '/link')
 		} catch (e) {
 			if (e instanceof ChangeAccountCreationError) {
 				console.error('Could not create Change account for email %s', values.email, e)
@@ -95,10 +94,12 @@ export const actions: Actions = {
 			}
 
 			await supabaseClient.auth.signOut()
-
+			
 			if (stripeCustomer) await stripeClient.customers.del(stripeCustomer.id).catch(e => null)
-
+			
 			return invalid(500, { values })
 		}
+
+		throw redirect(303, '/link') // This has to be out here because otherwise it would be caught
     }
 };
