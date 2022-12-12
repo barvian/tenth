@@ -1,13 +1,11 @@
 <script lang="ts">
-	import { applyAction, deserialize, enhance, type SubmitFunction } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { enhance, type SubmitFunction } from '$app/forms';
+	import { toast } from '@zerodevx/svelte-toast';
 	import Button from '~/components/Button.svelte';
 	import Input from '~/components/Input.svelte';
 	import MultiStep from '~/components/MultiStep/MultiStep.svelte';
 	import Step from '~/components/MultiStep/Step.svelte';
 	import supabaseClient, { EmailDoesntExistError } from '~/lib/db';
-	import { toast } from '@zerodevx/svelte-toast'
 	import type { ActionData } from './$types';
 
 	export let form: ActionData
@@ -64,7 +62,7 @@
 			<Input class="max-w-xs" required bind:error={emailError} showRequired={false} type="email" name="email" label="Email" on:input={reset} bind:value={email}>
 				We'll send you a code to get you signed in.
 			</Input>
-			<Button type="submit" disabled={Boolean(emailError)} class="max-w-xs mt-7">
+			<Button type="submit" disabled={Boolean(emailError)} width="w-full max-w-xs" class="mt-7">
 				Sign in
 			</Button>
 		</Step>
@@ -72,7 +70,7 @@
 			<h2 class="text-3xl font-bold text-center mb-5">Welcome back!</h2>
 			<p class="text-lg text-gray-500 mb-8 leading-snug text-center">Please enter the 6-digit code we sent to <mark>{email}</mark>.</p>
 			<Input class="max-w-xs" required={active} showRequired={false} type="text" name="token" label="Code" value={form?.values.token ?? ''} bind:error={tokenError} />
-			<Button class="max-w-xs mt-7" {loading} disabled={Boolean(tokenError)} type="submit">
+			<Button width="w-full max-w-xs" class="mt-7" {loading} disabled={Boolean(tokenError)} type="submit">
 				Continue
 			</Button>
 		</Step>

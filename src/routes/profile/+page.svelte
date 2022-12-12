@@ -40,8 +40,8 @@
 
 <h1 class="text-4xl font-bold text-center mb-8 max-w-2xl">Your profile</h1>
 <form method="POST" action="?/update" class="max-w-sm w-full" use:enhance={save}>
-    <Input class="mb-3" label="First name" name="first" value={data.profile.first_name} disabled />
-    <Input label="Last name" name="last" value={data.profile.last_name} disabled>
+    <Input class="mb-3" label="First name" name="first" value={data.profile?.first_name} disabled />
+    <Input label="Last name" name="last" value={data.profile?.last_name} disabled>
         You're not able to change your name right now.
     </Input>
     <Input class="mt-6" type="email" label="Email" name="email" bind:value={email} bind:error={emailError} disabled={updated} showDescription={!updated && email !== data.session?.user.email}>
@@ -52,7 +52,7 @@
     </Button>
 </form>
 <form method="POST" action="?/delete" class="max-w-sm w-full" use:enhance={destroy}>
-    <Button inconspicuous color="text-red-400" class="mt-8" type="submit" loading={destroying}>
+    <Button inconspicuous color="text-red-400 font-medium text-lg" class="mt-8" type="submit" loading={destroying}>
         Delete account
     </Button>
 </form>

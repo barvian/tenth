@@ -12,16 +12,19 @@ export interface Database {
       designated: {
         Row: {
           id: number
+          created_at: string
           user_id: string
           change_id: string
         }
         Insert: {
           id?: number
-          user_id: string
+          created_at?: string
+          user_id?: string
           change_id: string
         }
         Update: {
           id?: number
+          created_at?: string
           user_id?: string
           change_id?: string
         }
@@ -68,20 +71,20 @@ export interface Database {
         Row: {
           id: number
           change_id: string
-          email: unknown | null
           user_id: string | null
+          email: unknown | null
         }
         Insert: {
           id?: number
           change_id: string
-          email?: unknown | null
           user_id?: string | null
+          email?: unknown | null
         }
         Update: {
           id?: number
           change_id?: string
-          email?: unknown | null
           user_id?: string | null
+          email?: unknown | null
         }
       }
     }

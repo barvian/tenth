@@ -1,6 +1,7 @@
 const colors = require('tailwindcss/colors');
 const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin')
+const { parseToRgba } = require('color2k')
 
 /** @type {import('tailwindcss').Config} */ 
 module.exports = {
@@ -12,6 +13,7 @@ module.exports = {
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
+      bank: `rgb(var(--color-bank, ${parseToRgba(colors.orange[500]).slice(0,3).join(' ')}) / <alpha-value>)`,
       black: colors.black,
       white: colors.white,
       gray: {...colors.neutral, '450': '#8c8c8c' },
@@ -21,7 +23,8 @@ module.exports = {
     boxShadow: {
       DEFAULT: 'theme(space.1) theme(space[1.5]) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
       elevated: 'theme(space.1) theme(space[2.5]) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
-      md: 'theme(space.2) theme(space.3) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))'
+      md: 'theme(space[1.5]) theme(space.2) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
+      lg: 'theme(space.2) theme(space.3) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))'
     },
     extend: {
       borderColor: ({ theme }) => ({
@@ -30,9 +33,9 @@ module.exports = {
       fontFamily: {
         'sans': ['Value Sans Pro', ...defaultTheme.fontFamily.sans],
       },
-      fontSize: {
-        '4xl': '2.6rem'
-      },
+      // fontSize: {
+      //   // '4xl': '2.6rem'
+      // },
       spacing: {
         xl: 'calc(theme(space.10) + 5vh)',
         '2xl': 'calc(theme(space.16) + 10vh)'

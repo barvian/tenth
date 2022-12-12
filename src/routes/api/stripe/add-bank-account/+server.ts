@@ -10,7 +10,8 @@ export const POST: RequestHandler = async (event) => {
 	const { session, supabaseClient } = await getSupabase(event)
 	if (!session) throw error(403, 'No user logged in')
 	const { data: profile, error: profileError } = await supabaseClient.from('profiles').select('stripe_id').single()
-	if (!profile?.stripe_id) throw profileError
+	if (profileError) throw profileError
+	if (!profile.stripe_id) throw error(403, 'User has no stripe ID')
 
 	const body = await request.json()
 
@@ -32,9 +33,22 @@ export const POST: RequestHandler = async (event) => {
 		const bankAccount = await stripeClient.customers.createSource(profile.stripe_id, {
 			source: bankAccountToken
 		})
-		await stripeClient.customers.update(profile.stripe_id, {
+		const customer = await stripeClient.customers.update(profile.stripe_id, {
 			default_source: bankAccount.id
 		})
+		if (dev && typeof bankAccountToken !== 'string') {
+			await stripeClient.customers.verifySource(
+				customer.id, bankAccount.id,
+				{ amounts: [32, 45] }
+			)
+		}
+		await stripeClient.charges.create({
+			amount: 155,
+			customer: customer.id,
+			description: 'Tenth setup fee',
+			currency: 'usd',
+			receipt_email: session.user.email
+		}).catch(e => console.error(`Could not charge Stripe customer ${customer.id}`, e))
 	} catch (e) {
 		console.error(`Couldn't add bank account to customer`, profile.stripe_id, e)
 		throw e

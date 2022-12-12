@@ -7,29 +7,17 @@ import { withLoadAuth } from '~/lib/auth';
 
 export const load = withLoadAuth<PageServerLoad>(async (event) => {
 	const { supabaseClient, session } = await getSupabase(event)
+	if (!session) return
+	const parent = await event.parent()
 
-    if (session) {
-		// Check if the Stripe customer is fully configured (aka the linking process is complete)
-        const { data: profile, error: profileError } = await supabaseClient.from('profiles').select(
-            'stripe_id, plaid_institution_id, plaid_account_mask'
-        ).single()
-		if (!profile?.stripe_id) throw profileError
-
-		let institution: any
-		if (profile?.plaid_institution_id) {
-			institution = await event.fetch(`/api/plaid/institutions/${profile?.plaid_institution_id}.json`)
-				.then(r => r.ok ? r.json() : Promise.reject(r))
-		}
-
-		const stripeCustomer = await stripeClient.customers.retrieve(profile.stripe_id)
-		return {
-			stripe_linked: Boolean(stripeCustomer.default_source),
-			profile: { 
-				plaid_institution_id: profile.plaid_institution_id,
-				plaid_account_mask: profile.plaid_account_mask,
-			},
-			institution
-		}
+	let institution: any
+	if (parent.profile?.plaid_institution_id) {
+		institution = await event.fetch(`/api/plaid/institutions/${parent.profile.plaid_institution_id}.json`)
+			.then(r => r.ok ? r.json() : Promise.reject(r))
+	}
+        
+	return {
+		institution
 	}
 })
 
@@ -41,11 +29,13 @@ export const actions: Actions = {
 		try {
 			// First, unlink from Stripe
 			const { data: profile, error: profileError } = await supabaseClient.from('profiles').select('stripe_id').single()
-			if (!profile?.stripe_id) throw profileError
+			if (profileError) throw profileError
 
-			const stripeCustomer = await stripeClient.customers.retrieve(profile.stripe_id) as Stripe.Customer
-			if (stripeCustomer.default_source) {
-				await stripeClient.customers.deleteSource(stripeCustomer.id, stripeCustomer.default_source as string)
+			if (profile.stripe_id) {
+				const stripeCustomer = await stripeClient.customers.retrieve(profile.stripe_id) as Stripe.Customer
+				if (stripeCustomer.default_source) {
+					await stripeClient.customers.deleteSource(stripeCustomer.id, stripeCustomer.default_source as string)
+				}
 			}
 
 			// Unfortunately Change doesn't support a detach method, so just

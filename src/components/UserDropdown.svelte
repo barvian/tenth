@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
-    import { page } from '$app/stores';
-	import Caret from "./icons/Caret.svelte";
-    import md5 from 'crypto-js/md5'
-	import { clickOutside } from "~/lib/actions";
 	import { afterNavigate } from "$app/navigation";
+	import { page } from '$app/stores';
+	import md5 from 'crypto-js/md5';
+	import { clickOutside } from "~/lib/actions";
+	import Caret from "./icons/Caret.svelte";
 
     let open = false
 
@@ -31,13 +30,14 @@
         <span class="hidden lg:inline">{email}</span>
         <Caret strokeWidth={1} class="inline-block align-middle md:ml-1 h-1.5" />
     </summary>
-    <div class="rounded-2xl text-left border p-2 z-50 bg-white right-0 absolute top-full mt-4 min-w-[200px] shadow animate-fly-t" role="menu">
+    <div class="rounded-2xl text-left border p-2 z-50 bg-white right-0 absolute top-full mt-4 min-w-[200px] shadow-md animate-fly-t" role="menu">
         <span class="block lg:hidden border-b border-gray-200 p-3 mb-2 text-gray-500">
             {email}
         </span>
-        <a href="/profile" role="menuitem" class="block hover:bg-gray-100 p-3 rounded-xl w-full">Edit profile</a>
-        <form action="/logout" method="POST" use:enhance>
-            <button type="submit" class="block hover:bg-gray-100 p-3 w-full text-left rounded-xl">Log out</button>
+        <a href="/profile" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Edit profile</a>
+        <a href="/donations" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Donation history</a>
+        <form class="border-t border-gray-200 pt-2 mt-2" action="/logout" method="POST">
+            <button type="submit" class="block hover:bg-gray-100 p-3 w-full leading-tight text-left rounded-xl">Log out</button>
         </form>
     </div>
 </details>

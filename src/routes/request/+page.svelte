@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { applyAction, enhance, type SubmitFunction } from "$app/forms";
-    import Button from "~/components/Button.svelte";
-    import Facebook from "~/components/icons/social/Facebook.svelte";
-    import Instagram from "~/components/icons/social/Instagram.svelte";
-    import Twitter from "~/components/icons/social/Twitter.svelte";
-    import YouTube from "~/components/icons/social/YouTube.svelte";
-    import Input from "~/components/Input.svelte";
+	import { enhance, type SubmitFunction } from "$app/forms";
+	import { page } from '$app/stores';
+	import { toast } from '@zerodevx/svelte-toast';
+	import Button from "~/components/Button.svelte";
+	import Facebook from "~/components/icons/social/Facebook.svelte";
+	import Instagram from "~/components/icons/social/Instagram.svelte";
+	import Twitter from "~/components/icons/social/Twitter.svelte";
+	import YouTube from "~/components/icons/social/YouTube.svelte";
+	import Input from "~/components/Input.svelte";
 	import type { ActionData, PageData } from "./$types";
-    import { toast } from '@zerodevx/svelte-toast';
-    import { page } from '$app/stores'
 
     export let data: PageData
     export let form: ActionData
@@ -35,7 +35,7 @@
             Feel free to check back in a few days.
         {/if}
     </p>
-    <Button href="/" class="w-min">
+    <Button href="/" width="w-min">
         Go home
     </Button>
 {:else}

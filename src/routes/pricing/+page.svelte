@@ -7,7 +7,7 @@
     <p class="text-xl text-gray-500 mt-5">Tenth's fees are (much) lower than what you'd pay with monthly credit card donations.</p>
 </header>
 <div class="max-w-4xl grid md:grid-cols-2 lg:gap-10">
-    <div class="rounded-2xl bg-white shadow-md border px-8 pt-12 pb-8">
+    <div class="rounded-2xl bg-white shadow-lg border px-8 pt-12 pb-8">
         <div class="text-center">
             <h2 class="text-gray-500"><Logo class="inline-block h-3" /></h2>
             <span class="block mt-3 text-5xl font-bold text-border-current">1.5% + 15¢</span>

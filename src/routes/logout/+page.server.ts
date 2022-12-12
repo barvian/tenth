@@ -5,7 +5,7 @@ import type { Actions } from './$types';
 export const actions: Actions = {
 	async default(event) {
 		const { supabaseClient } = await getSupabase(event);
-		await supabaseClient.auth.signOut();
+		await supabaseClient.auth.signOut(); // don't handle errors, I guess
 		throw redirect(303, '/');
 	}
 };

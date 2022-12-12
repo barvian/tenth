@@ -59,7 +59,7 @@
         right: 0;
     }
 
-    main a {
+    main a:not([role="menuitem"]):not([class])  {
         @apply text-orange-500 font-medium
     }
 

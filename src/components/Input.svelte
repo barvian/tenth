@@ -1,15 +1,14 @@
 <script lang="ts">
-	import { stringify } from "postcss";
-    import { createEventDispatcher, SvelteComponent } from "svelte";
-    import { fade, scale } from "svelte/transition";
+	import { createEventDispatcher, SvelteComponent } from "svelte";
+	import { fade, scale } from "svelte/transition";
 	import { afterUpdate } from "~/lib/component";
-    import Search from "./icons/Search.svelte";
-    import Spinner from "./icons/Spinner.svelte";
+	import Search from "./icons/Search.svelte";
+	import Spinner from "./icons/Spinner.svelte";
 
     export let name: string
     export let label: string = ''
     export let type: string = 'text'
-    export let value = ''
+    export let value: string | null | undefined = ''
     export let required = false
     export let showRequired = true
     export let showDescription = true

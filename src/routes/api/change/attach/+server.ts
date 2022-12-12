@@ -13,11 +13,12 @@ export const POST: RequestHandler = async (event) => {
 	// First unlink from Stripe
 	
 	const { data: profile, error: profileError } = await supabaseClient.from('profiles').select('stripe_id').single()
-	if (!profile?.stripe_id) throw profileError
-
-	const stripeCustomer = await stripeClient.customers.retrieve(profile.stripe_id) as Stripe.Customer
-	if (stripeCustomer.default_source) {
-		await stripeClient.customers.deleteSource(stripeCustomer.id, stripeCustomer.default_source as string)
+	if (profileError) throw profileError
+	if (profile.stripe_id) {
+		const stripeCustomer = await stripeClient.customers.retrieve(profile.stripe_id) as Stripe.Customer
+		if (stripeCustomer.default_source) {
+			await stripeClient.customers.deleteSource(stripeCustomer.id, stripeCustomer.default_source as string)
+		}
 	}
 
 	// Then attach to Change

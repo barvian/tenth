@@ -6,8 +6,11 @@ import request from './data/request.json'
 export default [
   rest.get(
     'https://api.getchange.io/api/v1/nonprofits/:id',
-    async (req, res, ctx) =>
-      res(ctx.json(data.find(c => c.id === req.params.id)))
+    async (req, res, ctx) => {
+      const c = data.find(c => c.id === req.params.id)
+      if (!c) return req.passthrough()
+      return res(ctx.json(c))
+    }
   ),
   rest.post(
     'https://api.getchange.io/api/v1/accounts',
