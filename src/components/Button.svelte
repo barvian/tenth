@@ -1,20 +1,28 @@
 <script lang="ts">
 	import Spinner from "./icons/Spinner.svelte";
+    import clsx from 'clsx'
     
     export let href: string | null | undefined = null
     export let type = 'button'
     export let loading = false
     export let disabled = false
-    export let inconspicuous = false
-    export let bg = inconspicuous ? 'bg-transparent' : 'bg-black'
-    export let color = inconspicuous ? 'text-black' : 'text-white'
+    export let unstyled = false
+    export let bg = 'bg-black disabled:bg-gray-200'
+    export let color = 'text-white'
+    export let shadow: string | boolean = 'not-disabled:shadow not-disabled:hover:-translate-y-1 not-disabled:hover:shadow-elevated not-disabled:active:shadow not-disabled:active:translate-y-0'
     export let rounded = 'rounded-2xl'
+    export let padding = 'px-6 py-4'
     export let width = 'w-full'
+    export let text = 'text-lg'
+    export let align = 'text-center'
+    export let font = 'font-medium'
     let cls = ''
     export { cls as class }
 </script>
 
-<svelte:element this={href ? 'a' : 'button'} {href} disabled={loading || disabled} {type} class="{cls} {width} {loading || disabled ? 'cursor-not-allowed': inconspicuous ? '' : 'hover:-translate-y-1 hover:shadow-elevated active:shadow active:translate-y-0 active:transition-none'} disabled:cursor-not-allowed {color} {rounded} {bg} whitespace-nowrap overlap justify-items-center relative {inconspicuous ? '' : 'text-lg shadow px-6 py-4 disabled:bg-gray-200 disabled:shadow-transparent transition-all font-medium'}" on:click>
+<svelte:element this={href ? 'a' : 'button'} {href} disabled={loading || disabled} {type} on:click
+    class={clsx(cls, 'overlap-inline justify-items-center', !unstyled && [width, bg, color, align, shadow, padding, rounded, text, font, width, 'whitespace-nowrap relative transition-all active:transition-none'])}
+>
     <span class="block w-full" class:invisible={loading}><slot /></span>
     {#if loading}<Spinner class="h-5" />{/if}
 </svelte:element>

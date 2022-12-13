@@ -52,7 +52,7 @@
     </Button>
 </form>
 <form method="POST" action="?/delete" class="max-w-sm w-full" use:enhance={destroy}>
-    <Button inconspicuous color="text-red-400 font-medium text-lg" class="mt-8" type="submit" loading={destroying}>
+    <Button unstyled class="text-red-400 font-medium text-lg mt-8 w-full text-center" type="submit" loading={destroying}>
         Delete account
     </Button>
 </form>

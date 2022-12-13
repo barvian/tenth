@@ -83,9 +83,9 @@
                 <div class="space-y-4 w-full max-w-md mb-5">
                     {#each designated as item (item.id)}
                         <Charity charity={item}>
-                            <button slot="tools" type="button" on:click={(e) => removeCharity(item)} class="py-2 pl-2 transition-colors text-gray-300 hover:text-red-500">
+                            <Button slot="tools" unstyled on:click={(e) => removeCharity(item)} class="py-2 pl-2 transition-colors text-gray-300 hover:text-red-500">
                                 <X class="h-3.5" />
-                            </button>
+                            </Button>
                         </Charity>
                     {/each}
                 </div>
@@ -107,7 +107,7 @@
                     We'll send you a code to verify your email address.
                 </Input>
             </div>
-            <Button {loading} type="submit" width="max-w-md w-full" class="mt-8">
+            <Button {loading} type="submit" class="mt-8 max-w-md">
                 Continue
             </Button>
         </Step>
@@ -115,7 +115,7 @@
             <h2 class="text-3xl max-w-xl text-center font-bold mb-5">Verify your email</h2>
             <p class="text-lg max-w-xl leading-snug mb-8 text-gray-500 text-center">Please enter the 6-digit code we sent to <mark>{email}</mark>.</p>
             <Input class="max-w-xs" maxlength={6} required={active} type="text" name="token" label="Code" />
-            <Button {loading} type="submit" width="max-w-md w-full" class="mt-8">
+            <Button {loading} type="submit" class="mt-8 max-w-md">
                 Continue
             </Button>
         </Step>

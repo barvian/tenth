@@ -68,6 +68,9 @@ module.exports = {
     require('@tailwindcss/typography'),
     require('tailwindcss-bg-svg'),
     plugin(function({ addBase, addUtilities, addVariant, matchUtilities, addComponents, theme }) {
+      addVariant('not-disabled', '&:not(:disabled)')
+      addVariant('has-error', '&.has-error')
+      addVariant('peer-has-error', ':merge(.peer).has-error ~ &')
       addComponents({
         '.inner': {
           'position': 'relative',
@@ -94,11 +97,14 @@ module.exports = {
           'display': 'grid',
           'grid-template-areas': "'overlap'"
         },
-        '.overlap > *': {
+        '.overlap-inline': {
+          'display': 'inline-grid',
+          'grid-template-areas': "'overlap'"
+        },
+        '.overlap > *, .overlap-inline > *': {
             'grid-area': 'overlap'
         }
       })
-
       matchUtilities(
         {
           'text-border': (value) => ({

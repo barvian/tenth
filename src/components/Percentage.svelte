@@ -8,7 +8,7 @@
 </script>
 
 <div class="relative inline-block align-middle">
-    <select name="percentage" disabled={loading} class="appearance-none bg-transparent border-none opacity-0 absolute inset-0 peer disabled:cursor-not-allowed" bind:value on:change>
+    <select name="percentage" disabled={loading} class="appearance-none bg-transparent border-none opacity-0 absolute inset-0 peer" bind:value on:change>
         {#each options as p}
             <option value={p}>{p*100}%</option>
         {/each}

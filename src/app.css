@@ -40,6 +40,10 @@
         @apply !shadow
     }
 
+    :disabled {
+        @apply cursor-not-allowed;
+    }
+
     mark {
         @apply bg-transparent text-black;
     }

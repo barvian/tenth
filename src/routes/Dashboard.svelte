@@ -115,7 +115,7 @@
     <div class="space-y-4 w-full max-w-md mb-5">
         {#each designated as item (item.id)}
             <Charity charity={item}>
-                <Button slot="tools" inconspicuous width="w-min" on:click={() => removeCharity(item)} loading={deleting[item.id] || adding[item.id]} color="text-gray-300 hover:text-red-500 {adding[item.id] ? 'disabled:text-gray-300' : 'disabled:text-red-500'} transition-color" class="py-2 pl-2">
+                <Button slot="tools" unstyled on:click={() => removeCharity(item)} loading={deleting[item.id] || adding[item.id]} class="py-2 pl-2 text-gray-300 hover:text-red-500 {adding[item.id] ? 'disabled:text-gray-300' : 'disabled:text-red-500'} transition-color">
                     <X class="h-3.5" />
                 </Button>
             </Charity>

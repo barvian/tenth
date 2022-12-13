@@ -133,16 +133,16 @@
                     </div>
                 </div>
                 <form action="?/unlink" method="POST" use:enhance={unlink}>
-                    <Button width="w-min" inconspicuous type="submit" loading={unlinking} color="text-gray-300 hover:text-red-500 disabled:text-red-500 transition-color" class="py-2 pl-2">
+                    <Button unstyled type="submit" loading={unlinking} class="text-gray-300 hover:text-red-500 disabled:text-red-500 transition-color py-2 pl-2">
                         <X class="h-3.5" />
                     </Button>
                 </form>
             </div>
-            <Button width="w-full max-w-xs" on:click={next}>
+            <Button class="max-w-xs" on:click={next}>
                 Continue
             </Button>
         {:else}
-            <Button width="w-full max-w-xs" loading={!$plaidLoading || linking} on:click={linkChange}>
+            <Button class="max-w-xs" loading={!$plaidLoading || linking} on:click={linkChange}>
                 Link with Change
             </Button>
         {/if}
@@ -154,7 +154,7 @@
         <p class="text-lg max-w-xl leading-snug mb-10 text-gray-500 text-center">
             Tenth also needs access to your account to check your balance and tell Change how much to donate each month.
         </p>
-        <Button width="w-full max-w-xs" loading={!$plaidLoading || linking} on:click={linkStripe}>
+        <Button class="max-w-xs" loading={!$plaidLoading || linking} on:click={linkStripe}>
             <span class="flex w-full"><span>Link with Tenth</span><span class="font-bold inline-block ml-auto">$1.55</span></span>
         </Button>
         <p class="text-gray-450 text-center max-w-xl leading-snug mt-10">

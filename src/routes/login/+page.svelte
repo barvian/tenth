@@ -62,7 +62,7 @@
 			<Input class="max-w-xs" required bind:error={emailError} showRequired={false} type="email" name="email" label="Email" on:input={reset} bind:value={email}>
 				We'll send you a code to get you signed in.
 			</Input>
-			<Button type="submit" disabled={Boolean(emailError)} width="w-full max-w-xs" class="mt-7">
+			<Button type="submit" disabled={Boolean(emailError)} class="mt-7 max-w-xs">
 				Sign in
 			</Button>
 		</Step>
@@ -70,7 +70,7 @@
 			<h2 class="text-3xl font-bold text-center mb-5">Welcome back!</h2>
 			<p class="text-lg text-gray-500 mb-8 leading-snug text-center">Please enter the 6-digit code we sent to <mark>{email}</mark>.</p>
 			<Input class="max-w-xs" required={active} showRequired={false} type="text" name="token" label="Code" value={form?.values.token ?? ''} bind:error={tokenError} />
-			<Button width="w-full max-w-xs" class="mt-7" {loading} disabled={Boolean(tokenError)} type="submit">
+			<Button class="mt-7 max-w-xs" {loading} disabled={Boolean(tokenError)} type="submit">
 				Continue
 			</Button>
 		</Step>

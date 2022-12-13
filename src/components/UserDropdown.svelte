@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import md5 from 'crypto-js/md5';
 	import { clickOutside } from "~/lib/actions";
+	import Button from "./Button.svelte";
 	import Caret from "./icons/Caret.svelte";
 
     let open = false
@@ -37,7 +38,7 @@
         <a href="/profile" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Edit profile</a>
         <a href="/donations" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Donation history</a>
         <form class="border-t border-gray-200 pt-2 mt-2" action="/logout" method="POST">
-            <button type="submit" class="block hover:bg-gray-100 p-3 w-full leading-tight text-left rounded-xl">Log out</button>
+            <Button unstyled type="submit" class="block hover:bg-gray-100 p-3 w-full leading-tight text-left rounded-xl">Log out</Button>
         </form>
     </div>
 </details>

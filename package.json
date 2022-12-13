@@ -56,6 +56,7 @@
     "@supabase/auth-helpers-sveltekit": "^0.8.3",
     "@supabase/supabase-js": "^2.0.4",
     "@zerodevx/svelte-toast": "^1.0.0-rc.1",
+    "clsx": "^1.2.1",
     "color2k": "^2.0.0",
     "crypto-js": "^4.1.1",
     "jose": "^4.8.1",
