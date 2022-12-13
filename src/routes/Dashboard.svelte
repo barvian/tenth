@@ -86,7 +86,11 @@
 </script>
 
 <div role="heading" aria-level={1} class="text-4xl max-w-2xl leading-snug text-center font-bold">
-    We're donating
+    {#if designated.length > 0}
+        We're donating
+    {:else}
+        We'll donate
+    {/if}
     <Percentage value={percentage} loading={updatingPercentage} on:change={onPercentageChange} />
     of your
     <details class="group relative inline-block align-middle" bind:open={bankOpen} use:clickOutside on:outclick={() => bankOpen = false}>
@@ -104,13 +108,25 @@
         <div class="rounded-2xl text-left font-normal border text-base p-2 z-50 bg-white right-0 absolute top-full mt-2 min-w-[160px] shadow-md animate-fly-t" role="menu">
             <a href="/link" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Replace</a>
             <form action="/link?/unlink" method="POST" use:enhance={unlink}>
-                <Button loading={unlinking} type="submit" inconspicuous bg="hover:bg-gray-100" color="text-red-500" rounded="rounded-xl" class="p-3 leading-tight text-left">Unlink</Button>
+                <Button loading={unlinking} type="submit" unstyled class="p-3 leading-tight text-left not-disabled:hover:bg-gray-100 text-red-500 rounded-xl block w-full">Unlink</Button>
             </form>
         </div>
     </details> account every year.
 </div>
 <p class="text-xl max-w-xl text-center text-gray-500 mt-5 mb-8">
-    We donate {(percentage / 12 * 100).toFixed(3)}% of the account on the 20th of each month to your selected charities{#if designated.length > 1}, divided evenly{/if}:</p>
+    {#if designated.length > 0}
+        We're donating
+    {:else}
+        We'll donate
+    {/if}
+    {(percentage / 12 * 100).toFixed(3)}%
+    of your account on the 20th of each month
+    {#if designated.length > 0}
+        to your selected charities{#if designated.length > 1}, divided evenly{/if}:
+    {:else}
+        once you select some charities:
+    {/if}
+</p>
 {#if designated.length > 0}
     <div class="space-y-4 w-full max-w-md mb-5">
         {#each designated as item (item.id)}
