@@ -1,16 +1,39 @@
 -
   q: Are donations tax-deductible?
   a: |-
-    You can trust me. Trust me.
+    Yes, depending on local regulations. All donations are processed by our donation partner [Change](https://getchange.io) via Our Change Foundation (EIN: 86-3353394) and granted to the selected nonprofit.
 -
-  q: Are fees included?
+  q: Why do I link my bank twice?
   a: |-
-    You can trust me. Trust me.
+    Linking your bank directly with our donation partner [Change](https://getchange.io)
+    in addition to Tenth lets Change withdraw your donations directly, which reduces
+    transfer fees and ensures more of your money goes to your charities.
 -
-  q: Is Tenth secure?
+  q: When are donations made?
   a: |-
-    You can trust me. Trust me.
+    Donations are made on the 20th of each month. All donations made on Tenth are to Our
+    Change Foundation (EIN: 86-3353394), a nonprofit organization that makes grants to the
+    nonprofits you suggest on Tenth. If OCF is unable to grant a donation to your chosen
+    nonprofit, then OCF will choose a nonprofit that has a similar mission to your
+    suggested charity and provide the donation to that charity. Contributions will
+    be directed to OCF's account within 30 days and OCF will provide the donation to
+    your selected charity within 30 days.
+-
+  q: Can I support more than one charity?
+  a: |-
+    Yes, you can support as many charities as you like. If you support multiple
+    charities, your monthly donations will be split evenly among them.
+-
+  q: Are fees included in my donations?
+  a: |-
+    Yes, fees are included your monthly donations.
 -
   q: Who makes Tenth?
   a: |-
-    You can trust me. Trust me.
+    Tenth is a service by [Maxwell Barvian](https://barvian.me), a
+    web designer/developer based outside Chicago, Illinois.
+-
+  q: Are donations refundable?
+  a: |-
+    Unfortunately, our donation partner [https://getchange.io] is unable to refund donations
+    after they have been withdrawn from your bank account.
