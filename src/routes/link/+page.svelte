@@ -83,6 +83,7 @@
                 })
             }).then(r => r.ok ? r.json() : Promise.reject(r))
             multiStep.complete()
+            await invalidateAll()
             await goto('/')
         } catch (e) {
             if (e) toast.push(e.display_message ?? 'Could not link bank account', { classes: ['error'] })
