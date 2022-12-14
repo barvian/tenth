@@ -42,7 +42,7 @@
 <form method="POST" action="?/update" class="max-w-sm w-full" use:enhance={save}>
     <Input class="mb-3" label="First name" name="first" value={data.profile?.first_name} disabled />
     <Input label="Last name" name="last" value={data.profile?.last_name} disabled
-        description="You're not able to change your name right now."
+        description="You're not able to change your name at this time."
     />
     <Input class="mt-6" type="email" label="Email" name="email" bind:value={email} bind:error={emailError} disabled={updated}
         showDescription={!updated && email !== data.session?.user.email}

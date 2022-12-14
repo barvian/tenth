@@ -1,18 +1,12 @@
 <script lang="ts">
-	import { invalidate, invalidateAll } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import { parseToRgba } from 'color2k';
 	import { onMount } from 'svelte';
-	import colors from 'tailwindcss/colors';
 	import '~/app.css';
-	import Button from '~/components/Button.svelte';
 	import Arrow from '~/components/icons/Arrow.svelte';
-	import Heart from '~/components/icons/Heart.svelte';
 	import Logo from '~/components/icons/Logo.svelte';
-	import Tip from '~/components/icons/Tip.svelte';
-	import Money from '~/components/inputs/Money.svelte';
-	import Coins from '~/components/TipJar/Coins.svelte';
 	import UserDropdown from '~/components/UserDropdown.svelte';
 	import supabaseClient from '~/lib/db';
 	
@@ -25,9 +19,6 @@
 			subscription.unsubscribe()
 		}
 	})
-
-	let coins: Coins
-	setInterval(() => coins?.addCoin(), 3000)
 
 	$: bankColor = $page.data.institution?.primary_color ? 
 		parseToRgba($page.data.institution.primary_color).slice(0,3).join(' ') :
@@ -78,8 +69,8 @@
 
 <footer class="flex gap-3 flex-wrap inner justify-center text-gray-500 mb-9">
 	<span>© 2022 Tenth, LLC.</span>
-	<span>·</span>
-	<a href="/about" class="font-medium {$page.url.pathname === '/about' ? '!text-black' : 'text-gray-450'}">About</a>
+	<!-- <span>·</span>
+	<a href="/about" class="font-medium {$page.url.pathname === '/about' ? '!text-black' : 'text-gray-450'}">About</a> -->
 	<span>·</span>
 	<a href="/privacy" class="font-medium {$page.url.pathname === '/privacy' ? '!text-black' : 'text-gray-450'}">Privacy</a>
 	<span>·</span>

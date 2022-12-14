@@ -30,15 +30,15 @@
 <details class="group relative inline-block {cls}" bind:open use:clickOutside on:outclick={() => open = false}>
     <summary class="whitespace-nowrap group-open:text-black {active ? '!text-black' : 'text-gray-500'}" aria-haspopup="menu">
         <img src="https://www.gravatar.com/avatar/{md5(email.toLowerCase().trim())}?d=mp" alt="Your avatar" class="rounded-full aspect-square object-fill h-6 align-middle inline-block group-open:!opacity-100" class:opacity-60={!active} />
-        <!-- <span class="hidden lg:inline">{email}</span> -->
+        <span class="hidden lg:inline-block lg:ml-1.5">{email}</span>
         <Caret strokeWidth={1} class="inline-block align-middle md:ml-1 h-1.5" />
     </summary>
     <div class="rounded-2xl text-left border p-2 z-50 bg-white right-0 absolute top-full mt-4 min-w-[200px] shadow-md animate-fly-b" role="menu">
-        <span class="block border-b border-gray-200 p-3 pt-2.5 mb-2 text-gray-500">
+        <span class="block lg:hidden border-b border-gray-200 p-3 pt-2.5 mb-2 text-gray-500">
             {email}
         </span>
         <a href="/profile" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Edit profile</a>
-        <a href="/donations" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Donation history</a>
+        <!-- <a href="/donations" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Donation history</a> -->
         <form class="border-t border-gray-200 pt-2 mt-2" action="/logout" method="POST">
             <Button unstyled type="submit" class="block hover:bg-gray-100 p-3 w-full leading-tight text-left rounded-xl">Log out</Button>
         </form>
