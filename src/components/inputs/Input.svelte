@@ -23,8 +23,8 @@
     export let disabled = false
     export let pattern = '.*'
     export let bg = 'bg-white'
-    export let border: string = 'border-black focus:border-bank'
-    export let shadow: string | boolean = 'not-disabled:shadow focus:shadow-bank/10'
+    export let border: string = 'border-black focus:border-orange-500'
+    export let shadow: string | boolean = 'not-disabled:shadow focus:shadow-orange-500/10'
     export let padding = type === 'search' ? 'pl-12 pr-5 pb-3.5 pt-4' : label && !icon ? 'px-4 pb-2 pt-6 placeholder-shown:py-4' : icon ? 'pl-11 py-4 pr-4' : 'p-4'
     export let rounded = type === 'search' ? 'rounded-full' : 'rounded-2xl'
     export let align = type === 'search' ? 'text-center' : ''
@@ -56,17 +56,17 @@
             class={clsx(bg, border, border && 'has-error:border-red-500 disabled:border-gray-200', shadow, shadow && 'has-error:shadow-red-500/10', rounded, align, textSize, padding, 'w-full peer inherit-case placeholder:normal-case relative transition-all focus:ring-0 focus:ring-offset-0 font-medium placeholder:font-normal', type === 'search' || icon || !label ? 'placeholder:text-gray-450' : 'placeholder:text-transparent')}
         />
         {#if loading && (icon || type === 'search')}
-            <div transition:scale|local class="absolute top-1/2 left-5 -translate-y-1/2 text-gray-500 peer-focus:text-bank">
+            <div transition:scale|local class="absolute top-1/2 left-5 -translate-y-1/2 text-gray-500 peer-focus:text-orange-500">
                 <Spinner class="h-5" />
             </div>
         {:else if type === 'search'}
-            <div transition:scale|local class="absolute top-1/2 left-5 -translate-y-1/2 -mt-[1px] text-gray-500 peer-focus:text-bank">
+            <div transition:scale|local class="absolute top-1/2 left-5 -translate-y-1/2 -mt-[1px] text-gray-500 peer-focus:text-orange-500">
                 <Search class="w-4 transition-colors" />
             </div>
         {:else if icon}
-            <svelte:component this={icon} class="w-5 absolute top-1/2 left-4 -translate-y-1/2 -mt-[1px] transition-colors text-gray-500 peer-focus:text-bank " />
+            <svelte:component this={icon} class="w-5 absolute top-1/2 left-4 -translate-y-1/2 -mt-[1px] transition-colors text-gray-500 peer-focus:text-orange-500 " />
         {:else if label}
-            <label for={name} class="absolute overflow-hidden text-ellipsis max-w-[calc(100%-theme(space.4)*2)] normal-case whitespace-nowrap pointer-events-none scale-[0.55] text-gray-450 peer-focus:text-bank peer-has-error:text-red-500 peer-focus:peer-placeholder-shown:text-gray-450 [&_span]:opacity-0 peer-placeholder-shown:[&_span]:opacity-100 translate-y-[0.7rem] peer-placeholder-shown:translate-y-[1.1rem] peer-placeholder-shown:scale-100 left-4 ml-[0.05em] top-0 origin-top-left {textSize} transition-all">
+            <label for={name} class="absolute overflow-hidden text-ellipsis max-w-[calc(100%-theme(space.4)*2)] normal-case whitespace-nowrap pointer-events-none scale-[0.55] text-gray-450 peer-focus:text-orange-500 peer-has-error:text-red-500 peer-focus:peer-placeholder-shown:text-gray-450 [&_span]:opacity-0 peer-placeholder-shown:[&_span]:opacity-100 translate-y-[0.7rem] peer-placeholder-shown:translate-y-[1.1rem] peer-placeholder-shown:scale-100 left-4 ml-[0.05em] top-0 origin-top-left {textSize} transition-all">
                 {label}{#if required && showRequired}<span class="transition-opacity">*</span>{/if}
                 {#if placeholder}<span class="transition-opacity text-gray-450">({placeholder})</span>{/if}
             </label>

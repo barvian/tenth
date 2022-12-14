@@ -61,7 +61,7 @@
     }
 </script>
 
-<div class="relative bg-white shadow border transition-all border-black focus-within:border-bank focus-within:shadow-bank/10 {cls}" style:border-radius={searchRadius}>
+<div class="relative bg-white shadow border transition-all border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10 {cls}" style:border-radius={searchRadius}>
     <div bind:clientHeight={searchInputHeight}>
         <Input bind:value={term} bind:input={searchInput} {loading} type="search" border="border-none" shadow={false} {label} name="search" on:focus={() => searching = true} on:blur={() => searching = false} />
     </div>
@@ -69,7 +69,7 @@
         {#if results && results.length > 0}
             <div class="py-2 border-t border-gray-200">
                 {#each results as charity (charity.id)}
-                    <Charity {charity} inconspicuous class="cursor-pointer hover:bg-gray-100 p-3" on:click={() => onClickCharity(charity)} />
+                    <Charity {charity} unstyled class="cursor-pointer hover:bg-gray-100 p-3" on:click={() => onClickCharity(charity)} />
                 {/each}
             </div>
         {/if}
@@ -79,7 +79,7 @@
             {:else}
                 Can't find the charity you're looking for?
             {/if}
-            <a class="block mt-1 text-bank font-medium" href="/request">Request it to be added</a>
+            <a class="block mt-1 text-orange-500 font-medium" href="/request">Request it to be added</a>
         </div>
     </div>
 </div>
