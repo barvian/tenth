@@ -12,6 +12,7 @@
     export let value: string | null | undefined = ''
     export let required = false
     export let showRequired = true
+    export let description = ''
     export let showDescription = true
     export let descriptionAlign = "text-left"
     export let icon: typeof SvelteComponent | null = null
@@ -71,11 +72,11 @@
                 {#if placeholder}<span class="transition-opacity text-gray-450">({placeholder})</span>{/if}
             </label>
         {/if}
-        <slot name="tools" />
+        <slot />
     </div>
     {#if error}
-        <p in:fade|local class="text-red-600 {descriptionAlign} leading-snug mt-5">{@html error}</p>
-    {:else if $$slots.default && showDescription}
-        <p in:fade|local class="text-gray-500 {descriptionAlign} leading-snug mt-5"><slot /></p>
+        <p in:fade|local class="text-red-600 {descriptionAlign} leading-snug mt-4">{@html error}</p>
+    {:else if description && showDescription}
+        <p in:fade|local class="text-gray-500 {descriptionAlign} leading-snug mt-4">{@html description}</p>
     {/if}
 </div>

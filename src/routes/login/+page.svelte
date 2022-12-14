@@ -59,9 +59,9 @@
 	<MultiStep bind:this={multiStep} let:reset>
 		<Step as="fieldset">
 			<h1 class="text-4xl font-bold text-center mb-8">Sign in to Tenth</h1>
-			<Input class="max-w-xs" required bind:error={emailError} showRequired={false} type="email" name="email" label="Email" on:input={reset} bind:value={email}>
-				We'll send you a code to get you signed in.
-			</Input>
+			<Input class="max-w-xs" required bind:error={emailError} showRequired={false} type="email" name="email" label="Email" on:input={reset} bind:value={email}
+				description="We'll send you a code to get you signed in."
+			/>
 			<Button type="submit" disabled={Boolean(emailError)} class="mt-7 max-w-xs">
 				Sign in
 			</Button>

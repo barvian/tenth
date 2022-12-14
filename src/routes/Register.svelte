@@ -103,9 +103,9 @@
             <div class="grid grid-cols-2 gap-6 max-w-md w-full">
                 <Input required={active} type="text" name="first-name" label="First name" />
                 <Input required={active} type="text" name="last-name" label="Last name" />
-                <Input bind:error={emailError} bind:value={email} on:input={reset} class="col-span-full" required={active} type="email" name="email" label="Email">
-                    We'll send you a code to verify your email address.
-                </Input>
+                <Input bind:error={emailError} bind:value={email} on:input={reset} class="col-span-full" required={active} type="email" name="email" label="Email"
+                    description="We'll send you a code to verify your email address."
+                />
             </div>
             <Button {loading} type="submit" class="mt-8 max-w-md">
                 Continue

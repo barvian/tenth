@@ -32,6 +32,5 @@
 
 <Input name={name+'-formatted'} autocomplete="off" spellcheck={false} {...$$restProps} on:keydown={handleKeyDown} {value}>
 	<slot />
-	<slot slot="tools" name="tools" />
 </Input>
 <input type="hidden" {name} value={amount} />

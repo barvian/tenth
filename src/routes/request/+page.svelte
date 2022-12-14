@@ -50,9 +50,9 @@
     </header>
     <form method="POST" class="max-w-lg w-full grid grid-cols-3 gap-6" use:enhance={request}>
         <Input class="col-span-full" autocomplete="off" type="text" name="name" value={form?.values?.name} label="Charity name" required />
-        <Input class="col-span-full" autocomplete="off" type="text" name="ein" value={form?.values?.ein} label="EIN" placeholder="e.g. 41-1627391" required>
-            Not sure where to find this? Search for your charity on <a rel="external" href="http://www.guidestar.org/" target="_blank">Guidestar</a>.
-        </Input>
+        <Input class="col-span-full" autocomplete="off" type="text" name="ein" value={form?.values?.ein} label="EIN" placeholder="e.g. 41-1627391" required
+            description={`Not sure where to find this? Search for your charity on <a rel="external" href="http://www.guidestar.org/" target="_blank">Guidestar</a>.`}
+        />
         <Input class="col-span-full" autocomplete="off" type="text" name="address_line" value={form?.values?.address_line} label="Address line" placeholder="e.g. 1452 DoGood Lane" />
         <Input class="col-span-2" autocomplete="off" type="text" name="city" value={form?.values?.city} label="City" />
         <Input class="col-span-1 uppercase" autocomplete="off" maxlength={2} type="text" name="state" value={form?.values?.state} label="State" placeholder="e.g. IL" />
@@ -67,9 +67,9 @@
             </div>
         </fieldset>
         {#if !data?.session}
-            <Input class="col-span-full mt-2" type="email" name="email" value={form?.values?.email} label="Your email">
-                If provided, we'll email you updates about your request.
-            </Input>
+            <Input class="col-span-full mt-2" type="email" name="email" value={form?.values?.email} label="Your email"
+                description="If provided, we'll email you updates about your request."
+            />
         {/if}
         <Button class="col-span-full mt-2" loading={requesting} type="submit">Request</Button>
     </form>
