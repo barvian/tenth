@@ -42,8 +42,8 @@ module.exports = {
       //   // '4xl': '2.6rem'
       // },
       spacing: {
-        xl: 'calc(theme(space.12) + 8vh)',
-        '2xl': 'calc(theme(space.16) + 8vh)'
+        xl: 'calc(theme(space.10) + 5vh)',
+        '2xl': 'calc(theme(space.16) + 5vh)'
       },
       padding: {
         'page': '5vw'

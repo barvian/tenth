@@ -22,7 +22,7 @@
 
 @layer base {
     :root {
-        @apply overflow-x-hidden scroll-smooth xl:text-[18px];
+        @apply antialiased overflow-x-hidden scroll-smooth xl:text-[18px];
 
         --toastBackground: theme(colors.black);
         --toastBarHeight: 0;
@@ -38,6 +38,10 @@
     /* ugly but theme(boxShadow) doesn't work in this case */
     [class*="toastItem"] {
         @apply !shadow
+    }
+
+    body {
+        @apply min-h-screen flex flex-col
     }
 
     :disabled {
@@ -75,30 +79,6 @@
         transform-box: fill-box;
         transform-origin: center
     }
-
-    /* .link {
-        display: inline-block;
-        position: relative;
-
-    }
-    
-        .link::after {
-            background: currentColor;
-            bottom: 0;
-            content: '';
-            box-shadow: 0 -0.5px 0 currentColor;
-            height: 1px;
-            left: 0;
-            position: absolute;
-            transform-origin: center left;
-            transform: scaleX(0);
-            transition: all .6s cubic-bezier(.16,1,.3,1);
-            width: 100%;
-        }
-
-        .link:hover::after {
-            transform: scaleX(1)
-        } */
 }
 
 @layer utilities {
