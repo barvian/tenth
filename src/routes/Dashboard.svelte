@@ -85,7 +85,7 @@
     let bankOpen = false
 </script>
 
-<div role="heading" aria-level={1} class="text-4xl max-w-2xl leading-snug text-center font-bold">
+<div role="heading" aria-level={1} class="text-4xl max-w-2xl text-center font-bold">
     {#if designated.length > 0}
         We're donating
     {:else}
@@ -93,19 +93,21 @@
     {/if}
     <Percentage value={percentage} loading={updatingPercentage} on:change={onPercentageChange} />
     of your
-    <details class="group relative inline-block align-middle" bind:open={bankOpen} use:clickOutside on:outclick={() => bankOpen = false}>
-        <summary class="whitespace-nowrap border-current leading-extra-tight border-b-4 border-dotted text-bank" aria-haspopup="menu">
+    <details class="group relative inline-block align-baseline" bind:open={bankOpen} use:clickOutside on:outclick={() => bankOpen = false}>
+        <summary class="border-current leading-extra-tight border-b-4 mb-2 border-dotted text-bank" class:whitespace-nowrap={$page.data.institution?.logo} aria-haspopup="menu">
             {#if $page.data.institution?.logo}
                 <img class="h-9 inline-block -mt-1" alt="{$page.data.institution?.name} logo" src="data:image/png;base64,{$page.data.institution?.logo}" />
             {:else}
                 {$page.data.institution?.name}
             {/if}
-            <span class="tracking-tighter leading-none text-3xl inline-block -translate-y-1/4 mr-0.5">⚫︎⚫︎</span>{$page.data.profile?.plaid_account_mask}
-            <svg class="inline-block align-middle h-[0.7em]" viewBox="0 13 18 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 25L9 31L15 25" stroke="currentColor" vector-effect="non-scaling-stroke" stroke-width="4" stroke-linecap="square" stroke-linejoin="round"/>
-            </svg>
+            <span class="whitespace-nowrap">
+                <span class="tracking-tighter leading-none text-3xl inline-block -translate-y-1/4 mr-0.5">⚫︎⚫︎</span>{$page.data.profile?.plaid_account_mask}
+                <svg class="inline-block align-middle h-[0.7em]" viewBox="0 13 18 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 25L9 31L15 25" stroke="currentColor" vector-effect="non-scaling-stroke" stroke-width="4" stroke-linecap="square" stroke-linejoin="round"/>
+                </svg>
+            </span>
         </summary>
-        <div class="rounded-2xl text-left font-normal border text-base p-2 z-50 bg-white right-0 absolute top-full mt-2 min-w-[160px] shadow-md animate-fly-b" role="menu">
+        <div class="rounded-2xl text-left font-normal border text-base p-2 z-50 bg-white right-0 absolute top-full min-w-[160px] shadow-md animate-fly-b" role="menu">
             <a href="/link" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Replace</a>
             <form action="/link?/unlink" method="POST" use:enhance={unlink}>
                 <Button loading={unlinking} type="submit" unstyled class="p-3 leading-tight text-left not-disabled:hover:bg-gray-100 text-red-500 rounded-xl block w-full">Unlink</Button>
