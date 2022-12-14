@@ -62,36 +62,14 @@
 	</ul>
 
 	{#if $page.data.session}
-	<UserDropdown class="ml-auto" />
+		<UserDropdown class="ml-auto" />
 	{:else}
-	{@const active = $page.url.pathname === '/login'}
-	<a class="font-medium whitespace-nowrap group {active ? '!text-black' : 'text-gray-450'}" href="/login">
-		Sign in
-		<Arrow strokeWidth={1} class="inline-block align-baseline ml-1.5 h-2.5 -scale-x-100 transition-transform group-hover:translate-x-0.5 {active ? 'translate-x-0.5' : ''}" />
-	</a>
-	{/if}
-	{#if $page.data.profile?.stripe_linked}
-	<details class="relative">
-		<Button as="summary" class="relative ml-3 xs:ml-6 group" width="w-min" textSize="text-base" bg="xs:bg-rose-100/70 xs:active:bg-rose-200 {$page.url.pathname === '/tip' ? 'xs:!bg-rose-500' : '' }" color="text-rose-400 xs:text-rose-500 {$page.url.pathname === '/tip' ? 'text-rose-500 xs:text-white' : '' }" shadow={false} rounded="rounded-full" padding="xs:px-3 xs:pb-1 xs:pt-1.5">
-			<!-- <Coins bind:this={coins} coinSize={4} coinColor={colors.rose[200]} class="clip-[inset(0_round_999px)]" /> -->
-			<Heart class="h-5 xs:hidden inline-block align-middle relative" fill={$page.url.pathname === '/tip'} />
-			<Tip class="hidden h-4 xs:inline-block align-middle -mt-[3px] group-hover:animate-shake relative" />
-			<span class="hidden xs:inline relative">Tip</span>
-		</Button>
-		<div class="rounded-2xl border focus-within:border-rose-500 z-50 bg-white right-0 absolute top-full mt-3 min-w-[260px] shadow-md focus-within:shadow-rose-500/10 animate-fly-t" role="dialog">
-			<div class="px-2 mx-2 pt-4 pb-2">
-				tip!
-			</div>
-			<form method="POST" class="relative w-full px-4 pb-4">
-				<Money align="text-center" border="border-none" textSize="text-xl" shadow={false} padding="p-2.5" required type="text" name="amount" placeholder="$0" />
-				<Button type="submit" bg="bg-rose-500" rounded="rounded-xl" shadow="hover:shadow hover:-translate-y-1 active:translate-y-0 active:shadow-transparent" padding="p-3">
-					Tip
-				</Button>
-			</form>
-		</div>
-	</details>
-	{/if}
-    
+		{@const active = $page.url.pathname === '/login'}
+		<a class="font-medium whitespace-nowrap group ml-auto {active ? '!text-black' : 'text-gray-450'}" href="/login">
+			Sign in
+			<Arrow strokeWidth={1} class="inline-block align-baseline ml-1.5 h-2.5 -scale-x-100 transition-transform group-hover:translate-x-0.5 {active ? 'translate-x-0.5' : ''}" />
+		</a>
+	{/if}    
 </nav>
 
 <main class="inner pt-xl pb-2xl flex-1 flex flex-col items-center justify-center">
