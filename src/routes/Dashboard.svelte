@@ -117,9 +117,9 @@
 </div>
 <p class="text-xl max-w-xl text-center text-gray-500 mt-5 mb-8">
     {#if designated.length > 0}
-        We're donating
+        We send
     {:else}
-        We'll donate
+        We'll send
     {/if}
     {(percentage / 12 * 100).toFixed(3)}%
     of your account on the 20th of each month
