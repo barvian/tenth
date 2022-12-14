@@ -11,6 +11,7 @@
 	import Tip from '~/components/icons/Tip.svelte';
 	import UserDropdown from '~/components/UserDropdown.svelte';
 	import supabaseClient from '~/lib/db';
+	import { parseToRgba } from 'color2k'
 	
 	onMount(() => {
 		const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(() => {
@@ -22,15 +23,18 @@
 		}
 	})
 
+	$: bankColor = $page.data.institution?.primary_color ? 
+		parseToRgba($page.data.institution.primary_color).slice(0,3).join(' ') :
+		null
+
 	const toastOptions = {
 		intro: { y: 40 }
 	}
 </script>
 
 <svelte:head>
-	{#if $page.data.institution?.primary_color}
-		{@const style = `<style>:root { --color-bank: ${parseToRgba($page.data.institution.primary_color).slice(0,3).join(' ')}; }</style>`}
-		{@html style}
+	{#if bankColor}
+		{@html `<style>:root { --color-bank: ${bankColor}; }</style>`}
 	{/if}
 </svelte:head>
 
