@@ -75,7 +75,7 @@
 <form action="?/register" method="POST" use:enhance={register}>
     <MultiStep bind:this={multiStep} let:next let:prev let:reset leaveAlert="Are you sure you want to exit? You'll have to start the sign-up process again.">
         <Step as="fieldset">
-            <div role="heading" aria-level={1} class="text-4xl max-w-2xl text-center leading-tight font-bold">
+            <div role="heading" aria-level={1} class="text-4xl max-w-2xl text-center font-bold">
                 Donate <Percentage /> of your checking account to charity every year.
             </div>
             <p class="text-xl max-w-2xl text-center text-gray-500 mt-5 mb-8">Donated in monthly increments. Cancelable anytime.</p>

@@ -40,7 +40,7 @@
     </Button>
 {:else}
     <header class="text-center max-w-2xl mb-8">
-        <h1 class="text-4xl leading-tight font-bold">Request a charity</h1>
+        <h1 class="text-4xl font-bold">Request a charity</h1>
         <p class="text-xl mt-5 text-gray-500">
             Use the form to request that a charity be added to the Change network, which Tenth uses. Please fill out as many fields as possible; missing information may cause processing delays.
         </p>
