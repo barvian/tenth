@@ -8,8 +8,8 @@
     export { cls as class }
     export let coinSize = 5 // radius
     export let coinColor = '#000'
+    export let coinOpacity = 1
     export let initialStackWidth = .8
-    export let initialStackHeight = 0
     export let rounded = true
 
     let wrapper: HTMLElement, canvas: HTMLCanvasElement
@@ -85,11 +85,12 @@
       ])
   
       // Drop in initial coins
-      let initialCols = Math.max(3, Math.floor(w*initialStackWidth / (coinSize*2)))
-      let initialRows = Math.max(2, Math.floor(h*initialStackHeight / (coinSize*2)))
-      matter.Composite.add(world, Array.from({ length: initialRows }, (_, r) => 
-        matter.Composites.stack(w / 2 - initialCols*coinSize + (r % 2 === 0 ? coinSize/2 : coinSize/-2), h-(r+1)*coinSize*2, initialCols, 1, 0, 0, (x: number, y: number) => addCoin({ x, y, add: false })),
-      ))
+      const bottomCols = Math.max(3, Math.floor(w*initialStackWidth / (coinSize*2)))
+      const topCols = Math.ceil((bottomCols-1) / 2)
+      matter.Composite.add(world, [
+        matter.Composites.stack(w / 2 - bottomCols*coinSize, h-coinSize*2, bottomCols, 1, 0, 0, (x: number, y: number) => addCoin({ x, y, add: false })), // bottom
+        matter.Composites.stack(w / 2 - topCols*coinSize + ((bottomCols-topCols) % 2 ? 0 : coinSize), h-coinSize*3.5 /* avoid any even minor falling animations */, topCols, 1, 0, 0, (x: number, y: number) => addCoin({ x, y, add: false })), // top
+      ])
 
       // add mouse control
       const mouse = matter.Mouse.create(render.canvas),
@@ -120,7 +121,8 @@
     const coin = matter.Bodies.circle(x ?? w/2, y, coinSize, {
       restitution: 0.3,
       render: {
-        fillStyle: coinColor
+        fillStyle: coinColor,
+        opacity: coinOpacity
       }
     })
 

@@ -4,6 +4,7 @@
 	import supabaseClient from '~/lib/db'
 	import { onDestroy, onMount } from "svelte";
 	import Money from "../inputs/Money.svelte";
+	import colors from "tailwindcss/colors";
 
 	let coins: Coins
 
@@ -42,7 +43,7 @@
 <!-- Repeat for every max-width breakpoint change, if any -->
 <details class="fixed bottom-9 right-[calc(theme(padding.page)+calc(100vw-(theme(padding.page)*2)-min(100vw-(theme(padding.page)*2),theme(maxWidth.5xl)))/2)]">
 	<Button as="summary" class="border" width="w-min" rounded="rounded-full" color="text-black" bg="bg-white">
-		<Coins class="clip-[inset(2.5px_round_999px)]" bind:this={coins} />
+		<Coins coinColor={colors.neutral[200]} class="clip-[inset(2.5px_round_999px)]" bind:this={coins} />
 		<span class="relative">Tips</span><!-- position on top of coins -->
 	</Button>
 	<div class="rounded-2xl border z-50 bg-white right-0 absolute bottom-full mb-6 min-w-[260px] shadow-md animate-fly-t" role="dialog">

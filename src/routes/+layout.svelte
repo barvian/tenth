@@ -1,27 +1,33 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation';
+	import { invalidate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
+	import { parseToRgba } from 'color2k';
 	import { onMount } from 'svelte';
+	import colors from 'tailwindcss/colors';
 	import '~/app.css';
 	import Button from '~/components/Button.svelte';
 	import Arrow from '~/components/icons/Arrow.svelte';
 	import Heart from '~/components/icons/Heart.svelte';
 	import Logo from '~/components/icons/Logo.svelte';
 	import Tip from '~/components/icons/Tip.svelte';
+	import Money from '~/components/inputs/Money.svelte';
+	import Coins from '~/components/TipJar/Coins.svelte';
 	import UserDropdown from '~/components/UserDropdown.svelte';
 	import supabaseClient from '~/lib/db';
-	import { parseToRgba } from 'color2k'
 	
 	onMount(() => {
 		const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(() => {
-			invalidate('supabase:auth')
+			invalidateAll()
 		})
 
 		return () => {
 			subscription.unsubscribe()
 		}
 	})
+
+	let coins: Coins
+	setInterval(() => coins?.addCoin(), 3000)
 
 	$: bankColor = $page.data.institution?.primary_color ? 
 		parseToRgba($page.data.institution.primary_color).slice(0,3).join(' ') :
@@ -40,14 +46,14 @@
 
 <SvelteToast options={toastOptions} />
 
-<nav class="inner flex items-center justify-between">
+<nav class="inner flex items-center justify-between mt-5 md:mt-6 h-10">
 	<a href="/" class="{$page.url.pathname === '/' ? '!text-black' : 'text-gray-450'} pb-1">
 		<Logo />
 	</a>
 
 	<ul class="contents xs:flex items-center justify-center xs:absolute xs:left-1/2 xs:-translate-x-1/2 xs:gap-x-[calc(theme(space.2)+5vw)]">
 		<li class="ml-auto"><a href="/pricing" class="font-medium {$page.url.pathname === '/pricing' ? '!text-black' : 'text-gray-450'}">Pricing</a></li>
-		<li class="ml-auto"><a href="/support" class="font-medium {$page.url.pathname === '/support' ? '!text-black' : 'text-gray-450'}">Support</a></li>
+		<li class="ml-auto"><a href="/support" class="font-medium {$page.url.pathname === '/support' ? '!text-black' : 'text-gray-450'}">{#if $page.data.session}Support{:else}FAQs{/if}</a></li>
 	</ul>
 
 	{#if $page.data.session}
@@ -60,11 +66,25 @@
 	</a>
 	{/if}
 	{#if $page.data.profile?.stripe_linked}
-		<Button href="/tip" class="ml-3 xs:ml-6 group" width="w-min" textSize="text-base" bg="xs:bg-rose-100/70 xs:active:bg-rose-200 {$page.url.pathname === '/tip' ? 'xs:!bg-rose-500' : '' }" color="text-rose-400 xs:text-rose-500 {$page.url.pathname === '/tip' ? 'text-rose-500 xs:text-white' : '' }" shadow={false} rounded="rounded-full" padding="xs:px-3 xs:pb-1 xs:pt-1.5">
-			<Heart class="h-5 xs:hidden inline-block align-middle group-hover:animate-shake" />
-			<Tip class="hidden h-4 xs:inline-block align-middle -mt-[3px] group-hover:animate-shake" />
-			<span class="hidden xs:inline">Tip</span>
+	<details class="relative">
+		<Button as="summary" class="relative ml-3 xs:ml-6 group" width="w-min" textSize="text-base" bg="xs:bg-rose-100/70 xs:active:bg-rose-200 {$page.url.pathname === '/tip' ? 'xs:!bg-rose-500' : '' }" color="text-rose-400 xs:text-rose-500 {$page.url.pathname === '/tip' ? 'text-rose-500 xs:text-white' : '' }" shadow={false} rounded="rounded-full" padding="xs:px-3 xs:pb-1 xs:pt-1.5">
+			<!-- <Coins bind:this={coins} coinSize={4} coinColor={colors.rose[200]} class="clip-[inset(0_round_999px)]" /> -->
+			<Heart class="h-5 xs:hidden inline-block align-middle relative" fill={$page.url.pathname === '/tip'} />
+			<Tip class="hidden h-4 xs:inline-block align-middle -mt-[3px] group-hover:animate-shake relative" />
+			<span class="hidden xs:inline relative">Tip</span>
 		</Button>
+		<div class="rounded-2xl border focus-within:border-rose-500 z-50 bg-white right-0 absolute top-full mt-3 min-w-[260px] shadow-md focus-within:shadow-rose-500/10 animate-fly-t" role="dialog">
+			<div class="px-2 mx-2 pt-4 pb-2">
+				tip!
+			</div>
+			<form method="POST" class="relative w-full px-4 pb-4">
+				<Money align="text-center" border="border-none" textSize="text-xl" shadow={false} padding="p-2.5" required type="text" name="amount" placeholder="$0" />
+				<Button type="submit" bg="bg-rose-500" rounded="rounded-xl" shadow="hover:shadow hover:-translate-y-1 active:translate-y-0 active:shadow-transparent" padding="p-3">
+					Tip
+				</Button>
+			</form>
+		</div>
+	</details>
 	{/if}
     
 </nav>
@@ -73,7 +93,7 @@
 	<slot />
 </main>
 
-<footer class="flex gap-3 flex-wrap inner justify-center text-gray-500">
+<footer class="flex gap-3 flex-wrap inner justify-center text-gray-500 mb-9">
 	<span>© 2022 Tenth, LLC.</span>
 	<span>·</span>
 	<a href="/about" class="font-medium {$page.url.pathname === '/about' ? '!text-black' : 'text-gray-450'}">About</a>
