@@ -17,6 +17,10 @@ export const load = withLoadAuth<PageServerLoad>(async (event) => {
 	}
         
 	return {
+		meta: {
+			title: 'Link a bank',
+			description: `Link your bank account with Tenth to complete the set-up process`
+		},
 		institution
 	}
 })

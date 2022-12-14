@@ -9,8 +9,13 @@ import type { Actions, PageServerLoad } from './$types';
 const changeCreds = Buffer.from(PUBLIC_CHANGE_KEY+':'+SECRET_CHANGE_KEY).toString('base64')
 
 export const load: PageServerLoad = async (event) => {
+	const meta = {
+		title: 'Donate a part of your bank account to charity every month',
+		description: `Tenth is a platform enabling you to automatically donate a percentage of your bank account to charity every year`
+	}
+	
 	const { session, supabaseClient } = await getSupabase(event)
-	if (!session) return
+	if (!session) return { meta }
     const parent = await event.parent()
 
 	// Redirect if linking process is incomplete
@@ -28,6 +33,7 @@ export const load: PageServerLoad = async (event) => {
 	}
         
 	return {
+		meta,
 		institution,
 		designated
 	}

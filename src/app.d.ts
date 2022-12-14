@@ -8,6 +8,10 @@ declare namespace App {
 		SchemaName: 'public';
 	  }
 	interface PageData {
+		meta: {
+			title: string,
+			description?: string
+		},
 		session?: import('@supabase/supabase-js').Session;
 		profile?: {
 			plaid_institution_id: string | null;
@@ -17,9 +21,6 @@ declare namespace App {
 			last_name: string | null;
 			stripe_linked: boolean;
 		}
-	}
-	interface Locals {
-		tipped?: boolean;
 	}
 	// interface Error {}
 	// interface Platform {}

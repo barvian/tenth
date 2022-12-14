@@ -39,6 +39,11 @@
 </script>
 
 <svelte:head>
+	<title>Tenth: {$page.data.meta.title}</title>
+	{#if $page.data.meta.description}
+		<meta name="description" content={$page.data.meta.description} />
+	{/if}
+
 	{#if bankColor}
 		{@html `<style>:root { --color-bank: ${bankColor}; }</style>`}
 	{/if}
