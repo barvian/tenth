@@ -13,7 +13,7 @@
 <div class="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8 w-full max-w-4xl items-start">
     {#each data.faqs as {q, a}}
         <details class="rounded-3xl border shadow-md group">
-            <summary class="flex gap-x-3 items-center text-lg font-medium p-8 cursor-pointer select-none">
+            <summary class="flex gap-x-3 items-center text-lg font-medium p-8">
                 {q}
                 <Expander class="-mt-1 ml-auto" />
             </summary>

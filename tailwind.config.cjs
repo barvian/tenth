@@ -6,9 +6,9 @@ const { parseToRgba } = require('color2k')
 /** @type {import('tailwindcss').Config} */ 
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
-  // future: {
-  //   hoverOnlyWhenSupported: true,
-  // },
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     colors: {
       transparent: 'transparent',
@@ -18,15 +18,20 @@ module.exports = {
       white: colors.white,
       gray: {...colors.neutral, '450': '#8c8c8c' },
       orange: colors.orange,
-      red: colors.red
+      red: colors.red,
+      rose: colors.red
     },
     boxShadow: {
+      sm: 'theme(space[0.5]) theme(space[1]) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
       DEFAULT: 'theme(space.1) theme(space[1.5]) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
       elevated: 'theme(space.1) theme(space[2.5]) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
       md: 'theme(space[1.5]) theme(space.2) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
       lg: 'theme(space.2) theme(space.3) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))'
     },
     extend: {
+      screens: {
+        'xs': '520px',
+      },
       borderColor: ({ theme }) => ({
         DEFAULT: theme('colors.black'),
       }),
@@ -37,8 +42,8 @@ module.exports = {
       //   // '4xl': '2.6rem'
       // },
       spacing: {
-        xl: 'calc(theme(space.10) + 5vh)',
-        '2xl': 'calc(theme(space.16) + 10vh)'
+        xl: 'calc(theme(space.12) + 8vh)',
+        '2xl': 'calc(theme(space.16) + 8vh)'
       },
       padding: {
         'page': '5vw'
@@ -48,9 +53,34 @@ module.exports = {
       },
       animation: {
         'spin': 'spin 0.9s cubic-bezier(0.62, 0.37, 0.3, 0.63) infinite',
+        'shake': 'shake 1s ease-in-out',
+        'fly-b': 'fly-b 150ms ease-out',
         'fly-t': 'fly-t 150ms ease-out',
       },
       keyframes: {
+        'shake': {
+          '0%, 50%': {
+            'transform': 'translateY(0)'
+          },
+          '6.5%': {
+            'transform': 'translateY(-25%)/* rotateX(-9deg)*/'
+          },
+          '18.5%': {
+            'transform': 'translateY(21%)/* rotateX(7deg)*/'
+          },
+          '31.5%': {
+            'transform': 'translateY(-12.5%)/* rotateX(-5deg)*/'
+          },
+          '43.5%': {
+            'transform': 'translateY(8.333%)/* rotateX(3deg)*/'
+          }
+        },
+        'fly-b': {
+          '0%': {
+            'transform': 'translateY(-1rem)',
+            'opacity': 0
+          }
+        },
         'fly-t': {
           '0%': {
             'transform': 'translateY(1rem)',
@@ -69,11 +99,11 @@ module.exports = {
     require('tailwindcss-bg-svg'),
     plugin(function({ addBase, addUtilities, addVariant, matchUtilities, addComponents, theme }) {
       addVariant('not-disabled', '&:not(:disabled)')
+      addVariant('peer-not-disabled', ':merge(.peer):not(:disabled) ~ &')
       addVariant('has-error', '&.has-error')
       addVariant('peer-has-error', ':merge(.peer).has-error ~ &')
       addComponents({
         '.inner': {
-          'position': 'relative',
           'max-width': `calc(${theme('maxWidth.5xl')} + ${theme('padding.page')} * 2)`,
           'padding-left': theme('padding.page'),
           'padding-right': theme('padding.page'),
@@ -105,6 +135,14 @@ module.exports = {
             'grid-area': 'overlap'
         }
       })
+      matchUtilities(
+        {
+          'clip': (value) => ({
+            'clip-path': value
+          }),
+        },
+        { values: theme('clipPath') }
+      )
       matchUtilities(
         {
           'text-border': (value) => ({

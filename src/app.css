@@ -48,13 +48,17 @@
         @apply bg-transparent text-black;
     }
 
-    summary::marker {
-        display: none;
+    summary {
+        @apply cursor-pointer select-none;
     }
 
-    summary::-webkit-details-marker {
-        display: none;
-    }
+        summary::marker {
+            display: none;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
 
     input[autocomplete="off"]::-webkit-contacts-auto-fill-button, 
     input[autocomplete="off"]::-webkit-credentials-auto-fill-button {

@@ -7,7 +7,7 @@
 	import Instagram from "~/components/icons/social/Instagram.svelte";
 	import Twitter from "~/components/icons/social/Twitter.svelte";
 	import YouTube from "~/components/icons/social/YouTube.svelte";
-	import Input from "~/components/Input.svelte";
+	import Input from "~/components/inputs/Input.svelte";
 	import type { ActionData, PageData } from "./$types";
 
     export let data: PageData

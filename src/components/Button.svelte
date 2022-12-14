@@ -2,6 +2,7 @@
 	import Spinner from "./icons/Spinner.svelte";
     import clsx from 'clsx'
     
+    export let as = 'button'
     export let href: string | null | undefined = null
     export let type = 'button'
     export let loading = false
@@ -13,15 +14,15 @@
     export let rounded = 'rounded-2xl'
     export let padding = 'px-6 py-4'
     export let width = 'w-full'
-    export let text = 'text-lg'
+    export let textSize = 'text-lg'
     export let align = 'text-center'
     export let font = 'font-medium'
     let cls = ''
     export { cls as class }
 </script>
 
-<svelte:element this={href ? 'a' : 'button'} {href} disabled={loading || disabled} {type} on:click
-    class={clsx(cls, 'overlap-inline justify-items-center', !unstyled && [width, bg, color, align, shadow, padding, rounded, text, font, width, 'whitespace-nowrap relative transition-all active:transition-none'])}
+<svelte:element this={href ? 'a' : as} {href} disabled={loading || disabled} {type} on:click
+    class={clsx(cls, 'overlap-inline items-center justify-items-center', !unstyled && [width, bg, color, align, shadow, padding, rounded, textSize, font, width, 'whitespace-nowrap transition-all active:transition-none'])}
 >
     <span class="block w-full" class:invisible={loading}><slot /></span>
     {#if loading}<Spinner class="h-5" />{/if}

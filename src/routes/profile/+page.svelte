@@ -2,7 +2,7 @@
 	import { applyAction, enhance, type SubmitFunction } from "$app/forms";
 	import { toast } from '@zerodevx/svelte-toast';
 	import Button from "~/components/Button.svelte";
-	import Input from "~/components/Input.svelte";
+	import Input from "~/components/inputs/Input.svelte";
     import { page } from '$app/stores'
 	import type { ActionData, PageData } from "./$types";
 

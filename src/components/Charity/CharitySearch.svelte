@@ -12,7 +12,7 @@
     import debounce from 'lodash/debounce';
     import { createEventDispatcher } from "svelte";
     import type { Nonprofit, NonprofitSearchResults } from 'types/change';
-    import Input from '../Input.svelte';
+    import Input from '../inputs/Input.svelte';
     import Charity from './Charity.svelte';
 
     const dispatch = createEventDispatcher()
@@ -61,9 +61,9 @@
     }
 </script>
 
-<div class="relative bg-white shadow border transition-all border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10 {cls}" style:border-radius={searchRadius}>
+<div class="relative bg-white shadow border transition-all border-black focus-within:border-bank focus-within:shadow-bank/10 {cls}" style:border-radius={searchRadius}>
     <div bind:clientHeight={searchInputHeight}>
-        <Input bind:value={term} bind:input={searchInput} inconspicuous {loading} type="search" {label} name="search" on:focus={() => searching = true} on:blur={() => searching = false} />
+        <Input bind:value={term} bind:input={searchInput} {loading} type="search" border="border-none" shadow={false} {label} name="search" on:focus={() => searching = true} on:blur={() => searching = false} />
     </div>
     <div class="px-2 overflow-hidden transition-[max-height] {searching && results ? 'max-h-[1200px] duration-500' : 'max-h-0 ease-[cubic-bezier(0,1,0,1)]'}" on:mousedown|preventDefault>
         {#if results && results.length > 0}
@@ -79,7 +79,7 @@
             {:else}
                 Can't find the charity you're looking for?
             {/if}
-            <a class="block mt-1 text-orange-500 font-medium" href="/request">Request it to be added</a>
+            <a class="block mt-1 text-bank font-medium" href="/request">Request it to be added</a>
         </div>
     </div>
 </div>

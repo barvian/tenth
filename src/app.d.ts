@@ -18,6 +18,9 @@ declare namespace App {
 			stripe_linked: boolean;
 		}
 	}
+	interface Locals {
+		tipped?: boolean;
+	}
 	// interface Error {}
 	// interface Platform {}
 }

@@ -3,7 +3,7 @@
 	import Charity from '~/components/Charity/Charity.svelte';
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte';
 	import X from '~/components/icons/X.svelte';
-	import Percentage from "~/components/Percentage.svelte";
+	import Percentage from "~/components/inputs/Percentage.svelte";
     import type { Nonprofit } from 'types/change';
 	import Button from '~/components/Button.svelte';
     import supabaseClient from '~/lib/db';
@@ -94,7 +94,7 @@
     <Percentage value={percentage} loading={updatingPercentage} on:change={onPercentageChange} />
     of your
     <details class="group relative inline-block align-middle" bind:open={bankOpen} use:clickOutside on:outclick={() => bankOpen = false}>
-        <summary class="cursor-pointer whitespace-nowrap select-none border-current leading-extra-tight border-b-4 border-dotted text-bank" aria-haspopup="menu">
+        <summary class="whitespace-nowrap border-current leading-extra-tight border-b-4 border-dotted text-bank" aria-haspopup="menu">
             {#if $page.data.institution?.logo}
                 <img class="h-9 inline-block -mt-1" alt="{$page.data.institution?.name} logo" src="data:image/png;base64,{$page.data.institution?.logo}" />
             {:else}
@@ -105,7 +105,7 @@
                 <path d="M3 25L9 31L15 25" stroke="currentColor" vector-effect="non-scaling-stroke" stroke-width="4" stroke-linecap="square" stroke-linejoin="round"/>
             </svg>
         </summary>
-        <div class="rounded-2xl text-left font-normal border text-base p-2 z-50 bg-white right-0 absolute top-full mt-2 min-w-[160px] shadow-md animate-fly-t" role="menu">
+        <div class="rounded-2xl text-left font-normal border text-base p-2 z-50 bg-white right-0 absolute top-full mt-2 min-w-[160px] shadow-md animate-fly-b" role="menu">
             <a href="/link" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Replace</a>
             <form action="/link?/unlink" method="POST" use:enhance={unlink}>
                 <Button loading={unlinking} type="submit" unstyled class="p-3 leading-tight text-left not-disabled:hover:bg-gray-100 text-red-500 rounded-xl block w-full">Unlink</Button>
