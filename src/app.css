@@ -54,6 +54,7 @@
 
     summary {
         @apply cursor-pointer select-none;
+        list-style: none;
     }
 
         summary::marker {

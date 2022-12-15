@@ -101,7 +101,7 @@
                 {$page.data.institution?.name}
             {/if}
             <span class="whitespace-nowrap">
-                <span class="tracking-tighter leading-none text-3xl inline-block -translate-y-1/4 mr-0.5">⚫︎⚫︎</span>{$page.data.profile?.plaid_account_mask}
+                <span class="tracking-tighter leading-none inline-block text-[1.3em] mr-0.5">&bull;&bull;</span>{$page.data.profile?.plaid_account_mask}
                 <svg class="inline-block align-middle h-[0.7em]" viewBox="0 13 18 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3 25L9 31L15 25" stroke="currentColor" vector-effect="non-scaling-stroke" stroke-width="4" stroke-linecap="square" stroke-linejoin="round"/>
                 </svg>

@@ -42,7 +42,7 @@
 
 <SvelteToast options={toastOptions} />
 
-<nav class="inner flex items-center justify-between mt-5 md:mt-6 h-10">
+<nav class="inner flex items-center justify-between mt-5 h-10">
 	<a href="/" class="{$page.url.pathname === '/' ? '!text-black' : 'text-gray-450'} pb-1">
 		<Logo />
 	</a>

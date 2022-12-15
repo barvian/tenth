@@ -119,7 +119,7 @@
         <p class="text-lg max-w-xl leading-snug mb-10 text-gray-500 text-center">
             Giving our donation partner <a href="https://getchange.io">Change</a> access to your account lets them withdraw your donations directly, saving you <mark>~1% in processing fees</mark>.
         </p>
-        {#if data.profile?.plaid_institution_id && !data.profile.stripe_linked}
+        {#if true || data.profile?.plaid_institution_id && !data.profile.stripe_linked}
             <div class="w-full max-w-xs bg-white rounded-2xl flex gap-x-3 items-center border px-4 pt-2 pb-2.5 mb-8 shadow">
                 <div class="flex-1 pt-0.5">
                     <h3 class="text-gray-450 text-[0.62rem] mb-1">Linked account</h3>
@@ -129,7 +129,7 @@
                     <div class="overflow-hidden font-medium">
                         <span class="text-bank">{data.institution?.name}</span>
                         <span class="inline-block">
-                            <span class="tracking-tighter text-xs inline-block -translate-y-0.5 mr-0.5">⚫︎⚫︎</span>{data.profile?.plaid_account_mask}
+                            <span class="tracking-tighter leading-none inline-block text-[1.3em] mr-0.5">&bull;&bull;</span>{data.profile?.plaid_account_mask}
                         </span>
                     </div>
                 </div>
