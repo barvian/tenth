@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-    import Dashboard from './Dashboard.svelte';
-    import Register from './Register.svelte';
+	import type { PageData } from './$types'
+	import Dashboard from './Dashboard.svelte'
+	import Register from './Register.svelte'
 
-    export let data: PageData
+	export let data: PageData
 </script>
 
 {#if data.session}
-    <Dashboard />
+	<Dashboard />
 {:else}
-    <Register />
+	<Register />
 {/if}

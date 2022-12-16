@@ -1,17 +1,22 @@
-import { SECRET_CHANGE_KEY } from '$env/static/private';
-import { PUBLIC_CHANGE_KEY } from '$env/static/public';
-import { json } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
+import { SECRET_CHANGE_KEY } from '$env/static/private'
+import { PUBLIC_CHANGE_KEY } from '$env/static/public'
+import { json } from '@sveltejs/kit'
+import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ params }) => {
-	const creds = Buffer.from(PUBLIC_CHANGE_KEY+':'+SECRET_CHANGE_KEY).toString('base64')
-	const res = await fetch(`https://api.getchange.io/api/v1/nonprofits/${params.id}`, {
-		headers: { 'Authorization': `Basic ${creds}`}
-	}).then(r => r.ok ? r.json() : Promise.reject(r))
+	const creds = Buffer.from(
+		PUBLIC_CHANGE_KEY + ':' + SECRET_CHANGE_KEY
+	).toString('base64')
+	const res = await fetch(
+		`https://api.getchange.io/api/v1/nonprofits/${params.id}`,
+		{
+			headers: { Authorization: `Basic ${creds}` }
+		}
+	).then((r) => (r.ok ? r.json() : Promise.reject(r)))
 
 	return json(res, {
 		headers: {
 			'cache-control': 'public, max-age=3600'
 		}
-	});
+	})
 }

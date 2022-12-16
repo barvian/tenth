@@ -1,2 +1,2 @@
-import '~/lib/db';
+import '~/lib/db'
 // import '~/../mocks/browser';

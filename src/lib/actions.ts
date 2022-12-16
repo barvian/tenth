@@ -3,30 +3,13 @@ export function clickOutside(node: HTMLElement) {
 		if (!node.contains(event.target as Node)) {
 			node.dispatchEvent(new CustomEvent('outclick'))
 		}
-	};
+	}
 
-	document.addEventListener("click", handleClick, true)
+	document.addEventListener('click', handleClick, true)
 
 	return {
 		destroy() {
-			document.removeEventListener("click", handleClick, true)
+			document.removeEventListener('click', handleClick, true)
 		}
-	};
-}
-
-let resizeObserver: ResizeObserver
-export default function resize(node: HTMLElement) {
-	if (!resizeObserver) resizeObserver = new ResizeObserver(entries => {
-		entries.forEach(entry => {
-			entry.target.dispatchEvent(new CustomEvent('resize', { detail: entry }))
-		})
-	})
-  
-	resizeObserver.observe(node)
-  
-	return {
-	  destroy() {
-		resizeObserver.unobserve(node)
-	  }
 	}
-  }
+}

@@ -1,5 +1,5 @@
-import { json } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
+import { json } from '@sveltejs/kit'
+import type { RequestHandler } from './$types'
 import plaidClient from '~/lib/plaid'
 import { CountryCode } from 'plaid'
 
@@ -16,5 +16,5 @@ export const GET: RequestHandler = async ({ params }) => {
 		headers: {
 			'cache-control': 'public, max-age=3600'
 		}
-	});
+	})
 }

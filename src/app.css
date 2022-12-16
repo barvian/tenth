@@ -3,88 +3,88 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: "Value Sans Pro";
-    font-weight: normal;
-    src: url("/fonts/value-sans-regular-pro.otf");
+	font-family: 'Value Sans Pro';
+	font-weight: normal;
+	src: url('/fonts/value-sans-regular-pro.otf');
 }
 
 @font-face {
-    font-family: "Value Sans Pro";
-    font-weight: 500;
-    src: url("/fonts/value-sans-medium-pro.otf");
+	font-family: 'Value Sans Pro';
+	font-weight: 500;
+	src: url('/fonts/value-sans-medium-pro.otf');
 }
 
 @font-face {
-    font-family: "Value Sans Pro";
-    font-weight: bold;
-    src: url("/fonts/value-sans-bold-pro.ttf");
+	font-family: 'Value Sans Pro';
+	font-weight: bold;
+	src: url('/fonts/value-sans-bold-pro.ttf');
 }
 
 @layer base {
-    :root {
-        @apply antialiased overflow-x-hidden scroll-smooth xl:text-[18px];
+	:root {
+		@apply antialiased overflow-x-hidden scroll-smooth xl:text-[18px];
 
-        --toastBackground: theme(colors.black);
-        --toastBarHeight: 0;
-        --toastContainerRight: 3rem;
-        --toastContainerLeft: 3rem;
-        --toastBorderRadius: theme(borderRadius.2xl);
-        --toastMsgPadding: theme(spacing.4);
-        --toastBtnWidth: calc(var(--toastMsgPadding)*2 + 1rem);
-        --toastMargin: 0 auto theme(spacing.6);
-        --toastWidth: min(theme(width.96), 100%);
-    }
+		--toastBackground: theme(colors.black);
+		--toastBarHeight: 0;
+		--toastContainerRight: 3rem;
+		--toastContainerLeft: 3rem;
+		--toastBorderRadius: theme(borderRadius.2xl);
+		--toastMsgPadding: theme(spacing.4);
+		--toastBtnWidth: calc(var(--toastMsgPadding) * 2 + 1rem);
+		--toastMargin: 0 auto theme(spacing.6);
+		--toastWidth: min(theme(width.96), 100%);
+	}
 
-    /* ugly but theme(boxShadow) doesn't work in this case */
-    [class*="toastItem"] {
-        @apply !shadow
-    }
+	/* ugly but theme(boxShadow) doesn't work in this case */
+	[class*='toastItem'] {
+		@apply !shadow;
+	}
 
-    body {
-        @apply min-h-screen flex flex-col
-    }
+	body {
+		@apply min-h-screen flex flex-col;
+	}
 
-    :disabled {
-        @apply cursor-not-allowed;
-    }
+	:disabled {
+		@apply cursor-not-allowed;
+	}
 
-    mark {
-        @apply bg-transparent text-black;
-    }
+	mark {
+		@apply bg-transparent text-black font-medium;
+	}
 
-    summary {
-        @apply cursor-pointer select-none;
-        list-style: none;
-    }
+	summary {
+		@apply cursor-pointer select-none;
+		list-style: none;
+	}
 
-        summary::marker {
-            display: none;
-        }
+	summary::marker {
+		display: none;
+	}
 
-        summary::-webkit-details-marker {
-            display: none;
-        }
+	summary::-webkit-details-marker {
+		display: none;
+	}
 
-    input[autocomplete="off"]::-webkit-contacts-auto-fill-button, 
-    input[autocomplete="off"]::-webkit-credentials-auto-fill-button {
-        visibility: hidden !important;
-        position: absolute;
-        right: 0;
-    }
+	input[autocomplete='off']::-webkit-contacts-auto-fill-button,
+	input[autocomplete='off']::-webkit-credentials-auto-fill-button {
+		visibility: hidden !important;
+		position: absolute;
+		right: 0;
+	}
 
-    main a:not([role="menuitem"]):not([class])  {
-        @apply text-orange-500 font-medium
-    }
+	main a:not([role='menuitem']):not([class]) {
+		@apply text-orange-500 font-medium;
+	}
 
-    svg * { 
-        transform-box: fill-box;
-        transform-origin: center
-    }
+	svg * {
+		transform-box: fill-box;
+		transform-origin: center;
+	}
 }
 
 @layer utilities {
-    .error {
-        @apply shadow-red-500/10;
-        --toastBackground: theme(colors.red[500])
-    }
+	.error {
+		@apply shadow-red-500/10;
+		--toastBackground: theme(colors.red[500]);
+	}
 }
