@@ -119,7 +119,6 @@
         <p class="text-lg max-w-xl leading-snug mb-10 text-gray-500 text-center">
             Giving our donation partner <a href="https://getchange.io">Change</a> access to your account lets them withdraw your donations directly, saving you <mark>~1% in processing fees</mark>.
         </p>
-        {#if true || data.profile?.plaid_institution_id && !data.profile.stripe_linked}
             <div class="w-full max-w-xs bg-white rounded-2xl flex gap-x-3 items-center border px-4 pt-2 pb-2.5 mb-8 shadow">
                 <div class="flex-1 pt-0.5">
                     <h3 class="text-gray-450 text-[0.62rem] mb-1">Linked account</h3>
@@ -162,4 +161,5 @@
             We’ll charge you a one-time verification fee of $1.55 after successfully linking.
         </p>
     </Step>
+		{#if data.profile?.plaid_institution_id && !data.profile.stripe_linked}
 </MultiStep>
