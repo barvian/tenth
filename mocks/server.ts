@@ -1,5 +1,5 @@
 import { dev } from '$app/environment'
-import { setupServer } from 'msw/node'
+import { setupServer } from 'msw/lib/node/index.js'
 import handlers from './handlers'
 
 if (dev) {
