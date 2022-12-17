@@ -162,7 +162,7 @@
 					description="We'll send you a code to verify your email address."
 				/>
 			</div>
-			<Button {loading} type="submit" class="mt-8 max-w-md">Continue</Button>
+			<Button {loading} disabled={Boolean(emailError)} type="submit" class="mt-8 max-w-md">Continue</Button>
 		</Step>
 		<Step as="fieldset" let:active>
 			<h2 class="text-3xl max-w-xl text-center font-bold mb-5">
