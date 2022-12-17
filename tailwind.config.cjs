@@ -42,9 +42,6 @@ module.exports = {
 			fontFamily: {
 				sans: ['Value Sans Pro', ...defaultTheme.fontFamily.sans]
 			},
-			// fontSize: {
-			//   // '4xl': '2.6rem'
-			// },
 			spacing: {
 				xl: 'calc(theme(space.10) + 5vh)',
 				'2xl': 'calc(theme(space.12) + 10vh)'
@@ -102,7 +99,6 @@ module.exports = {
 		require('@tailwindcss/typography'),
 		require('tailwindcss-bg-svg'),
 		plugin(function ({
-			addBase,
 			addUtilities,
 			addVariant,
 			matchUtilities,
@@ -111,8 +107,10 @@ module.exports = {
 		}) {
 			addVariant('not-disabled', '&:not(:disabled)')
 			addVariant('peer-not-disabled', ':merge(.peer):not(:disabled) ~ &')
-			addVariant('has-error', '&.has-error')
-			addVariant('peer-has-error', ':merge(.peer).has-error ~ &')
+			addVariant('group-not-disabled', ':merge(.group):not(:disabled) &')
+			addVariant('invalid', '&[aria-invalid]:not([aria-invalid="false"])')
+			addVariant('peer-invalid', ':merge(.peer)[aria-invalid]:not([aria-invalid="false"]) ~ &')
+			addVariant('group-invalid', ':merge(.group)[aria-invalid]:not([aria-invalid="false"]) &')
 			addComponents({
 				'.inner': {
 					'max-width': `calc(${theme('maxWidth.5xl')} + ${theme(

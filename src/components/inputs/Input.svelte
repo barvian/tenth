@@ -77,13 +77,13 @@
 			on:focus
 			on:blur
 			placeholder={label || placeholder}
-			class:has-error={error}
+			aria-invalid={Boolean(error)}
 			class={clsx(
 				bg,
 				border,
-				border && 'has-error:border-red-500 disabled:border-gray-200',
+				border && 'invalid:border-red-500 disabled:border-gray-200',
 				shadow,
-				shadow && 'has-error:shadow-red-500/10',
+				shadow && 'invalid:shadow-red-500/10',
 				rounded,
 				align,
 				textSize,
@@ -116,7 +116,7 @@
 		{:else if label}
 			<label
 				for={name}
-				class="absolute overflow-hidden text-ellipsis max-w-[calc(100%-theme(space.4)*2)] normal-case whitespace-nowrap pointer-events-none scale-[0.55] text-gray-450 peer-focus:text-orange-500 peer-has-error:text-red-500 peer-focus:peer-placeholder-shown:text-gray-450 [&_span]:opacity-0 peer-placeholder-shown:[&_span]:opacity-100 translate-y-[0.7rem] peer-placeholder-shown:translate-y-[1.1rem] peer-placeholder-shown:scale-100 left-4 ml-[0.05em] top-0 origin-top-left {textSize} transition-all"
+				class="absolute overflow-hidden text-ellipsis max-w-[calc(100%-theme(space.4)*2)] normal-case whitespace-nowrap pointer-events-none scale-[0.55] text-gray-450 peer-focus:text-orange-500 peer-invalid:text-red-500 peer-focus:peer-placeholder-shown:text-gray-450 [&_span]:opacity-0 peer-placeholder-shown:[&_span]:opacity-100 translate-y-[0.7rem] peer-placeholder-shown:translate-y-[1.1rem] peer-placeholder-shown:scale-100 left-4 ml-[0.05em] top-0 origin-top-left {textSize} transition-all"
 			>
 				{label}{#if required && showRequired}<span class="transition-opacity"
 						>*</span
@@ -129,7 +129,7 @@
 		<slot />
 	</div>
 	{#if error}
-		<p in:fade|local class="text-red-600 {descriptionAlign} leading-snug mt-4">
+		<p in:fade|local class="text-red-600 {descriptionAlign} leading-snug mt-4" role="alert">
 			{@html error}
 		</p>
 	{:else if description && showDescription}
