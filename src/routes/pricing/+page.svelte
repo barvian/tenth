@@ -82,7 +82,7 @@
 					<td class="pr-4 py-4">
 						<h4>Platform fees</h4>
 						<p class="text-gray-500 leading-snug mt-0.5">
-							The fees incurred by donation platforms to process donations.
+							The fees donation platforms charge to process donations.
 						</p>
 					</td>
 					<td class="py-4 align-top text-right">1.5—4.9%</td>
