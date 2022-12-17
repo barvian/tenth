@@ -16,7 +16,7 @@ declare namespace App {
 		profile?: {
 			plaid_institution_id: string | null
 			plaid_account_mask: string | null
-			percentage: number | null
+			percentage: number
 			first_name: string | null
 			last_name: string | null
 			stripe_linked: boolean

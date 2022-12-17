@@ -1,10 +1,9 @@
 <script lang="ts">
+	import clsx from 'clsx'
 	import { createEventDispatcher, SvelteComponent } from 'svelte'
 	import { fade, scale } from 'svelte/transition'
-	import { afterUpdate } from '~/lib/component'
 	import Search from '../icons/Search.svelte'
 	import Spinner from '../icons/Spinner.svelte'
-	import clsx from 'clsx'
 
 	export let name: string
 	export let label: string = ''
@@ -47,12 +46,10 @@
 	const dispatch = createEventDispatcher()
 
 	const errors: Record<string, string> = {}
-	afterUpdate(
-		() => {
-			if (error && value) errors[value] = error
-		},
-		() => [error]
-	) // ignore value changes
+	const updateErrors = () => {
+		if (error && value) errors[value] = error
+	}
+	$: error, updateErrors()
 
 	function handleInput(e: Event & { currentTarget: HTMLInputElement }) {
 		value = e.currentTarget?.value

@@ -1,34 +1,26 @@
 <script lang="ts">
+	import { enhance, type SubmitFunction } from '$app/forms'
 	import { page } from '$app/stores'
+	import { toast } from '@zerodevx/svelte-toast'
+	import type { Nonprofit } from 'types/change'
+	import Button from '~/components/Button.svelte'
 	import Charity from '~/components/Charity/Charity.svelte'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
 	import X from '~/components/icons/X.svelte'
 	import Percentage from '~/components/inputs/Percentage.svelte'
-	import type { Nonprofit } from 'types/change'
-	import Button from '~/components/Button.svelte'
-	import supabaseClient from '~/lib/db'
-	import { toast } from '@zerodevx/svelte-toast'
-	import { afterUpdate } from '~/lib/component'
-	import { sleep } from '~/lib/promises'
 	import { clickOutside } from '~/lib/actions'
-	import { applyAction, enhance, type SubmitFunction } from '$app/forms'
-	import { update } from 'lodash'
+	import supabaseClient from '~/lib/db'
+	import { sleep } from '~/lib/promises'
 
-	let designated: Nonprofit[] = $page.data.designated ?? []
-	afterUpdate(
-		() => {
-			if ($page.data.designated) designated = $page.data.designated
-		},
-		() => [$page.data.designated]
-	)
-	let percentage: number = $page.data.profile?.percentage
-	afterUpdate(
-		() => {
-			if ($page.data.profile?.percentage)
-				percentage = $page.data.profile?.percentage
-		},
-		() => [$page.data.profile?.percentage]
-	)
+	let designated: Nonprofit[] = []
+	const updateDesignated = () => {
+		if ($page.data.designated) designated = $page.data.designated
+	}
+	$: $page.data.designated, updateDesignated()
+
+	let percentage: number
+	const updatePercentage = () => (percentage = $page.data.profile!.percentage)
+	$: $page.data.profile!.percentage, updatePercentage()
 
 	let adding: Record<string, boolean> = {},
 		deleting: Record<string, boolean> = {}
@@ -198,8 +190,8 @@
 	{:else}
 		We'll send
 	{/if}
-	{parseFloat(((percentage / 12) * 100).toFixed(3))}% of your account on the 20th of each
-	month
+	{parseFloat(((percentage / 12) * 100).toFixed(3))}% of your account on the
+	20th of each month
 	{#if designated.length > 0}
 		to your selected charities{#if designated.length > 1}, divided evenly{/if}:
 	{:else}

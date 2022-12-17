@@ -12,21 +12,21 @@ export interface Database {
 			designated: {
 				Row: {
 					id: number
+					change_id: string
 					created_at: string
 					user_id: string
-					change_id: string
 				}
 				Insert: {
 					id?: number
+					change_id: string
 					created_at?: string
 					user_id?: string
-					change_id: string
 				}
 				Update: {
 					id?: number
+					change_id?: string
 					created_at?: string
 					user_id?: string
-					change_id?: string
 				}
 			}
 			profiles: {
@@ -34,7 +34,7 @@ export interface Database {
 					user_id: string
 					first_name: string | null
 					last_name: string | null
-					percentage: number | null
+					percentage: number
 					stripe_id: string
 					change_id: string
 					plaid_institution_id: string | null
@@ -46,7 +46,7 @@ export interface Database {
 					user_id: string
 					first_name?: string | null
 					last_name?: string | null
-					percentage?: number | null
+					percentage: number
 					stripe_id: string
 					change_id: string
 					plaid_institution_id?: string | null
@@ -58,7 +58,7 @@ export interface Database {
 					user_id?: string
 					first_name?: string | null
 					last_name?: string | null
-					percentage?: number | null
+					percentage?: number
 					stripe_id?: string
 					change_id?: string
 					plaid_institution_id?: string | null
@@ -71,20 +71,20 @@ export interface Database {
 				Row: {
 					id: number
 					change_id: string
-					user_id: string | null
 					email: unknown | null
+					user_id: string | null
 				}
 				Insert: {
 					id?: number
 					change_id: string
-					user_id?: string | null
 					email?: unknown | null
+					user_id?: string | null
 				}
 				Update: {
 					id?: number
 					change_id?: string
-					user_id?: string | null
 					email?: unknown | null
+					user_id?: string | null
 				}
 			}
 		}

@@ -13,9 +13,7 @@
 	<div class="rounded-2xl bg-white shadow-lg border px-8 pt-12 pb-8">
 		<div class="text-center">
 			<h2 class="text-gray-500"><Logo class="inline-block h-3" /></h2>
-			<span class="block mt-3 text-5xl font-bold"
-				>1.5% + 15¢</span
-			>
+			<span class="block mt-3 text-5xl font-bold">1.5% + 15¢</span>
 			<span class="block mt-2">per donation, + $1.55 one-time setup fee</span>
 		</div>
 		<table class="table-auto mt-6">
@@ -61,8 +59,7 @@
 	<div class="px-8 pt-12 pb-8">
 		<div class="text-center">
 			<h3>Recurring Credit Card Donation Fees</h3>
-			<span
-				class="block mt-3 text-gray-500 text-5xl font-bold"
+			<span class="block mt-3 text-gray-500 text-5xl font-bold"
 				>3.7–7.8% + 30¢</span
 			>
 			<span class="block mt-2">per donation</span>
