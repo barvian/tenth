@@ -1,19 +1,18 @@
 <script lang="ts">
-	import { getContext } from 'svelte-typed-context'
-	import key from './key'
+	import { getMultiStep } from './MultiStep.svelte'
 
 	let cls = ''
 	export { cls as class }
 
 	export let as = 'div'
 
-	const context = getContext(key)
-	if (!context) {
+	const multiStep = getMultiStep()
+	if (!multiStep) {
 		throw new Error(
 			'Step components cannot be rendered outside the MultiStep component'
 		)
 	}
-	const { step, steps } = context
+	const { step, steps } = multiStep
 
 	let i = $steps++
 	$: active = $step === i

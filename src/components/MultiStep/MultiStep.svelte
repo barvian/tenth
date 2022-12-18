@@ -1,8 +1,22 @@
+<script lang="ts" context="module">
+	import type { Writable } from 'svelte/store'
+	import { getContext, type InjectionKey } from 'svelte-typed-context'
+
+	const key: InjectionKey<{
+		step: Writable<number>
+		steps: Writable<number>
+		next: () => void
+		prev: () => void
+		reset: () => void
+	}> = Symbol()
+
+	export const getMultiStep = () => getContext(key)
+</script>
+
 <script lang="ts">
 	import { beforeNavigate, goto as skGoto } from '$app/navigation'
 	import { setContext } from 'svelte-typed-context'
 	import { writable } from 'svelte/store'
-	import key from './key'
 
 	export let inconspicuous = true
 	export let leaveAlert: string | undefined = undefined
