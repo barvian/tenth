@@ -7,10 +7,10 @@
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
 	import Charity from '~/components/Charity/Charity.svelte'
 	import X from '~/components/icons/X.svelte'
-	import Input from '~/components/inputs/Input.svelte'
+	import Input from '~/components/forms/Input.svelte'
 	import MultiStep from '~/components/MultiStep/MultiStep.svelte'
 	import Step from '~/components/MultiStep/Step.svelte'
-	import Percentage from '~/components/inputs/Percentage.svelte'
+	import Percentage from '~/components/forms/Percentage.svelte'
 	import supabaseClient, { EmailExistsError } from '~/lib/db'
 
 	let multiStep: MultiStep

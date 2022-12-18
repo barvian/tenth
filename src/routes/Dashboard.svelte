@@ -7,7 +7,7 @@
 	import Charity from '~/components/Charity/Charity.svelte'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
 	import X from '~/components/icons/X.svelte'
-	import Percentage from '~/components/inputs/Percentage.svelte'
+	import Percentage from '~/components/forms/Percentage.svelte'
 	import { clickOutside } from '~/lib/actions'
 	import supabaseClient from '~/lib/db'
 	import { sleep } from '~/lib/promises'

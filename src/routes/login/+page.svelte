@@ -2,7 +2,7 @@
 	import { enhance, type SubmitFunction } from '$app/forms'
 	import { toast } from '@zerodevx/svelte-toast'
 	import Button from '~/components/Button.svelte'
-	import Input from '~/components/inputs/Input.svelte'
+	import Input from '~/components/forms/Input.svelte'
 	import MultiStep from '~/components/MultiStep/MultiStep.svelte'
 	import Step from '~/components/MultiStep/Step.svelte'
 	import supabaseClient, { EmailDoesntExistError } from '~/lib/db'
