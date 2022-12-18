@@ -34,8 +34,8 @@
 </script>
 
 <svelte:head>
-	<title>Tenth: {$page.data.meta.title}</title>
-	{#if $page.data.meta.description}
+	<title>Tenth: {$page.error ? 'Error' : $page.data.meta.title}</title>
+	{#if $page.data?.meta?.description}
 		<meta name="description" content={$page.data.meta.description} />
 	{/if}
 
