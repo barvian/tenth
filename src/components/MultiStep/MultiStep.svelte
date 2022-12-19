@@ -58,8 +58,9 @@
 			!done &&
 			leaveAlert &&
 			!confirm(leaveAlert)
-		)
+		) {
 			cancel()
+		}
 	})
 
 	function handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -96,6 +97,17 @@
 	style="transform: scaleX({width})"
 />
 
-<div class="overlap">
+<div class="overlap relative">
+	<noscript class="block justify-self-center self-center">
+		<div class="absolute -inset-4 z-50 bg-white" />
+		<div class="relative z-50 rounded-2xl shadow-md border max-w-xl text-center p-8">
+			<h2 class="text-3xl font-bold mb-5">
+				JavaScript is disabled
+			</h2>
+			<p class="text-lg text-gray-500">
+				JavaScript must be enabled for some parts of this site. Please enable it in your browser settings.
+			</p>
+		</div>
+	</noscript>
 	<slot {next} {prev} {reset} />
 </div>
