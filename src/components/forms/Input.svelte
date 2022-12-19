@@ -4,11 +4,18 @@
 	import { fade, scale } from 'svelte/transition'
 	import Search from '../icons/Search.svelte'
 	import Spinner from '../icons/Spinner.svelte'
+	import { getForm } from './Form.svelte'
+	import omit from 'lodash/omit'
 
-	export let name: string
+	const form = getForm()
+	const formValues = form?.values // these only refer to submitted values, because it's SSR capable
+	const formInvalids = form?.invalid // these only refer to submitted values, because it's SSR capable
+
+	export let name: string | undefined = undefined
 	export let label: string = ''
 	export let type: string = 'text'
-	export let value: string | null | undefined = ''
+	export let value: string | null | undefined =
+		$formValues && name && $formValues[name] // non-reactive, only applies to SSR contexts
 	export let required = false
 	export let showRequired = true
 	export let description = ''
@@ -45,15 +52,26 @@
 
 	const dispatch = createEventDispatcher()
 
+	// Order matters with these next two:
+	const handleFormUpdate = () => {
+		if ($formInvalids && name && $formInvalids[name])
+			error = $formInvalids[name]
+	}
+	$: $formInvalids, handleFormUpdate()
+
 	const errors: Record<string, string> = {}
-	const updateErrors = () => {
+	const handleErrorUpdate = () => {
 		if (error && value) errors[value] = error
 	}
-	$: error, updateErrors()
+	$: error, handleErrorUpdate()
 
 	function handleInput(e: Event & { currentTarget: HTMLInputElement }) {
 		value = e.currentTarget?.value
 		error = errors[value] ?? null
+		if ($formInvalids && name) {
+			if (error) $formInvalids[name] = error
+			else $formInvalids = omit($formInvalids, name)
+		}
 		dispatch('input', e)
 	}
 </script>
@@ -71,7 +89,7 @@
 			{required}
 			id={name}
 			{type}
-			{value}
+			value={value || ''}
 			on:input={handleInput}
 			on:keydown
 			on:focus
@@ -129,12 +147,27 @@
 		<slot />
 	</div>
 	{#if error}
-		<p in:fade|local class="text-red-600 {descriptionAlign} leading-snug mt-4" role="alert">
+		<p
+			in:fade|local
+			class="text-red-600 {descriptionAlign} leading-snug mt-4"
+			role="alert"
+		>
 			{@html error}
 		</p>
-	{:else if description && showDescription}
-		<p in:fade|local class="text-gray-500 {descriptionAlign} leading-snug mt-4">
-			{@html description}
-		</p>
+	{:else if description}
+		{#if showDescription}
+			<p
+				in:fade|local
+				class="text-gray-500 {descriptionAlign} leading-snug mt-4"
+			>
+				{@html description}
+			</p>
+		{:else}
+			<noscript class="contents">
+				<p class="text-gray-500 {descriptionAlign} leading-snug mt-4">
+					{@html description}
+				</p>
+			</noscript>
+		{/if}
 	{/if}
 </div>

@@ -1,29 +1,24 @@
 <script lang="ts">
-	import { enhance, type SubmitFunction } from '$app/forms'
 	import { page } from '$app/stores'
 	import { toast } from '@zerodevx/svelte-toast'
 	import type { Nonprofit } from 'types/change'
 	import Button from '~/components/Button.svelte'
 	import Charity from '~/components/Charity/Charity.svelte'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
-	import X from '~/components/icons/X.svelte'
+	import Form from '~/components/forms/Form.svelte'
 	import Percentage from '~/components/forms/Percentage.svelte'
+	import X from '~/components/icons/X.svelte'
 	import { clickOutside } from '~/lib/actions'
 	import supabaseClient from '~/lib/db'
-	import { sleep } from '~/lib/promises'
 
-	let designated: Nonprofit[] = []
-	const updateDesignated = () => {
-		if ($page.data.designated) designated = $page.data.designated
-	}
-	$: $page.data.designated, updateDesignated()
+	let designated: Nonprofit[]
+	$: designated = $page.data.designated || []
 
-	let percentage: number
-	const updatePercentage = () => (percentage = $page.data.profile!.percentage)
-	$: $page.data.profile!.percentage, updatePercentage()
+	$: monthlyPercentage = parseFloat(
+		(($page.data.profile!.percentage / 12) * 100).toFixed(3)
+	)
 
-	let adding: Record<string, boolean> = {},
-		deleting: Record<string, boolean> = {}
+	let adding: Record<string, boolean> = {}
 	async function addCharity(event: CustomEvent) {
 		const charity = event.detail as Nonprofit
 		if (designated.find((c) => c.id === charity.id)) return
@@ -41,64 +36,6 @@
 			adding[charity.id] = false
 		}
 	}
-	async function removeCharity(charity: Nonprofit) {
-		deleting[charity.id] = true
-		const { error } = await supabaseClient
-			.from('designated')
-			.delete()
-			.eq('change_id', charity.id)
-		if (error) {
-			toast.push(`Couldn't remove charity. Please try again later.`, {
-				classes: ['error']
-			})
-		} else {
-			designated = designated.filter((d) => d.id !== charity.id)
-		}
-		deleting[charity.id] = false
-	}
-
-	let updatingPercentage = false
-	async function onPercentageChange(event: Event) {
-		const newPercentage = event.currentTarget?.value
-		if (newPercentage == null) return
-
-		updatingPercentage = true
-		const [{ error }] = await Promise.all([
-			supabaseClient
-				.from('profiles')
-				.update({
-					percentage: newPercentage
-				})
-				.eq('user_id', $page.data.session!.user.id),
-			sleep(500) // Give them time to see the spinner
-		])
-		if (error) {
-			toast.push(`Couldn't update yearly percentage. Please try again later.`, {
-				classes: ['error']
-			})
-			// TODO: find a better way to force an update despite a numeric value not changing
-			const prevPercentage = percentage
-			percentage = newPercentage
-			percentage = prevPercentage
-		} else {
-			percentage = newPercentage
-		}
-		updatingPercentage = false
-	}
-
-	let unlinking = false
-	const unlink: SubmitFunction = () => {
-		unlinking = true
-		return async ({ result, update }) => {
-			if (result.type === 'error' || result.type === 'invalid') {
-				toast.push(`Couldn't unlink your account. Please try again later.`, {
-					classes: ['error']
-				})
-			}
-			await update()
-			unlinking = false
-		}
-	}
 
 	let bankOpen = false
 </script>
@@ -113,11 +50,13 @@
 	{:else}
 		We'll donate
 	{/if}
-	<Percentage
-		value={percentage}
-		loading={updatingPercentage}
-		on:change={onPercentageChange}
-	/>
+	<Form action="?/update-percentage" let:loading let:submit>
+		<Percentage
+			value={$page.data.profile?.percentage}
+			{loading}
+			on:change={submit}
+		/>
+	</Form>
 	of your
 	<details
 		class="group relative inline-block align-baseline"
@@ -171,15 +110,20 @@
 				class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full"
 				>Replace</a
 			>
-			<form action="/link?/unlink" method="POST" use:enhance={unlink}>
+			<Form
+				action="/link?/unlink"
+				on:submit={(event) => {
+					if (!confirm('Are you sure you want to unlink this account?'))
+						event.preventDefault()
+				}}
+			>
 				<Button
-					loading={unlinking}
 					type="submit"
 					unstyled
 					class="p-3 leading-tight text-left not-disabled:hover:bg-gray-100 text-red-500 rounded-xl block w-full"
 					>Unlink</Button
 				>
-			</form>
+			</Form>
 		</div>
 	</details>
 	account every year.
@@ -190,8 +134,7 @@
 	{:else}
 		We'll send
 	{/if}
-	{parseFloat(((percentage / 12) * 100).toFixed(3))}% of your account on the
-	20th of each month
+	{monthlyPercentage}% of your account on the 20th of each month
 	{#if designated.length > 0}
 		to your selected charities{#if designated.length > 1}, divided evenly{/if}:
 	{:else}
@@ -202,17 +145,20 @@
 	<div class="space-y-4 w-full max-w-md mb-5">
 		{#each designated as item (item.id)}
 			<Charity charity={item}>
-				<Button
-					slot="tools"
-					unstyled
-					on:click={() => removeCharity(item)}
-					loading={deleting[item.id] || adding[item.id]}
-					class="py-2 pl-2 text-gray-300 hover:text-red-500 {adding[item.id]
-						? 'disabled:text-gray-300'
-						: 'disabled:text-red-500'} transition-color"
-				>
-					<X class="h-3.5" />
-				</Button>
+				<Form action="?/remove-charity">
+					<Button
+						type="submit"
+						unstyled
+						name="id"
+						value={item.id}
+						loading={adding[item.id]}
+						class="py-2 pl-2 text-gray-300 hover:text-red-500 {adding[item.id]
+							? 'disabled:text-gray-300'
+							: 'disabled:text-red-500'} transition-color"
+					>
+						<X class="h-3.5" />
+					</Button>
+				</Form>
 			</Charity>
 		{/each}
 	</div>

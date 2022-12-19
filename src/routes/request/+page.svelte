@@ -1,47 +1,32 @@
 <script lang="ts">
-	import { enhance, type SubmitFunction } from '$app/forms'
-	import { page } from '$app/stores'
-	import { toast } from '@zerodevx/svelte-toast'
 	import Button from '~/components/Button.svelte'
+	import Form from '~/components/forms/Form.svelte'
+	import Input from '~/components/forms/Input.svelte'
 	import Facebook from '~/components/icons/social/Facebook.svelte'
 	import Instagram from '~/components/icons/social/Instagram.svelte'
 	import Twitter from '~/components/icons/social/Twitter.svelte'
 	import YouTube from '~/components/icons/social/YouTube.svelte'
-	import Input from '~/components/forms/Input.svelte'
-	import type { ActionData, PageData } from './$types'
+	import type { PageData } from './$types'
 
 	export let data: PageData
-	export let form: ActionData
-
-	let requesting = false
-	const request: SubmitFunction = ({}) => {
-		requesting = true
-		return async ({ update, result }) => {
-			if (result.type === 'invalid') {
-				toast.push(`Couldn't submit request. Please try again later.`, {
-					classes: ['error']
-				})
-			}
-			await update()
-			requesting = false
-		}
-	}
 </script>
 
-{#if form?.values && $page.status === 200}
-	<h2 class="text-3xl max-w-xl text-center font-bold mb-5">
-		We received your request!
-	</h2>
-	<p class="text-lg max-w-xl leading-snug mb-8 text-gray-500 text-center">
-		{#if form.values.email}
-			We'll send updates to <span class="text-black">{form.values.email}</span> as
-			we get them.
-		{:else}
-			Feel free to check back in a few days.
-		{/if}
-	</p>
-	<Button href="/" width="w-min">Go home</Button>
-{:else}
+<Form>
+	<svelte:fragment slot="complete" let:values>
+		<h2 class="text-3xl max-w-xl text-center font-bold mb-5">
+			We received your request!
+		</h2>
+		<p class="text-lg max-w-xl leading-snug mb-8 text-gray-500 text-center">
+			{#if values?.email}
+				We'll send updates to <span class="text-black">{values?.email}</span> as
+				we get them.
+			{:else}
+				Feel free to check back in a few days.
+			{/if}
+		</p>
+		<Button href="/" width="w-min">Go home</Button>
+	</svelte:fragment>
+
 	<header class="text-center max-w-2xl mb-8">
 		<h1 class="text-4xl font-bold">Request a charity</h1>
 		<p class="text-xl mt-5 text-gray-500">
@@ -58,17 +43,13 @@
 			>.
 		</p>
 	</header>
-	<form
-		method="POST"
-		class="max-w-lg w-full grid grid-cols-3 gap-6"
-		use:enhance={request}
-	>
+
+	<fieldset class="max-w-lg grid grid-cols-6 gap-6">
 		<Input
 			class="col-span-full"
 			autocomplete="off"
 			type="text"
 			name="name"
-			value={form?.values?.name}
 			label="Charity name"
 			required
 		/>
@@ -77,7 +58,6 @@
 			autocomplete="off"
 			type="text"
 			name="ein"
-			value={form?.values?.ein}
 			label="EIN"
 			placeholder="e.g. 41-1627391"
 			required
@@ -88,25 +68,22 @@
 			autocomplete="off"
 			type="text"
 			name="address_line"
-			value={form?.values?.address_line}
 			label="Address line"
 			placeholder="e.g. 1452 DoGood Lane"
 		/>
 		<Input
-			class="col-span-2"
+			class="col-span-4"
 			autocomplete="off"
 			type="text"
 			name="city"
-			value={form?.values?.city}
 			label="City"
 		/>
 		<Input
-			class="col-span-1 uppercase"
+			class="col-span-2 uppercase"
 			autocomplete="off"
 			maxlength={2}
 			type="text"
 			name="state"
-			value={form?.values?.state}
 			label="State"
 			placeholder="e.g. IL"
 		/>
@@ -115,63 +92,57 @@
 			autocomplete="off"
 			type="url"
 			name="website"
-			value={form?.values?.website}
 			label="Website"
 			placeholder="e.g. http://mycharity.org"
 		/>
-		<fieldset class="col-span-full">
-			<!-- <h2 class="text-xl mb-5 mt-2 font-medium">Social media handles</h2> -->
-			<div class="grid grid-cols-2 gap-6">
-				<Input
-					type="text"
-					name="facebook"
-					value={form?.values?.facebook}
-					autocomplete="off"
-					spellcheck={false}
-					placeholder="mycharity"
-					icon={Facebook}
-				/>
-				<Input
-					type="text"
-					name="twitter"
-					value={form?.values?.twitter}
-					autocomplete="off"
-					spellcheck={false}
-					placeholder="mycharity"
-					icon={Twitter}
-				/>
-				<Input
-					type="text"
-					name="instagram"
-					value={form?.values?.instagram}
-					autocomplete="off"
-					spellcheck={false}
-					placeholder="mycharity"
-					icon={Instagram}
-				/>
-				<Input
-					type="text"
-					name="youtube"
-					value={form?.values?.youtube}
-					autocomplete="off"
-					spellcheck={false}
-					placeholder="mycharity"
-					icon={YouTube}
-				/>
-			</div>
-		</fieldset>
+
+		<!-- <h2 class="text-xl mb-5 mt-2 font-medium">Social media handles</h2> -->
+		<Input
+			type="text"
+			name="facebook"
+			class="col-span-3"
+			autocomplete="off"
+			spellcheck={false}
+			placeholder="mycharity"
+			icon={Facebook}
+		/>
+		<Input
+			type="text"
+			name="twitter"
+			class="col-span-3"
+			autocomplete="off"
+			spellcheck={false}
+			placeholder="mycharity"
+			icon={Twitter}
+		/>
+		<Input
+			type="text"
+			name="instagram"
+			class="col-span-3"
+			autocomplete="off"
+			spellcheck={false}
+			placeholder="mycharity"
+			icon={Instagram}
+		/>
+		<Input
+			type="text"
+			name="youtube"
+			class="col-span-3"
+			autocomplete="off"
+			spellcheck={false}
+			placeholder="mycharity"
+			icon={YouTube}
+		/>
+
 		{#if !data?.session}
 			<Input
 				class="col-span-full mt-2"
 				type="email"
 				name="email"
-				value={form?.values?.email}
 				label="Your email"
 				description="If provided, we'll email you updates about your request."
 			/>
 		{/if}
-		<Button class="col-span-full mt-2" loading={requesting} type="submit"
-			>Request</Button
-		>
-	</form>
-{/if}
+		<Button type="submit" class="col-span-full mt-2">Request</Button>
+	</fieldset>
+</Form>

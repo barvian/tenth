@@ -12,7 +12,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		{
 			headers: { Authorization: `Basic ${creds}` }
 		}
-	).then((r) => (r.ok ? r.json() : Promise.reject(r)))
+	).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
 
 	return json(res, {
 		headers: {

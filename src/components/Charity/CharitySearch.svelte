@@ -44,7 +44,7 @@
 						limit: limit.toString()
 					}),
 				{ signal }
-			).then((r) => (r.ok ? r.json() : Promise.reject(r)))
+			).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
 			results = response.nonprofits
 			loading = false
 		},

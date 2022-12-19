@@ -20,7 +20,7 @@
 
 <svelte:element
 	this={as}
-	class="transition-all duration-300 ease-in-out flex flex-col items-center justify-center {cls}"
+	class="overlap-item transition-all duration-300 ease-in-out flex flex-col items-center justify-center {cls}"
 	class:opacity-0={!active}
 	class:pointer-events-none={!active}
 	class:-translate-x-[20vw]={$step > i}

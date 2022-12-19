@@ -39,11 +39,11 @@
 	export const next = () => goto($step + 1)
 	export const prev = () => goto($step - 1)
 	export const reset = () => (furthest = $step)
-	export const complete = () =>
-		/*new Promise(resolve => {
-        progressBar?.addEventListener('transitionend', resolve, { once: true })*/
-		(done = true)
-	// })
+	export const complete = () => {
+		// progressBar?.addEventListener('transitionend', resolve, { once: true })
+		if ($step + 1 < $steps) return
+		done = true
+	}
 
 	beforeNavigate(({ cancel, delta, from, to }) => {
 		if (navigating) {
@@ -100,14 +100,15 @@
 <div class="overlap relative">
 	<noscript class="block justify-self-center self-center">
 		<div class="absolute -inset-4 z-50 bg-white" />
-		<div class="relative z-50 rounded-2xl shadow-md border max-w-xl text-center p-8">
-			<h2 class="text-3xl font-bold mb-5">
-				JavaScript is disabled
-			</h2>
+		<div
+			class="relative z-50 rounded-2xl shadow-md border max-w-xl text-center p-8"
+		>
+			<h2 class="text-3xl font-bold mb-5">JavaScript is disabled</h2>
 			<p class="text-lg text-gray-500">
-				JavaScript must be enabled for some parts of this site. Please enable it in your browser settings.
+				JavaScript must be enabled for some parts of this site. Please enable it
+				in your browser settings.
 			</p>
 		</div>
 	</noscript>
-	<slot {next} {prev} {reset} />
+	<slot {next} {prev} {complete} {reset} />
 </div>

@@ -1,39 +1,53 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
-import { invalid, redirect } from '@sveltejs/kit'
+import { redirect } from '@sveltejs/kit'
+import { invalid, success } from '~/lib/actions'
 import type { Actions } from './$types'
 
 export const actions: Actions = {
-	async default(event) {
+	async 'send-otp'(event) {
+		const { request } = event
+		const { supabaseClient } = await getSupabase(event)
+		const data = await request.formData()
+		const email = data.get('email') as string
+
+		const { data: emailExists, error: checkEmailError } = await supabaseClient
+			.rpc('email_exists', { email })
+			.single()
+		if (checkEmailError) throw checkEmailError
+		else if (!emailExists)
+			return invalid(406, data, {
+				email: `We couldn't find a Tenth account with that email.`
+			})
+
+		const { error: signInError } = await supabaseClient.auth.signInWithOtp({
+			email,
+			options: {
+				shouldCreateUser: false
+			}
+		})
+		if (signInError) throw signInError
+
+		return success(data)
+	},
+	async login(event) {
 		const { request } = event
 		const { supabaseClient } = await getSupabase(event)
 
-		const formData = await request.formData()
-		const email = formData.get('email') as string
-		const token = formData.get('token') as string
+		const data = await request.formData()
+		const email = data.get('email') as string
+		const token = data.get('token') as string
 
 		const { error } = await supabaseClient.auth.verifyOtp({
 			email,
 			token,
 			type: 'magiclink'
 		})
-
-		if (error?.name === 'AuthApiError') {
-			return invalid(401, {
-				error: `Couldn't log in. Please re-check your code.`,
-				values: {
-					email,
-					token
-				}
+		// @ts-ignore
+		if (error && error.status === 401)
+			return invalid(401, data, {
+				token: error.message
 			})
-		} else if (error) {
-			return invalid(500, {
-				error: `Couldn't log in. Please try again later.`,
-				values: {
-					email,
-					token
-				}
-			})
-		}
+		else if (error) throw error
 
 		throw redirect(303, event.url.searchParams.get('next') ?? '/')
 	}
