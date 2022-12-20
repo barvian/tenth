@@ -13,7 +13,7 @@
 	<div class="rounded-2xl bg-white shadow-lg border px-8 pt-12 pb-8">
 		<div class="text-center">
 			<h2 class="text-gray-500"><Logo class="inline-block h-3" /></h2>
-			<span class="block mt-3 text-5xl font-bold">1.5% + 15¢</span>
+			<span class="block mt-3 text-5xl font-bold">1.5% + 50¢</span>
 			<span class="block mt-2">per donation, + $1.55 one-time setup fee</span>
 		</div>
 		<table class="table-auto mt-6">
@@ -40,7 +40,18 @@
 						</p>
 					</td>
 					<td class="py-4 align-top text-right border-b border-gray-500/25"
-						>15¢</td
+						>10¢</td
+					>
+				</tr>
+				<tr>
+					<td class="pr-4 border-b border-gray-500/25 py-4">
+						<h4>Tenth fee</h4>
+						<p class="text-gray-500 leading-snug mt-0.5">
+							Our fee, to cover ongoing expenses and further development.
+						</p>
+					</td>
+					<td class="py-4 align-top text-right border-b border-gray-500/25"
+						>40¢</td
 					>
 				</tr>
 				<tr>
