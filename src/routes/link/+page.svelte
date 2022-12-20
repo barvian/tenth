@@ -64,10 +64,12 @@
 			multiStep?.next()
 		} catch (e) {
 			if (e)
-				// @ts-ignore
-				toast.push(e.display_message ?? 'Could not link bank account', {
-					classes: ['error']
-				})
+				toast.push(
+					(e as any).display_message ?? 'Could not link bank account',
+					{
+						classes: ['error']
+					}
+				)
 		}
 
 		linking = false
@@ -96,9 +98,7 @@
 						})
 					} else if (
 						data.profile?.plaid_account_mask &&
-						// @ts-ignore TODO: remove if Plaid Link types get updated
 						metadata?.account_number_mask &&
-						// @ts-ignore TODO: remove if Plaid Link types get updated
 						metadata.account_number_mask !== data.profile.plaid_account_mask
 					) {
 						plaidHandler.exit({ force: true })
@@ -119,13 +119,16 @@
 			}).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
 
 			multiStep?.complete()
+			await invalidateAll()
 			await goto('/')
 		} catch (e) {
 			if (e)
-				// @ts-ignore
-				toast.push(e.display_message ?? 'Could not link bank account', {
-					classes: ['error']
-				})
+				toast.push(
+					(e as any).display_message ?? 'Could not link bank account',
+					{
+						classes: ['error']
+					}
+				)
 		}
 
 		linking = false

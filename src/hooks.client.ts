@@ -5,7 +5,7 @@ import '~/lib/db'
 export const handleError: HandleClientError = ({ error, event }) => {
 	return {
 		message:
-			// @ts-ignore
-			error?.display_message ?? 'Something went wrong. Please try again later.'
+			(error as any)?.display_message ??
+			'Something went wrong. Please try again later.'
 	}
 }

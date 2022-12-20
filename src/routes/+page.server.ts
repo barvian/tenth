@@ -1,6 +1,7 @@
 import { SECRET_CHANGE_KEY } from '$env/static/private'
 import { PUBLIC_CHANGE_KEY } from '$env/static/public'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
+import { AuthApiError } from '@supabase/supabase-js'
 import { error, redirect } from '@sveltejs/kit'
 import type stripe from 'stripe'
 import { invalid, success } from '~/lib/actions'
@@ -91,8 +92,7 @@ export const actions: Actions = {
 			token: data.get('token') as string,
 			type: 'magiclink'
 		})
-		// @ts-ignore
-		if (verifyError && verifyError.status === 401)
+		if (verifyError instanceof AuthApiError && verifyError.status === 401)
 			return invalid(401, data, {
 				token: verifyError.message
 			})
@@ -135,7 +135,7 @@ export const actions: Actions = {
 			await supabaseClient.auth.signOut()
 
 			if (stripeCustomer)
-				await stripeClient.customers.del(stripeCustomer.id).catch((e) => null)
+				await stripeClient.customers.del(stripeCustomer.id).catch(() => null)
 
 			throw e
 		}

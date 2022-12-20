@@ -1,4 +1,5 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
+import { AuthApiError } from '@supabase/supabase-js'
 import { redirect } from '@sveltejs/kit'
 import { invalid, success } from '~/lib/actions'
 import type { Actions } from './$types'
@@ -42,8 +43,7 @@ export const actions: Actions = {
 			token,
 			type: 'magiclink'
 		})
-		// @ts-ignore
-		if (error && error.status === 401)
+		if (error instanceof AuthApiError && error.status === 401)
 			return invalid(401, data, {
 				token: error.message
 			})
