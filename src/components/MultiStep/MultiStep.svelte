@@ -49,8 +49,9 @@
 		if (navigating) {
 		} // we initiated this event, so ignore
 		else if (delta === -1) prev()
-		else if (delta === 1 && $step + 1 <= furthest) next()
-		else if (from?.url.pathname === to?.url.pathname)
+		else if (delta === 1) {
+			if ($step + 1 <= furthest) next()
+		} else if (from?.url.pathname === to?.url.pathname)
 			goto(0) // navigating to the same page, reset
 		else if (
 			$step > 0 &&
