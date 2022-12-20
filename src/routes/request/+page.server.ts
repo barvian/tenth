@@ -1,7 +1,6 @@
 import { SECRET_CHANGE_KEY } from '$env/static/private'
 import { PUBLIC_CHANGE_KEY } from '$env/static/public'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
-import { invalid } from '@sveltejs/kit'
 import { success } from '~/lib/actions'
 import type { Actions } from './$types'
 const changeCreds = Buffer.from(

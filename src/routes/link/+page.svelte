@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation'
-	import { error, redirect, type HttpError } from '@sveltejs/kit'
 	import { toast } from '@zerodevx/svelte-toast'
 	import type { Plaid } from 'plaid-link'
 	import { onDestroy } from 'svelte'
 	import Button from '~/components/forms/Button.svelte'
-	import Form, { type ClientAction } from '~/components/forms/Form.svelte'
+	import Form from '~/components/forms/Form.svelte'
 	import Change from '~/components/icons/Change.svelte'
 	import X from '~/components/icons/X.svelte'
 	import MultiStep from '~/components/MultiStep/MultiStep.svelte'
@@ -64,8 +63,8 @@
 			await invalidateAll() // This messes up the history stack, so do it first
 			multiStep?.next()
 		} catch (e) {
-			// @ts-ignore
 			if (e)
+				// @ts-ignore
 				toast.push(e.display_message ?? 'Could not link bank account', {
 					classes: ['error']
 				})
@@ -122,8 +121,8 @@
 			multiStep?.complete()
 			await goto('/')
 		} catch (e) {
-			// @ts-ignore
 			if (e)
+				// @ts-ignore
 				toast.push(e.display_message ?? 'Could not link bank account', {
 					classes: ['error']
 				})

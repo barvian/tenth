@@ -1,8 +1,8 @@
-import { error, json } from '@sveltejs/kit'
-import type { RequestHandler } from './$types'
-import plaidClient from '~/lib/plaid'
-import { CountryCode, Products } from 'plaid'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
+import { error, json } from '@sveltejs/kit'
+import { CountryCode, Products } from 'plaid'
+import plaidClient from '~/lib/plaid'
+import type { RequestHandler } from './$types'
 
 export const POST: RequestHandler = async (event) => {
 	const { session, supabaseClient } = await getSupabase(event)

@@ -1,9 +1,9 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
-import { error, invalid } from '@sveltejs/kit'
-import stripeClient from '~/lib/stripe'
+import { error } from '@sveltejs/kit'
 import type Stripe from 'stripe'
-import type { Actions, PageServerLoad } from './$types'
 import { withLoadAuth } from '~/lib/auth'
+import stripeClient from '~/lib/stripe'
+import type { Actions, PageServerLoad } from './$types'
 
 export const load = withLoadAuth<PageServerLoad>(async (event) => {
 	const meta = {

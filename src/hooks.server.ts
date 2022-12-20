@@ -1,6 +1,6 @@
 import type { HandleServerError } from '@sveltejs/kit'
-import '~/lib/db'
 import '~/../mocks/server'
+import '~/lib/db'
 
 export const handleError: HandleServerError = ({ error, event }) => {
 	return {

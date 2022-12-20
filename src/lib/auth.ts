@@ -1,6 +1,5 @@
-import { redirect, type Load } from '@sveltejs/kit'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
-import { page } from '$app/stores'
+import { redirect, type Load } from '@sveltejs/kit'
 
 // Redirect if not logged in
 export function withLoadAuth<L>(fn?: L): Load {

@@ -1,8 +1,8 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error, json } from '@sveltejs/kit'
-import type { RequestHandler } from './$types'
-import stripeClient from '~/lib/stripe'
 import type Stripe from 'stripe'
+import stripeClient from '~/lib/stripe'
+import type { RequestHandler } from './$types'
 
 export const POST: RequestHandler = async (event) => {
 	const { request } = event
