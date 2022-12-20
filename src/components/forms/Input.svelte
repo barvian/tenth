@@ -12,8 +12,8 @@
 	const formInvalids = form?.invalid // these only refer to submitted values, because it's SSR capable
 
 	export let name: string | undefined = undefined
-	export let label: string = ''
-	export let type: string = 'text'
+	export let label = ''
+	export let type = 'text'
 	export let value: string | null | undefined =
 		$formValues && name && $formValues[name] // non-reactive, only applies to SSR contexts
 	export let required = false
@@ -30,7 +30,7 @@
 	export let disabled = false
 	export let pattern = '.*'
 	export let bg = 'bg-white'
-	export let border: string = 'border-black focus:border-orange-500'
+	export let border = 'border-black focus:border-orange-500'
 	export let shadow: string | boolean =
 		'not-disabled:shadow focus:shadow-orange-500/10'
 	export let padding =

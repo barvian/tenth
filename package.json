@@ -8,12 +8,13 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --plugin-search-dir . --check .",
+		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
 		"gen:types": "supabase gen types typescript --local > types/supabase.ts",
 		"reset:db": "supabase db reset",
 		"test:db": "supabase test db",
-		"postinstall": "patch-package"
+		"postinstall": "patch-package",
+		"prepare": "husky install"
 	},
 	"devDependencies": {
 		"@rollup/plugin-yaml": "^3.1.0",
@@ -30,6 +31,8 @@
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.1",
+		"husky": "^8.0.2",
+		"lint-staged": "^13.1.0",
 		"mdsvex": "^0.10.6",
 		"msw": "^0.46.0",
 		"patch-package": "^6.4.7",
@@ -64,5 +67,9 @@
 	},
 	"msw": {
 		"workerDirectory": "static"
+	},
+	"lint-staged": {
+		"*.{js,ts,svelte}": "eslint --cache --fix",
+		"*.{js,ts,svelte,css,md}": "prettier --write"
 	}
 }
