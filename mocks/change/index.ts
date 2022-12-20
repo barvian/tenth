@@ -1,6 +1,6 @@
 import { rest } from 'msw'
-import data from './data/charities.json'
 import account from './data/account.json'
+import data from './data/charities.json'
 import request from './data/request.json'
 
 export default [

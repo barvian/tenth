@@ -1,6 +1,6 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
-import type { LayoutServerLoad } from './$types'
 import stripeClient from '~/lib/stripe'
+import type { LayoutServerLoad } from './$types'
 
 export const load: LayoutServerLoad = async (event) => {
 	const { session, supabaseClient } = await getSupabase(event)

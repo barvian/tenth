@@ -109,8 +109,14 @@ module.exports = {
 			addVariant('peer-not-disabled', ':merge(.peer):not(:disabled) ~ &')
 			addVariant('group-not-disabled', ':merge(.group):not(:disabled) &')
 			addVariant('invalid', '&[aria-invalid]:not([aria-invalid="false"])')
-			addVariant('peer-invalid', ':merge(.peer)[aria-invalid]:not([aria-invalid="false"]) ~ &')
-			addVariant('group-invalid', ':merge(.group)[aria-invalid]:not([aria-invalid="false"]) &')
+			addVariant(
+				'peer-invalid',
+				':merge(.peer)[aria-invalid]:not([aria-invalid="false"]) ~ &'
+			)
+			addVariant(
+				'group-invalid',
+				':merge(.group)[aria-invalid]:not([aria-invalid="false"]) &'
+			)
 			addComponents({
 				'.inner': {
 					'max-width': `calc(${theme('maxWidth.5xl')} + ${theme(
@@ -143,7 +149,7 @@ module.exports = {
 					display: 'inline-grid',
 					'grid-template-areas': "'overlap'"
 				},
-				'.overlap > *, .overlap-inline > *': {
+				'.overlap > *, .overlap-inline > *, .overlap-item': {
 					'grid-area': 'overlap'
 				}
 			})

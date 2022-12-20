@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { enhance, type SubmitFunction } from '$app/forms'
 	import { goto, invalidateAll } from '$app/navigation'
 	import { toast } from '@zerodevx/svelte-toast'
+	import type { Plaid } from 'plaid-link'
 	import { onDestroy } from 'svelte'
-	import Button from '~/components/Button.svelte'
+	import Button from '~/components/forms/Button.svelte'
+	import Form from '~/components/forms/Form.svelte'
 	import Change from '~/components/icons/Change.svelte'
 	import X from '~/components/icons/X.svelte'
 	import MultiStep from '~/components/MultiStep/MultiStep.svelte'
@@ -15,22 +16,74 @@
 
 	let multiStep: MultiStep
 
-	let plaidLoading = loadScript(
+	let plaidLoaded = loadScript(
 		'https://cdn.plaid.com/link/v2/stable/link-initialize.js'
 	)
-	let plaidHandler: ReturnType<typeof window.Plaid.create>
-	const openPlaid = (token: string) =>
-		new Promise<[string, Plaid.OnSuccessMetadata]>((resolve, reject) => {
+	let plaidHandler: Plaid.LinkHandler
+	const openPlaid = (token: string, opts: Partial<Plaid.CreateConfig> = {}) =>
+		new Promise<[string, Plaid.OnSuccessMetaData]>((resolve, reject) => {
 			plaidHandler?.destroy()
 			plaidHandler = window.Plaid.create({
+				...opts,
 				token,
 				onSuccess(public_token, metadata) {
 					resolve([public_token, metadata])
 				},
 				onExit(error) {
 					reject(error)
-				},
-				// I really wish Plaid let you filter institutions instead of just by routing numbers
+				}
+			})
+			plaidHandler.open()
+		})
+
+	let linking = false
+
+	async function linkChange() {
+		linking = true
+
+		try {
+			const link_token = await fetch('/api/change/link-token', {
+				method: 'POST'
+			}).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+
+			let [plaid_public_token, metadata] = await openPlaid(link_token)
+			await fetch('/api/change/attach', {
+				method: 'POST',
+				body: JSON.stringify({
+					link_token,
+					plaid_public_token,
+					bank_account_id: metadata.accounts[0].id,
+					plaid_institution_id: metadata.institution.institution_id,
+					plaid_account_mask: metadata.accounts[0].mask,
+					plaid_account_type: metadata.accounts[0].type,
+					plaid_account_subtype: metadata.accounts[0].subtype
+				})
+			}).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+
+			await invalidateAll() // This messes up the history stack, so do it first
+			multiStep?.next()
+		} catch (e) {
+			if (e)
+				// @ts-ignore
+				toast.push(e.display_message ?? 'Could not link bank account', {
+					classes: ['error']
+				})
+		}
+
+		linking = false
+	}
+
+	async function linkStripe() {
+		linking = true
+
+		try {
+			const link_token = await fetch('/api/plaid/link-token', {
+				method: 'POST'
+			}).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+
+			let [plaid_public_token, metadata] = await openPlaid(link_token, {
+				// I really wish Plaid let you filter institutions instead of just
+				// by routing numbers
 				onEvent(eventName, metadata) {
 					if (
 						data.profile?.institution_id &&
@@ -56,49 +109,6 @@
 					}
 				}
 			})
-			plaidHandler.open()
-		})
-
-	let linking = false
-	async function linkChange() {
-		linking = true
-		try {
-			const link_token = await fetch('/api/change/link-token', {
-				method: 'POST'
-			}).then((r) => (r.ok ? r.json() : Promise.reject(r)))
-			const [plaid_public_token, metadata] = await openPlaid(link_token)
-
-			await fetch('/api/change/attach', {
-				method: 'POST',
-				body: JSON.stringify({
-					link_token,
-					plaid_public_token,
-					bank_account_id: metadata.accounts[0].id,
-					plaid_institution_id: metadata.institution.institution_id,
-					plaid_account_mask: metadata.accounts[0].mask,
-					plaid_account_type: metadata.accounts[0].type,
-					plaid_account_subtype: metadata.accounts[0].subtype
-				})
-			}).then((r) => (r.ok ? r.json() : Promise.reject(r)))
-			await invalidateAll()
-			multiStep.next()
-		} catch (e) {
-			if (e)
-				// ts-ignore
-				toast.push(e.display_message ?? 'Could not link bank account', {
-					classes: ['error']
-				})
-		}
-		linking = false
-	}
-
-	async function linkStripe() {
-		linking = true
-		try {
-			const link_token = await fetch('/api/plaid/link-token', {
-				method: 'POST'
-			}).then((r) => (r.ok ? r.json() : Promise.reject(r)))
-			const [plaid_public_token, metadata] = await openPlaid(link_token)
 
 			await fetch('/api/stripe/add-bank-account', {
 				method: 'POST',
@@ -106,35 +116,19 @@
 					plaid_public_token,
 					bank_account_id: metadata.accounts[0].id
 				})
-			}).then((r) => (r.ok ? r.json() : Promise.reject(r)))
-			multiStep.complete()
-			await invalidateAll()
+			}).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+
+			multiStep?.complete()
 			await goto('/')
 		} catch (e) {
 			if (e)
+				// @ts-ignore
 				toast.push(e.display_message ?? 'Could not link bank account', {
 					classes: ['error']
 				})
 		}
-		linking = false
-	}
 
-	let unlinking = false
-	const unlink: SubmitFunction = ({ cancel }) => {
-		if (!confirm('Are you sure you want to unlink this account?'))
-			return cancel()
-		unlinking = true
-		return async ({ update, result }) => {
-			if (result.type === 'success') {
-				multiStep.reset()
-			} else {
-				toast.push(`Couldn't unlink bank account. Please try again later.`, {
-					classes: ['error']
-				})
-			}
-			await update()
-			unlinking = false
-		}
+		linking = false
 	}
 
 	onDestroy(() => {
@@ -142,7 +136,7 @@
 	})
 </script>
 
-<MultiStep bind:this={multiStep} let:next inconspicuous={false}>
+<MultiStep bind:this={multiStep} let:next let:reset inconspicuous={false}>
 	<Step>
 		<h2 class="text-3xl max-w-2xl font-bold mb-8 text-center">
 			Link your checking account with <Change
@@ -177,23 +171,30 @@
 						</span>
 					</div>
 				</div>
-				<form action="?/unlink" method="POST" use:enhance={unlink}>
+				<Form
+					action="?/unlink"
+					on:submit={(event) => {
+						if (!confirm('Are you sure you want to unlink this account?'))
+							event.preventDefault()
+					}}
+					on:load={reset}
+				>
 					<Button
 						unstyled
 						type="submit"
-						loading={unlinking}
 						class="text-gray-300 hover:text-red-500 disabled:text-red-500 transition-color py-2 pl-2"
 					>
 						<X class="h-3.5" />
 					</Button>
-				</form>
+				</Form>
 			</div>
 			<Button class="max-w-xs" on:click={next}>Continue</Button>
 		{:else}
 			<Button
+				name="link"
 				class="max-w-xs"
-				loading={!$plaidLoading || linking}
 				on:click={linkChange}
+				loading={!$plaidLoaded || linking}
 			>
 				Link with Change
 			</Button>
@@ -208,9 +209,10 @@
 			Change how much to donate each month.
 		</p>
 		<Button
+			name="link"
 			class="max-w-xs"
-			loading={!$plaidLoading || linking}
 			on:click={linkStripe}
+			loading={!$plaidLoaded || linking}
 		>
 			<span class="flex w-full"
 				><span>Link with Tenth</span><span

@@ -27,7 +27,7 @@ export const POST: RequestHandler = async (event) => {
 				'Content-Type': 'application/json'
 			}
 		}
-	).then(async (r) => (r.ok ? r.json() : Promise.reject(r)))
+	).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
 
 	return json(res)
 }

@@ -1,9 +1,9 @@
 import { SECRET_CHANGE_KEY } from '$env/static/private'
 import { PUBLIC_CHANGE_KEY } from '$env/static/public'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
-import { invalid, redirect } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import type stripe from 'stripe'
-import { ChangeAccountCreationError } from '~/lib/change'
+import { invalid, success } from '~/lib/actions'
 import stripeClient from '~/lib/stripe'
 import type { Actions, PageServerLoad } from './$types'
 const changeCreds = Buffer.from(
@@ -28,7 +28,7 @@ export const load: PageServerLoad = async (event) => {
 		.fetch(
 			`/api/plaid/institutions/${parent.profile.plaid_institution_id}.json`
 		)
-		.then((r) => (r.ok ? r.json() : Promise.reject(r)))
+		.then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
 
 	const { data: change_ids } = await supabaseClient
 		.from('designated')
@@ -52,78 +52,125 @@ export const load: PageServerLoad = async (event) => {
 	}
 }
 
-const getValues = (formData: FormData) => ({
-	percentage: +(formData.get('percentage') as string),
-	email: formData.get('email') as string,
-	firstName: formData.get('first-name') as string,
-	lastName: formData.get('last-name') as string,
-	designated: JSON.parse(
-		(formData.get('designated') as string) || '[]'
-	) as string[],
-	token: formData.get('token') as string
-})
-
 export const actions: Actions = {
+	async 'send-otp'(event) {
+		const { request } = event
+		const { supabaseClient } = await getSupabase(event)
+		const data = await request.formData()
+		const email = data.get('email') as string
+
+		const { data: emailExists, error: checkEmailError } = await supabaseClient
+			.rpc('email_exists', { email })
+			.single()
+		if (checkEmailError) throw checkEmailError
+		else if (emailExists)
+			return invalid(406, data, {
+				email: 'That email is already in use. Try another.'
+			})
+
+		const { error: signInError } = await supabaseClient.auth.signInWithOtp({
+			email,
+			options: {
+				shouldCreateUser: true
+			}
+		})
+		if (signInError) throw signInError
+
+		return success(data)
+	},
 	async register(event) {
 		const { request } = event
 		const { supabaseClient } = await getSupabase(event)
-		const values = getValues(await request.formData())
+		const data = await request.formData()
+		const email = data.get('email') as string,
+			first = data.get('first-name') as string,
+			last = data.get('last-name') as string
 
 		const { error: verifyError } = await supabaseClient.auth.verifyOtp({
-			email: values.email,
-			token: values.token,
+			email: email,
+			token: data.get('token') as string,
 			type: 'magiclink'
 		})
-		if (verifyError) return invalid(401, { values })
+		// @ts-ignore
+		if (verifyError && verifyError.status === 401)
+			return invalid(401, data, {
+				token: verifyError.message
+			})
+		else if (verifyError) throw verifyError
 
-		let stripeCustomer: stripe.Customer | undefined, changeAccount
+		let stripeCustomer: stripe.Customer | undefined
 		try {
 			stripeCustomer = await stripeClient.customers.create()
 
-			changeAccount = await fetch('https://api.getchange.io/api/v1/accounts', {
-				method: 'POST',
-				headers: {
-					Authorization: `Basic ${changeCreds}`,
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					email: values.email,
-					name: `${values.firstName} ${values.lastName}`
-				})
-			}).then(async (r) => {
-				if (r.ok) return r.json()
-				throw new ChangeAccountCreationError(await r.text())
-			})
-			console.log(`Created change account for ${values.email}`, changeAccount)
+			const changeAccount = await fetch(
+				'https://api.getchange.io/api/v1/accounts',
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Basic ${changeCreds}`,
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						email: email,
+						name: `${first} ${last}`
+					})
+				}
+			).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+			console.log(`Created change account for ${email}`, changeAccount)
 
 			const { error: registerError } = await supabaseClient.rpc('register', {
 				stripe_id: stripeCustomer.id,
 				change_id: changeAccount.id,
-				first_name: values.firstName,
-				last_name: values.lastName,
-				percentage: values.percentage,
-				designated: values.designated
+				first_name: first,
+				last_name: last,
+				percentage: +(data.get('percentage') as string),
+				designated: JSON.parse(
+					(data.get('designated') as string) || '[]'
+				) as string[]
 			})
 			if (registerError) throw registerError
 		} catch (e) {
-			if (e instanceof ChangeAccountCreationError) {
-				console.error(
-					'Could not create Change account for email %s',
-					values.email,
-					e
-				)
-			} else {
-				console.error('Registration failed for email %s', values.email, e)
-			}
+			// Clean up before throwing
 
 			await supabaseClient.auth.signOut()
 
 			if (stripeCustomer)
 				await stripeClient.customers.del(stripeCustomer.id).catch((e) => null)
 
-			return invalid(500, { values })
+			throw e
 		}
 
-		throw redirect(303, '/link') // This has to be out here because otherwise it would be caught
+		throw redirect(303, '/link')
+	},
+	async 'update-percentage'(event) {
+		const { request } = event
+		const { session, supabaseClient } = await getSupabase(event)
+		if (!session) throw error(403, 'No user logged in')
+		const data = await request.formData()
+
+		const { error: updateError } = await supabaseClient
+			.from('profiles')
+			.update({
+				percentage: +(data.get('percentage') as string)
+			})
+			.eq('user_id', session.user.id)
+		if (updateError) throw updateError
+
+		return success(data)
+	},
+	async 'remove-charity'(event) {
+		const { request } = event
+		const { session, supabaseClient } = await getSupabase(event)
+		if (!session) throw error(403, 'No user logged in')
+		const data = await request.formData()
+		const id = data.get('id') as string
+
+		const { error: deleteError } = await supabaseClient
+			.from('designated')
+			.delete()
+			.eq('change_id', id)
+		if (deleteError) throw deleteError
+
+		return success(data)
 	}
 }

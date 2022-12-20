@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit'
-import type { RequestHandler } from './$types'
-import plaidClient from '~/lib/plaid'
 import { CountryCode } from 'plaid'
+import plaidClient from '~/lib/plaid'
+import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ params }) => {
 	const res = await plaidClient.institutionsGetById({

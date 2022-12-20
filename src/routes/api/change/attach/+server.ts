@@ -1,9 +1,8 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error, json } from '@sveltejs/kit'
-import { ChangeAccountAttachError } from '~/lib/change'
-import type { RequestHandler } from './$types'
-import stripeClient from '~/lib/stripe'
 import type Stripe from 'stripe'
+import stripeClient from '~/lib/stripe'
+import type { RequestHandler } from './$types'
 
 export const POST: RequestHandler = async (event) => {
 	const { request } = event
@@ -46,8 +45,11 @@ export const POST: RequestHandler = async (event) => {
 				bank_account_id: body.bank_account_id
 			})
 		}
-	).then(async (r) => (r.ok ? r.json() : Promise.reject(await r.text())))
-	if (!updatedAccount?.active) throw new ChangeAccountAttachError()
+	).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+	if (!updatedAccount?.active)
+		throw new Error(
+			`Change account ${updatedAccount.id} not marked as active after attaching new account`
+		)
 
 	// And update the profile
 	await supabaseClient

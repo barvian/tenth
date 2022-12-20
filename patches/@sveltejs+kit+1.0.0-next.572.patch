@@ -1,0 +1,12 @@
+diff --git a/node_modules/@sveltejs/kit/src/runtime/app/forms.js b/node_modules/@sveltejs/kit/src/runtime/app/forms.js
+index 7a0f975..5835a65 100644
+--- a/node_modules/@sveltejs/kit/src/runtime/app/forms.js
++++ b/node_modules/@sveltejs/kit/src/runtime/app/forms.js
+@@ -57,6 +57,7 @@ export function enhance(form, submit = () => {}) {
+ 	/** @param {SubmitEvent} event */
+ 	async function handle_submit(event) {
+ 		event.preventDefault();
++		if (event.submitter?.disabled) return; // Fix a safari bug with disabled submitters
+ 
+ 		const action = new URL(
+ 			// We can't do submitter.formAction directly because that property is always set

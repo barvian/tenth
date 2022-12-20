@@ -47,5 +47,5 @@
 			{/if}
 		</span>
 	</div>
-	<slot name="tools" />
+	<slot />
 </div>

@@ -1,20 +1,15 @@
 <script lang="ts">
-	import { enhance, type SubmitFunction } from '$app/forms'
-	import { toast } from '@zerodevx/svelte-toast'
 	import { fade } from 'svelte/transition'
 	import type { Nonprofit } from 'types/change'
-	import Button from '~/components/Button.svelte'
-	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
+	import Button from '~/components/forms/Button.svelte'
 	import Charity from '~/components/Charity/Charity.svelte'
+	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
+	import Form from '~/components/forms/Form.svelte'
+	import Input from '~/components/forms/Input.svelte'
+	import Percentage from '~/components/forms/Percentage.svelte'
 	import X from '~/components/icons/X.svelte'
-	import Input from '~/components/inputs/Input.svelte'
 	import MultiStep from '~/components/MultiStep/MultiStep.svelte'
 	import Step from '~/components/MultiStep/Step.svelte'
-	import Percentage from '~/components/inputs/Percentage.svelte'
-	import supabaseClient, { EmailExistsError } from '~/lib/db'
-
-	let multiStep: MultiStep
-	$: if (multiStep && designated.length === 0) multiStep.reset()
 
 	let designated: Nonprofit[] = []
 	function addCharity(event: CustomEvent) {
@@ -25,70 +20,28 @@
 	function removeCharity(charity: Nonprofit) {
 		designated = designated.filter((d) => d.id !== charity.id)
 	}
-
-	let email = ''
-
-	let loading = false,
-		emailError: string | null | undefined,
-		tokenError: string | null | undefined
-	const register: SubmitFunction = async ({ cancel }) => {
-		loading = true
-
-		if (multiStep.getStep() === 0) {
-			cancel()
-			multiStep.next()
-			loading = false
-		} else if (multiStep.getStep() === 1) {
-			cancel()
-			try {
-				const { data: emailExists, error: checkEmailError } =
-					await supabaseClient.rpc('email_exists', { email }).single()
-				if (checkEmailError) throw checkEmailError
-				else if (emailExists) throw new EmailExistsError()
-
-				const { error: signInError } = await supabaseClient.auth.signInWithOtp({
-					email,
-					options: {
-						shouldCreateUser: true
-					}
-				})
-				if (signInError) throw signInError
-
-				multiStep.next()
-			} catch (e) {
-				if (e instanceof EmailExistsError)
-					emailError = `That email is already in use. Try another.`
-				else
-					toast.push('Something went wrong. Please try again later.', {
-						classes: ['error']
-					})
-			}
-			loading = false
-		}
-
-		return async ({ update, result }) => {
-			if (result.type === 'success' || result.type === 'redirect') {
-				multiStep.complete()
-			} else {
-				toast.push(`Couldn't register. Please try again later.`, {
-					classes: ['error']
-				})
-			}
-			await update()
-			loading = false
-		}
-	}
 </script>
 
-<form action="?/register" method="POST" use:enhance={register}>
-	<MultiStep
-		bind:this={multiStep}
-		let:next
-		let:prev
-		let:reset
-		leaveAlert="Are you sure you want to exit? You'll have to start the sign-up process again."
+<MultiStep
+	let:next
+	let:complete
+	let:reset
+	leaveAlert="Are you sure you want to exit? You'll have to start the sign-up process again."
+>
+	<Form
+		id="register"
+		action="?/register"
+		on:load={(event) => {
+			event.preventDefault() // prevent invalidating the page, which messes up the history stack & MultiStep
+		}}
+		on:loadend={(event) => {
+			// We have to call this before complete, because we have a leaveAlert
+			if (['success', 'redirect'].includes(event.detail?.type)) complete()
+		}}
+		on:complete={next}
+		let:values
 	>
-		<Step as="fieldset">
+		<Step as="fieldset" let:active>
 			<div
 				role="heading"
 				aria-level={1}
@@ -104,9 +57,11 @@
 					{#each designated as item (item.id)}
 						<Charity charity={item}>
 							<Button
-								slot="tools"
 								unstyled
-								on:click={(e) => removeCharity(item)}
+								on:click={(e) => {
+									removeCharity(item)
+									if (designated.length === 0) reset()
+								}}
 								class="py-2 pl-2 transition-colors text-gray-300 hover:text-red-500"
 							>
 								<X class="h-3.5" />
@@ -129,7 +84,7 @@
 			/>
 			{#if designated.length > 0}
 				<div in:fade|local class="mt-8 max-w-md w-full">
-					<Button type="submit">Get started</Button>
+					<Button on:click={next}>Get started</Button>
 				</div>
 			{/if}
 		</Step>
@@ -151,25 +106,30 @@
 					label="Last name"
 				/>
 				<Input
-					bind:error={emailError}
-					bind:value={email}
+					type="email"
 					on:input={reset}
 					class="col-span-full"
 					required={active}
-					type="email"
 					name="email"
 					label="Email"
 					description="We'll send you a code to verify your email address."
 				/>
 			</div>
-			<Button {loading} disabled={Boolean(emailError)} type="submit" class="mt-8 max-w-md">Continue</Button>
+			<Button
+				type="submit"
+				disabled={!active}
+				formaction="?/send-otp"
+				class="mt-8 max-w-md"
+			>
+				Continue
+			</Button>
 		</Step>
 		<Step as="fieldset" let:active>
 			<h2 class="text-3xl max-w-xl text-center font-bold mb-5">
 				Verify your email
 			</h2>
 			<p class="text-lg max-w-xl leading-snug mb-8 text-gray-500 text-center">
-				Please enter the 6-digit code we sent to <mark>{email}</mark>.
+				Please enter the 6-digit code we sent to <mark>{values?.email}</mark>.
 			</p>
 			<Input
 				class="max-w-xs"
@@ -179,7 +139,9 @@
 				name="token"
 				label="Code"
 			/>
-			<Button {loading} type="submit" class="mt-8 max-w-xs">Continue</Button>
+			<Button type="submit" disabled={!active} class="mt-8 max-w-xs"
+				>Continue</Button
+			>
 		</Step>
-	</MultiStep>
-</form>
+	</Form>
+</MultiStep>

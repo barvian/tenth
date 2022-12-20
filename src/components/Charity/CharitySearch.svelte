@@ -12,7 +12,7 @@
 	import debounce from 'lodash/debounce'
 	import { createEventDispatcher } from 'svelte'
 	import type { Nonprofit, NonprofitSearchResults } from 'types/change'
-	import Input from '../inputs/Input.svelte'
+	import Input from '../forms/Input.svelte'
 	import Charity from './Charity.svelte'
 
 	const dispatch = createEventDispatcher()
@@ -44,7 +44,7 @@
 						limit: limit.toString()
 					}),
 				{ signal }
-			).then((r) => (r.ok ? r.json() : Promise.reject(r)))
+			).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
 			results = response.nonprofits
 			loading = false
 		},
