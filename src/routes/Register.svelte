@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
 	import type { Nonprofit } from 'types/change'
-	import Button from '~/components/Button.svelte'
+	import Button from '~/components/forms/Button.svelte'
 	import Charity from '~/components/Charity/Charity.svelte'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
 	import Form from '~/components/forms/Form.svelte'

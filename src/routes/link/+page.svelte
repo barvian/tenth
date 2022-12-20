@@ -4,7 +4,7 @@
 	import { toast } from '@zerodevx/svelte-toast'
 	import type { Plaid } from 'plaid-link'
 	import { onDestroy } from 'svelte'
-	import Button from '~/components/Button.svelte'
+	import Button from '~/components/forms/Button.svelte'
 	import Form, { type ClientAction } from '~/components/forms/Form.svelte'
 	import Change from '~/components/icons/Change.svelte'
 	import X from '~/components/icons/X.svelte'

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
 	import clsx from 'clsx'
-	import { getForm } from './forms/Form.svelte'
-	import Spinner from './icons/Spinner.svelte'
+	import { getForm } from './Form.svelte'
+	import Spinner from '../icons/Spinner.svelte'
 	import omit from 'lodash/omit'
 
 	const form = getForm()

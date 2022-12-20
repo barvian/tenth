@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '~/components/Button.svelte'
+	import Button from '~/components/forms/Button.svelte'
 	import Form from '~/components/forms/Form.svelte'
 	import Input from '~/components/forms/Input.svelte'
 	import Facebook from '~/components/icons/social/Facebook.svelte'

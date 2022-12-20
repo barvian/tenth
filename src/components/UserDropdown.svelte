@@ -3,7 +3,7 @@
 	import { page } from '$app/stores'
 	import md5 from 'crypto-js/md5'
 	import { clickOutside } from '~/lib/actions'
-	import Button from './Button.svelte'
+	import Button from './forms/Button.svelte'
 	import Caret from './icons/Caret.svelte'
 
 	let cls = ''
