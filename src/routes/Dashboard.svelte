@@ -132,13 +132,13 @@
 	{#if designated.length > 0}
 		We send
 	{:else}
-		We'll send
+		We'll donate
 	{/if}
 	{monthlyPercentage}% of your account on the 20th of each month
 	{#if designated.length > 0}
 		to your selected charities{#if designated.length > 1}, divided evenly{/if}:
 	{:else}
-		once you select some charities:
+		if you select some charities:
 	{/if}
 </p>
 {#if designated.length > 0}
