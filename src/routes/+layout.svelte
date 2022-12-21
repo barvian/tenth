@@ -34,8 +34,7 @@
 	}
 
 	$: if (dev && !$page.data.meta?.title && !$page.error) {
-		console.error('No page title specified')
-		throw new Error()
+		throw new Error('No page title specified')
 	}
 </script>
 

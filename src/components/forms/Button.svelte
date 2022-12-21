@@ -33,10 +33,9 @@
 	export { cls as class }
 
 	$: if (formaction && form && !$formHasUniqueId) {
-		console.error(
+		throw new Error(
 			'<Form /> must have a unique ID if it contains buttons with formactions'
 		)
-		throw new Error()
 	}
 </script>
 
