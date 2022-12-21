@@ -24,7 +24,6 @@
 
 	export let action = ''
 	export let id = action
-	export let method: 'get' | 'post' = 'post'
 	let cls = 'contents'
 	export { cls as class }
 
@@ -97,7 +96,7 @@
 {:else}
 	<form
 		{action}
-		{method}
+		method="post"
 		use:enhance={handleSubmit}
 		bind:this={form}
 		class={cls}
