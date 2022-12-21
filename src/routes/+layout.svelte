@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dev } from '$app/environment'
 	import { invalidateAll } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { SvelteToast } from '@zerodevx/svelte-toast'
@@ -31,10 +32,15 @@
 	const toastOptions = {
 		intro: { y: 40 }
 	}
+
+	$: if (dev && !$page.data.meta?.title && !$page.error) {
+		console.error('No page title specified')
+		throw new Error()
+	}
 </script>
 
 <svelte:head>
-	<title>Tenth: {$page.error ? 'Error' : $page.data.meta.title}</title>
+	<title>Tenth: {$page.error ? 'Error' : $page.data.meta?.title}</title>
 	{#if $page.data?.meta?.description}
 		<meta name="description" content={$page.data.meta.description} />
 	{/if}

@@ -8,7 +8,7 @@ declare namespace App {
 		SchemaName: 'public'
 	}
 	interface PageData {
-		meta: {
+		meta?: {
 			title: string
 			description?: string
 		}
@@ -19,6 +19,7 @@ declare namespace App {
 			percentage: number
 			first_name: string | null
 			last_name: string | null
+			recurring_tip: number | null
 			stripe_linked: boolean
 		}
 	}
