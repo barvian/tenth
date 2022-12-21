@@ -2,7 +2,7 @@ import { SECRET_CHANGE_KEY } from '$env/static/private'
 import { PUBLIC_CHANGE_KEY } from '$env/static/public'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { AuthApiError } from '@supabase/supabase-js'
-import { error, redirect } from '@sveltejs/kit'
+import { redirect } from '@sveltejs/kit'
 import type stripe from 'stripe'
 import { invalid, success } from '~/lib/actions'
 import stripeClient from '~/lib/stripe'
@@ -12,45 +12,9 @@ const changeCreds = Buffer.from(
 ).toString('base64')
 
 export const load: PageServerLoad = async (event) => {
-	const meta = {
-		title: 'Donate a part of your bank account to charity every month',
-		description: `Tenth is a platform enabling you to automatically donate a percentage of your bank account to charity every year`
-	}
-
-	const { session, supabaseClient } = await getSupabase(event)
-	if (!session) return { meta }
-	const parent = await event.parent()
-
-	// Redirect if linking process is incomplete
-	if (!parent.profile?.plaid_institution_id || !parent.profile?.stripe_linked)
-		throw redirect(303, '/link')
-
-	const institution = await event
-		.fetch(
-			`/api/plaid/institutions/${parent.profile.plaid_institution_id}.json`
-		)
-		.then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
-
-	const { data: change_ids } = await supabaseClient
-		.from('designated')
-		.select('change_id')
-		.order('created_at', { ascending: true })
-	let designated
-	if (change_ids?.length) {
-		designated = await Promise.all(
-			change_ids.map((row) =>
-				event
-					.fetch(`/api/change/charities/${row.change_id}.json`)
-					.then((r) => (r.ok ? r.json() : Promise.reject(r)))
-			)
-		)
-	}
-
-	return {
-		meta,
-		institution,
-		designated
-	}
+	// This is only here to pre-render the home page,
+	// as pre-rendered pages can't have server actions
+	throw redirect(301, '/')
 }
 
 export const actions: Actions = {
@@ -141,36 +105,5 @@ export const actions: Actions = {
 		}
 
 		throw redirect(303, '/link')
-	},
-	async 'update-percentage'(event) {
-		const { request } = event
-		const { session, supabaseClient } = await getSupabase(event)
-		if (!session) throw error(403, 'No user logged in')
-		const data = await request.formData()
-
-		const { error: updateError } = await supabaseClient
-			.from('profiles')
-			.update({
-				percentage: +(data.get('percentage') as string)
-			})
-			.eq('user_id', session.user.id)
-		if (updateError) throw updateError
-
-		return success(data)
-	},
-	async 'remove-charity'(event) {
-		const { request } = event
-		const { session, supabaseClient } = await getSupabase(event)
-		if (!session) throw error(403, 'No user logged in')
-		const data = await request.formData()
-		const id = data.get('id') as string
-
-		const { error: deleteError } = await supabaseClient
-			.from('designated')
-			.delete()
-			.eq('change_id', id)
-		if (deleteError) throw deleteError
-
-		return success(data)
 	}
 }

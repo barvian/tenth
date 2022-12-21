@@ -1,21 +1,23 @@
 <script lang="ts">
-	import { page } from '$app/stores'
 	import { toast } from '@zerodevx/svelte-toast'
 	import type { Nonprofit } from 'types/change'
-	import Button from '~/components/forms/Button.svelte'
 	import Charity from '~/components/Charity/Charity.svelte'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
+	import Button from '~/components/forms/Button.svelte'
 	import Form from '~/components/forms/Form.svelte'
 	import Percentage from '~/components/forms/Percentage.svelte'
 	import X from '~/components/icons/X.svelte'
 	import { clickOutside } from '~/lib/actions'
 	import supabaseClient from '~/lib/db'
+	import type { PageData } from './$types'
+
+	export let data: PageData
 
 	let designated: Nonprofit[]
-	$: designated = $page.data.designated || []
+	$: designated = data.designated || []
 
 	$: monthlyPercentage = parseFloat(
-		(($page.data.profile!.percentage / 12) * 100).toFixed(3)
+		((data.profile?.percentage ?? 0 / 12) * 100).toFixed(3)
 	)
 
 	let adding: Record<string, boolean> = {}
@@ -51,11 +53,7 @@
 		We'll donate
 	{/if}
 	<Form action="?/update-percentage" let:loading let:submit>
-		<Percentage
-			value={$page.data.profile?.percentage}
-			{loading}
-			on:change={submit}
-		/>
+		<Percentage value={data.profile?.percentage} {loading} on:change={submit} />
 	</Form>
 	of your
 	<details
@@ -66,23 +64,23 @@
 	>
 		<summary
 			class="border-current leading-extra-tight border-b-4 mb-2 border-dotted text-bank"
-			class:whitespace-nowrap={$page.data.institution?.logo}
+			class:whitespace-nowrap={data.institution?.logo}
 			aria-haspopup="menu"
 		>
-			{#if $page.data.institution?.logo}
+			{#if data.institution?.logo}
 				<img
 					class="h-9 inline-block -mt-1"
-					alt="{$page.data.institution?.name} logo"
-					src="data:image/png;base64,{$page.data.institution?.logo}"
+					alt="{data.institution?.name} logo"
+					src="data:image/png;base64,{data.institution?.logo}"
 				/>
 			{:else}
-				{$page.data.institution?.name}
+				{data.institution?.name}
 			{/if}
 			<span class="whitespace-nowrap">
 				<span
 					class="tracking-tighter leading-none inline-block text-[1.3em] mr-0.5"
 					>&bull;&bull;</span
-				>{$page.data.profile?.plaid_account_mask}
+				>{data.profile?.plaid_account_mask}
 				<svg
 					class="inline-block align-middle h-[0.7em]"
 					viewBox="0 13 18 33"

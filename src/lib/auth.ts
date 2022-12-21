@@ -21,7 +21,7 @@ export function withLoadNoAuth<L>(fn?: L): Load {
 	return async (event) => {
 		const { session } = await getSupabase(event)
 		if (session) {
-			throw redirect(303, event.url.searchParams.get('next') ?? '/')
+			throw redirect(303, event.url.searchParams.get('next') ?? '/dashboard')
 		}
 
 		if (fn instanceof Function) return fn(event)

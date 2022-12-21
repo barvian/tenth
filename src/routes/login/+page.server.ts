@@ -49,6 +49,6 @@ export const actions: Actions = {
 			})
 		else if (error) throw error
 
-		throw redirect(303, event.url.searchParams.get('next') ?? '/')
+		throw redirect(303, event.url.searchParams.get('next') ?? '/dashboard')
 	}
 }

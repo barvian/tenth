@@ -120,7 +120,7 @@
 
 			multiStep?.complete()
 			await invalidateAll()
-			await goto('/')
+			await goto('/dashboard')
 		} catch (e) {
 			if (e)
 				toast.push(

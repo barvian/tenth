@@ -59,18 +59,12 @@
 				await invalidateAll()
 			}
 
-			dispatch('loadend', result)
+			const apply = dispatch('loadend', result)
 
 			// On the client, let's skip the error boundary and just show a toast
 			if (result.type === 'error') {
 				toast.push(result.error.message, { classes: ['error'] })
-			}
-			// For success/invalid results, only apply action if it belongs to the
-			// current page, otherwise `form` will be updated erroneously
-			else if (
-				result.type === 'redirect' ||
-				location.origin + location.pathname === action.origin + action.pathname
-			) {
+			} else if (apply) {
 				await applyAction(result)
 			}
 
