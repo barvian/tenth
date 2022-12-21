@@ -17,7 +17,7 @@
 	$: designated = data.designated || []
 
 	$: monthlyPercentage = parseFloat(
-		((data.profile?.percentage ?? 0 / 12) * 100).toFixed(3)
+		(((data.profile?.percentage ?? 0) / 12) * 100).toFixed(3)
 	)
 
 	let adding: Record<string, boolean> = {}
