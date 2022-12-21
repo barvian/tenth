@@ -1,6 +1,8 @@
 import { withLoadNoAuth } from '~/lib/auth'
 import type { PageLoad } from './$types'
 
+export const prerender = true
+
 export const load = withLoadNoAuth<PageLoad>(() => ({
 	meta: {
 		title: 'Login',

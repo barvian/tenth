@@ -73,7 +73,7 @@
 		<!-- <a href="/donations" role="menuitem" class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full">Donation history</a> -->
 		<form
 			class="border-t border-gray-200 pt-2 mt-2"
-			action="/logout"
+			action="/api/auth?/logout"
 			method="POST"
 		>
 			<Button

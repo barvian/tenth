@@ -4,12 +4,13 @@
 	import Input from '~/components/forms/Input.svelte'
 	import MultiStep from '~/components/MultiStep/MultiStep.svelte'
 	import Step from '~/components/MultiStep/Step.svelte'
+	import { page } from '$app/stores'
 </script>
 
 <MultiStep let:next let:complete let:reset>
 	<Form
 		id="login"
-		action="?/login"
+		action="/api/auth?/login"
 		on:load={(event) => {
 			event.preventDefault() // prevent invalidating the page, which messes up the history stack & MultiStep
 		}}
@@ -34,7 +35,7 @@
 			/>
 			<Button
 				type="submit"
-				formaction="?/send-otp"
+				formaction="/api/auth?/send-otp"
 				disabled={!active}
 				class="mt-7 max-w-xs"
 			>
@@ -53,6 +54,11 @@
 				type="text"
 				name="token"
 				label="Code"
+			/>
+			<Input
+				type="hidden"
+				name="next"
+				value={$page.url.searchParams.get('next')}
 			/>
 			<Button class="mt-7 max-w-xs" type="submit">Continue</Button>
 		</Step>

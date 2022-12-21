@@ -12,8 +12,6 @@ const changeCreds = Buffer.from(
 ).toString('base64')
 
 export const load: PageServerLoad = async (event) => {
-	// This is only here to pre-render the home page,
-	// as pre-rendered pages can't have server actions
 	throw redirect(301, '/')
 }
 
@@ -23,20 +21,26 @@ export const actions: Actions = {
 		const { supabaseClient } = await getSupabase(event)
 		const data = await request.formData()
 		const email = data.get('email') as string
+		const newUser = data.has('new-user')
 
 		const { data: emailExists, error: checkEmailError } = await supabaseClient
 			.rpc('email_exists', { email })
 			.single()
 		if (checkEmailError) throw checkEmailError
-		else if (emailExists)
+		else if (newUser && emailExists)
 			return invalid(406, data, {
 				email: 'That email is already in use. Try another.'
 			})
+		else if (!newUser && !emailExists) {
+			return invalid(406, data, {
+				email: `We couldn't find a Tenth account with that email.`
+			})
+		}
 
 		const { error: signInError } = await supabaseClient.auth.signInWithOtp({
 			email,
 			options: {
-				shouldCreateUser: true
+				shouldCreateUser: newUser
 			}
 		})
 		if (signInError) throw signInError
@@ -105,5 +109,32 @@ export const actions: Actions = {
 		}
 
 		throw redirect(303, '/link')
+	},
+	async login(event) {
+		const { request } = event
+		const { supabaseClient } = await getSupabase(event)
+
+		const data = await request.formData()
+		const email = data.get('email') as string
+		const token = data.get('token') as string
+		const next = data.get('next') as string
+
+		const { error } = await supabaseClient.auth.verifyOtp({
+			email,
+			token,
+			type: 'magiclink'
+		})
+		if (error instanceof AuthApiError && error.status === 401)
+			return invalid(401, data, {
+				token: error.message
+			})
+		else if (error) throw error
+
+		throw redirect(303, next || '/dashboard')
+	},
+	async logout(event) {
+		const { supabaseClient } = await getSupabase(event)
+		await supabaseClient.auth.signOut() // don't handle errors, I guess
+		throw redirect(303, '/')
 	}
 }

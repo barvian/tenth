@@ -30,7 +30,7 @@
 >
 	<Form
 		id="register"
-		action="/register?/register"
+		action="/api/auth?/register"
 		on:loadend={(event) => {
 			// We have to call this before complete, because we have a leaveAlert
 			if (['success', 'redirect'].includes(event.detail?.type)) complete()
@@ -115,7 +115,8 @@
 			<Button
 				type="submit"
 				disabled={!active}
-				formaction="/register?/send-otp"
+				formaction="/api/auth?/send-otp"
+				name="new-user"
 				class="mt-8 max-w-md"
 			>
 				Continue
