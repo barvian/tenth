@@ -4,7 +4,7 @@
 	const options = [0.33, 0.25, 0.2, 0.15, 0.1, 0.05, 0.03, 0.02, 0.01]
 
 	export let loading = false
-	export let value: number = 0.1
+	export let value = 0.1
 </script>
 
 <div class="relative inline-block">
@@ -20,7 +20,7 @@
 		{/each}
 	</select>
 	<label
-		class="relative whitespace-nowrap flex pl-0.5 pr-1 items-baseline text-orange-500 border-current leading-none border-b-4 mb-2 border-dotted pointer-events-none peer-disabled:text-gray-300"
+		class="relative whitespace-nowrap flex pl-0.5 pr-1 items-baseline text-bank border-current leading-none border-b-4 mb-2 border-dotted pointer-events-none peer-disabled:text-gray-300"
 		for="percentage"
 	>
 		{#if loading}<Spinner class="inline-block align-middle h-7 mr-1.5" />{/if}
