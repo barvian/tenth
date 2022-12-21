@@ -44,7 +44,7 @@
 				aria-level={1}
 				class="text-4xl max-w-2xl text-center font-bold"
 			>
-				Donate <Percentage /> of your checking account to charity every year.
+				Donate <Percentage /> of your bank account to charity every year.
 			</div>
 			<p class="text-xl max-w-2xl text-center text-gray-500 mt-5 mb-8">
 				Donated in monthly increments. Cancelable anytime.

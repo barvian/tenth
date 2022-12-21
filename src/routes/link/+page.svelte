@@ -142,7 +142,7 @@
 <MultiStep bind:this={multiStep} let:next let:reset inconspicuous={false}>
 	<Step>
 		<h2 class="text-3xl max-w-2xl font-bold mb-8 text-center">
-			Link your checking account with <Change
+			Link your bank account with <Change
 				class="inline-block align-baseline ml-[0.15em] h-[0.7em]"
 			/>
 		</h2>
@@ -205,7 +205,7 @@
 	</Step>
 	<Step>
 		<h2 class="text-3xl max-w-2xl font-bold mb-8 text-center">
-			Link your {data.institution?.name ?? 'checking'} account with Tenth
+			Link your {data.institution?.name ?? 'bank'} account with Tenth
 		</h2>
 		<p class="text-lg max-w-xl leading-snug mb-10 text-gray-500 text-center">
 			Tenth also needs access to your account to check your balance and tell

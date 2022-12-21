@@ -59,7 +59,7 @@
 						<h4>Setup fee</h4>
 						<p class="text-gray-500 leading-snug mt-0.5">
 							The fee we incur to link your bank account with our platform, only
-							charged one time after successfully linking a checking account.
+							charged one time after successfully linking an account.
 						</p>
 					</td>
 					<td class="py-4 align-top text-right">$1.55</td>
