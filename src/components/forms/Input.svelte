@@ -25,10 +25,10 @@
 	export let error: string | null | undefined = undefined
 	export let loading = false // only displays if there's an icon or it's a search
 	export let placeholder = ''
-	export let autocomplete = 'on'
-	export let maxlength = 524288
+	export let autocomplete: string | undefined = undefined
+	export let maxlength: number | undefined = undefined
 	export let disabled = false
-	export let pattern = '.*'
+	export let pattern: string | undefined = undefined
 	export let bg = 'bg-white'
 	export let border = 'border-black focus:border-orange-500'
 	export let shadow: string | boolean =
@@ -46,7 +46,7 @@
 	export let textSize = 'text-lg'
 	let cls = ''
 	export { cls as class }
-	export let spellcheck = true
+	export let spellcheck: boolean | undefined = undefined
 
 	export let input: HTMLInputElement | null = null
 
