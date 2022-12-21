@@ -165,7 +165,7 @@
 						/>
 					{/if}
 					<div class="overflow-hidden font-medium">
-						<span class="text-bank">{data.institution?.name}</span>
+						{data.institution?.name}
 						<span class="inline-block">
 							<span
 								class="tracking-tighter leading-none inline-block text-[1.3em] mr-0.5"
