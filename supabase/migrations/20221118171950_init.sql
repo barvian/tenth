@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS public.profiles
     user_id uuid NOT NULL,
     first_name text COLLATE pg_catalog."default",
     last_name text COLLATE pg_catalog."default",
-    percentage numeric(3,3) NOT NULL,
+    percentage numeric(3,3) NOT NULL CHECK (percentage > 0),
     stripe_id text NOT NULL COLLATE pg_catalog."default" UNIQUE,
     change_id text NOT NULL COLLATE pg_catalog."default" UNIQUE,
     plaid_institution_id text COLLATE pg_catalog."default" UNIQUE,
