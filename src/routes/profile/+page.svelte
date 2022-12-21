@@ -26,7 +26,7 @@
 	<Form action="?/update" let:complete>
 		<p
 			slot="complete"
-			class="mt-6 bg-gray-100 rounded-3xl p-6 text-center"
+			class="mt-6 bg-gray-100 rounded-2xl p-6 text-center"
 			role="alert"
 		>
 			Click the link we sent to your new and old email addresses to confirm your
