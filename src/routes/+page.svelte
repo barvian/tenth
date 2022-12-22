@@ -31,6 +31,9 @@
 	<Form
 		id="register"
 		action="/api/auth?/register"
+		on:load={(event) => {
+			event.preventDefault() // prevent invalidating the page, which messes up the history stack & MultiStep
+		}}
 		on:loadend={(event) => {
 			// We have to call this before complete, because we have a leaveAlert
 			if (['success', 'redirect'].includes(event.detail?.type)) complete()
