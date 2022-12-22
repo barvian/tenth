@@ -10,6 +10,7 @@
 	import MultiStep from '~/components/MultiStep/MultiStep.svelte'
 	import Step from '~/components/MultiStep/Step.svelte'
 	import { loadScript } from '~/lib/component'
+	import { parseJSON } from '~/lib/fetch'
 	import type { PageData } from './$types'
 
 	export let data: PageData
@@ -44,7 +45,7 @@
 		try {
 			const link_token = await fetch('/api/change/link-token', {
 				method: 'POST'
-			}).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+			}).then(parseJSON)
 
 			let [plaid_public_token, metadata] = await openPlaid(link_token)
 			await fetch('/api/change/attach', {
@@ -58,7 +59,7 @@
 					plaid_account_type: metadata.accounts[0].type,
 					plaid_account_subtype: metadata.accounts[0].subtype
 				})
-			}).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+			}).then(parseJSON)
 
 			await invalidateAll() // This messes up the history stack, so do it first
 			multiStep?.next()
@@ -81,12 +82,12 @@
 		try {
 			const link_token = await fetch('/api/plaid/link-token', {
 				method: 'POST'
-			}).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+			}).then(parseJSON)
 
 			let [plaid_public_token, metadata] = await openPlaid(link_token, {
 				// I really wish Plaid let you filter institutions instead of just
 				// by routing numbers
-				onEvent(eventName, metadata) {
+				onEvent(_, metadata) {
 					if (
 						data.profile?.institution_id &&
 						metadata?.institution_id &&
@@ -116,7 +117,7 @@
 					plaid_public_token,
 					bank_account_id: metadata.accounts[0].id
 				})
-			}).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+			}).then(parseJSON)
 
 			multiStep?.complete()
 			await invalidateAll()
@@ -175,6 +176,7 @@
 					</div>
 				</div>
 				<Form
+					id="unlink"
 					action="?/unlink"
 					on:submit={(event) => {
 						if (!confirm('Are you sure you want to unlink this account?'))
@@ -184,10 +186,9 @@
 				>
 					<Button
 						unstyled
-						type="submit"
 						class="text-gray-300 hover:text-red-500 disabled:text-red-500 transition-color py-2 pl-2"
 					>
-						<X class="h-3.5" />
+						<X class="h-4" />
 					</Button>
 				</Form>
 			</div>

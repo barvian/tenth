@@ -5,11 +5,14 @@
 	import { SvelteToast } from '@zerodevx/svelte-toast'
 	import { parseToRgba } from 'color2k'
 	import { onMount } from 'svelte'
+	import { setContext } from 'svelte-typed-context'
 	import '~/app.css'
+	import type Form from '~/components/forms/Form.svelte'
 	import Arrow from '~/components/icons/Arrow.svelte'
 	import Logo from '~/components/icons/Logo.svelte'
 	import UserDropdown from '~/components/UserDropdown.svelte'
 	import supabaseClient from '~/lib/db'
+	import { key } from './layout'
 
 	onMount(() => {
 		const {
@@ -36,6 +39,17 @@
 	$: if (dev && !$page.data.meta?.title && !$page.error) {
 		throw new Error('No page title specified')
 	}
+
+	// Allow forms to register themselves per-page by ID
+
+	const forms: Record<string, Form> = {}
+	export const registerForm = (id: string, form: Form) => (forms[id] = form)
+	export const getFormById = (id?: string) => id && forms[id]
+
+	setContext(key, {
+		registerForm,
+		getFormById
+	})
 </script>
 
 <svelte:head>
@@ -44,7 +58,7 @@
 		<meta name="description" content={$page.data.meta.description} />
 	{/if}
 
-	{#if bankStyle}{@html bankStyle}{/if}
+	{@html bankStyle ?? ''}
 </svelte:head>
 
 <SvelteToast options={toastOptions} />

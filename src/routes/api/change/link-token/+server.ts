@@ -2,6 +2,7 @@ import { SECRET_CHANGE_KEY } from '$env/static/private'
 import { PUBLIC_CHANGE_KEY } from '$env/static/public'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error, json } from '@sveltejs/kit'
+import { parseJSON } from '~/lib/fetch'
 import type { RequestHandler } from './$types'
 
 export const POST: RequestHandler = async (event) => {
@@ -27,7 +28,7 @@ export const POST: RequestHandler = async (event) => {
 				'Content-Type': 'application/json'
 			}
 		}
-	).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+	).then(parseJSON)
 
 	return json(res)
 }

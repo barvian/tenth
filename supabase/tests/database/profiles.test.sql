@@ -1,5 +1,5 @@
 begin;
-select plan(8);
+select plan(9);
 
 insert into auth.users (id, email) values
 ('b9511b07-87eb-4e02-bfb5-3b7095129c73', 'unregistered@test.com'),
@@ -28,12 +28,23 @@ select lives_ok(
     select register(
         'fake-stripe-id2',
         'fake-change-id2',
-        'Registered2', 'User',
+        'Registered2',
+        'User',
         0.100,
-        '{"fake-charity-id"}'
+        '{"(id3,0.75)","(id2,0.5)"}'
     );
     $$,
     'register() succeeds for unregistered users'
+);
+
+select results_eq(
+    $$
+    select count(*) from public.designated;
+    $$,
+    $$
+    values(2::bigint)
+    $$,
+    'register() inserts the designated charities into the designated table'
 );
 
 select results_eq(

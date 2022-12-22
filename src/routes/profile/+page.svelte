@@ -23,7 +23,7 @@
 		disabled
 		description="You're not able to change your name at this time."
 	/>
-	<Form action="?/update" let:complete>
+	<Form id="update" action="?/update" let:complete>
 		<p
 			slot="complete"
 			class="mt-6 bg-gray-100 rounded-2xl p-6 text-center"
@@ -42,9 +42,10 @@
 			showDescription={!complete && email !== data.session?.user.email}
 			description="We'll send you a confirmation to complete your email change."
 		/>
-		<Button class="mt-8" type="submit" disabled={complete}>Save profile</Button>
+		<Button class="mt-8" disabled={complete}>Save profile</Button>
 	</Form>
 	<Form
+		id="delete"
 		action="?/delete"
 		on:submit={(event) => {
 			if (!confirm('Are you sure you want to delete your account?'))
@@ -54,7 +55,6 @@
 		<Button
 			unstyled
 			class="text-red-400 font-medium text-lg mt-8 w-full text-center"
-			type="submit"
 		>
 			Delete account
 		</Button>

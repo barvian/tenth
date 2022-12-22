@@ -12,6 +12,7 @@ export const load: LayoutServerLoad = async (event) => {
 			'stripe_id, first_name, last_name, plaid_institution_id, plaid_account_mask, percentage'
 		)
 		.single()
+	event.depends('supabase:profile')
 	if (profileError) throw profileError
 
 	// Check if the Stripe customer is fully configured (aka the linking process is complete)

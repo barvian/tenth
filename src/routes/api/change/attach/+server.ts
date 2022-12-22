@@ -1,6 +1,7 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error, json } from '@sveltejs/kit'
 import type Stripe from 'stripe'
+import { parseJSON } from '~/lib/fetch'
 import stripeClient from '~/lib/stripe'
 import type { RequestHandler } from './$types'
 
@@ -45,7 +46,7 @@ export const POST: RequestHandler = async (event) => {
 				bank_account_id: body.bank_account_id
 			})
 		}
-	).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+	).then(parseJSON)
 	if (!updatedAccount?.active)
 		throw new Error(
 			`Change account ${updatedAccount.id} not marked as active after attaching new account`

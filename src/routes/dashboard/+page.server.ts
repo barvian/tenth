@@ -1,14 +1,19 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error, redirect } from '@sveltejs/kit'
-import { success } from '~/lib/actions'
+import type { Institution } from 'plaid'
+import type { Nonprofit } from 'types/change'
+import { addClientActionsToServer, success } from '~/lib/actions'
 import { withLoadAuth } from '~/lib/auth'
+import type { Designation } from '~/lib/db'
+import { parseJSON } from '~/lib/fetch'
 import type { Actions, PageServerLoad } from './$types'
+import { update_percentage, update_split } from './actions.client'
 
 export const load = withLoadAuth<PageServerLoad>(async (event) => {
 	const { supabaseClient } = await getSupabase(event)
 	const parent = await event.parent()
 
-	// Redirect if linking process is incomplete
+	// Redirect if linking process isn't complete
 	if (!parent.profile?.plaid_institution_id || !parent.profile?.stripe_linked)
 		throw redirect(303, '/link')
 
@@ -16,20 +21,23 @@ export const load = withLoadAuth<PageServerLoad>(async (event) => {
 		.fetch(
 			`/api/plaid/institutions/${parent.profile.plaid_institution_id}.json`
 		)
-		.then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+		.then((r) => parseJSON<Institution>(r))
 
-	const { data: change_ids } = await supabaseClient
+	const { data } = await supabaseClient
 		.from('designated')
-		.select('change_id')
+		.select('change_id, weight')
 		.order('created_at', { ascending: true })
-	let designated
-	if (change_ids?.length) {
+	event.depends('supabase:designated')
+
+	let designated: Designation[] = []
+	if (data?.length) {
 		designated = await Promise.all(
-			change_ids.map((row) =>
-				event
+			data.map(async (row) => ({
+				nonprofit: await event
 					.fetch(`/api/change/charities/${row.change_id}.json`)
-					.then((r) => (r.ok ? r.json() : Promise.reject(r)))
-			)
+					.then((r) => parseJSON<Nonprofit>(r)),
+				weight: row.weight
+			}))
 		)
 	}
 
@@ -44,22 +52,7 @@ export const load = withLoadAuth<PageServerLoad>(async (event) => {
 })
 
 export const actions: Actions = {
-	async 'update-percentage'(event) {
-		const { request } = event
-		const { session, supabaseClient } = await getSupabase(event)
-		if (!session) throw error(403, 'No user logged in')
-		const data = await request.formData()
-
-		const { error: updateError } = await supabaseClient
-			.from('profiles')
-			.update({
-				percentage: +(data.get('percentage') as string)
-			})
-			.eq('user_id', session.user.id)
-		if (updateError) throw updateError
-
-		return success(data)
-	},
+	...addClientActionsToServer({ update_percentage, update_split }),
 	async 'remove-charity'(event) {
 		const { request } = event
 		const { session, supabaseClient } = await getSupabase(event)

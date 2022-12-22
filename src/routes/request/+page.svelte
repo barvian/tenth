@@ -11,7 +11,7 @@
 	export let data: PageData
 </script>
 
-<Form>
+<Form id="request">
 	<svelte:fragment slot="complete" let:values>
 		<h2 class="text-3xl max-w-xl text-center font-bold mb-5">
 			We received your request!
@@ -143,6 +143,6 @@
 				description="If provided, we'll email you updates about your request."
 			/>
 		{/if}
-		<Button type="submit" class="col-span-full mt-2">Request</Button>
+		<Button class="col-span-full mt-2">Request</Button>
 	</fieldset>
 </Form>

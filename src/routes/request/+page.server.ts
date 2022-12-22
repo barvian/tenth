@@ -2,6 +2,7 @@ import { SECRET_CHANGE_KEY } from '$env/static/private'
 import { PUBLIC_CHANGE_KEY } from '$env/static/public'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { success } from '~/lib/actions'
+import { parseJSON } from '~/lib/fetch'
 import type { Actions } from './$types'
 const changeCreds = Buffer.from(
 	PUBLIC_CHANGE_KEY + ':' + SECRET_CHANGE_KEY
@@ -36,7 +37,7 @@ export const actions: Actions = {
 					}
 				})
 			}
-		).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+		).then(parseJSON)
 
 		await supabaseClient.from('requests').insert({
 			// ignore errors

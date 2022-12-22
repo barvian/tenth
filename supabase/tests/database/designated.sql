@@ -22,7 +22,7 @@ select throws_ok(
     insert into public.designated (change_id) values ('fake-change-id');
     $$,
     23505,
-    'duplicate key value violates unique constraint "designated_user_id_change_id_key"',
+    'duplicate key value violates unique constraint "designated_pkey"',
     'An authenticated user cannot create non-unique designations'
 );
 

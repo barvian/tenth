@@ -5,7 +5,7 @@ import '~/lib/db'
 
 export const handleError: HandleServerError = ({ error, event }) => {
 	if (dev) {
-		console.error(error, event)
+		console.error(error)
 	} else {
 		// Sentry.captureException(error, { event });
 	}

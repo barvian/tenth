@@ -24,8 +24,7 @@
 		furthest = 0,
 		steps = writable(0),
 		navigating = false,
-		done = false,
-		progressBar: HTMLElement | undefined
+		done = false
 
 	export const getStep = () => $step
 	const goto = (s: number) => {
@@ -40,15 +39,14 @@
 	export const prev = () => goto($step - 1)
 	export const reset = () => (furthest = $step)
 	export const complete = () => {
-		// progressBar?.addEventListener('transitionend', resolve, { once: true })
 		if ($step + 1 < $steps) return
 		done = true
 	}
 
 	beforeNavigate(({ cancel, delta, from, to }) => {
 		if (navigating) {
-		} // we initiated this event, so ignore
-		else if (delta === -1) prev()
+			// we initiated this event, so ignore
+		} else if (delta === -1) prev()
 		else if (delta === 1) {
 			if ($step + 1 <= furthest) next()
 		} else if (from?.url.pathname === to?.url.pathname)
@@ -93,7 +91,6 @@
 <svelte:window on:beforeunload={handleBeforeUnload} />
 
 <div
-	bind:this={progressBar}
 	class="fixed top-0 left-0 w-full h-[3px] bg-black origin-left transition-transform duration-300 z-50"
 	style="transform: scaleX({width})"
 />
