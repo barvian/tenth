@@ -72,6 +72,17 @@
 		right: 0;
 	}
 
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	/* Firefox */
+	input[type='number'] {
+		-moz-appearance: textfield;
+	}
+
 	main a:not([role='menuitem']):not([class]) {
 		@apply text-orange-500 font-medium;
 	}

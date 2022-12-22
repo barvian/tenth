@@ -1,39 +1,38 @@
 <script lang="ts">
-	import clsx from 'clsx'
+	import clsx, { type ClassValue } from 'clsx'
 	import { createEventDispatcher, SvelteComponent } from 'svelte'
 	import { fade, scale } from 'svelte/transition'
 	import Search from '../icons/Search.svelte'
 	import Spinner from '../icons/Spinner.svelte'
-	import { getForm } from './Form.svelte'
 	import omit from 'lodash/omit'
+	import { getFormByIdOrContext } from './Form.svelte'
 
-	const form = getForm()
-	const formValues = form?.values // these only refer to submitted values, because it's SSR capable
-	const formInvalids = form?.invalid // these only refer to submitted values, because it's SSR capable
+	let formId: string | undefined = undefined
+	export { formId as form }
+	$: form = getFormByIdOrContext(formId)
+	$: formValues = form?.values
+	$: formInvalids = form?.invalid
 
 	export let name: string | undefined = undefined
 	export let label = ''
 	export let type = 'text'
-	export let value: string | null | undefined =
-		$formValues && name && $formValues[name] // non-reactive, only applies to SSR contexts
+	export let value: any = $formValues && name && $formValues[name] // non-reactive, only applies to SSR contexts
 	export let required = false
 	export let showRequired = true
 	export let description = ''
 	export let showDescription = true
-	export let descriptionAlign = 'text-left'
+	export let descriptionAlign: ClassValue = 'text-left'
 	export let icon: typeof SvelteComponent | null = null
 	export let error: string | null | undefined = undefined
+	export let invalid = false
 	export let loading = false // only displays if there's an icon or it's a search
 	export let placeholder = ''
-	export let autocomplete: string | undefined = undefined
-	export let maxlength: number | undefined = undefined
-	export let disabled = false
-	export let pattern: string | undefined = undefined
-	export let bg = 'bg-white'
-	export let border = 'border-black focus:border-orange-500'
-	export let shadow: string | boolean =
+	export let width: ClassValue = 'w-full'
+	export let bg: ClassValue = 'bg-white'
+	export let border: ClassValue = 'border-black focus:border-orange-500'
+	export let shadow: ClassValue =
 		'not-disabled:shadow focus:shadow-orange-500/10'
-	export let padding =
+	export let padding: ClassValue =
 		type === 'search'
 			? 'pl-12 pr-5 pb-3.5 pt-4'
 			: label && !icon
@@ -41,12 +40,12 @@
 			: icon
 			? 'pl-11 py-4 pr-4'
 			: 'p-4'
-	export let rounded = type === 'search' ? 'rounded-full' : 'rounded-2xl'
-	export let align = type === 'search' ? 'text-center' : ''
-	export let textSize = 'text-lg'
+	export let rounded: ClassValue =
+		type === 'search' ? 'rounded-full' : 'rounded-2xl'
+	export let align: ClassValue = type === 'search' && 'text-center'
+	export let textSize: ClassValue = 'text-lg'
 	let cls = ''
 	export { cls as class }
-	export let spellcheck: boolean | undefined = undefined
 
 	export let input: HTMLInputElement | null = null
 
@@ -77,20 +76,17 @@
 </script>
 
 {#if type === 'hidden'}
-	<input bind:this={input} {type} {disabled} {name} {value} />
+	<input bind:this={input} {...$$restProps} {type} {name} {value} />
 {:else}
-	<div class="w-full {cls}">
+	<div class="{width} {cls}">
 		<div class="group relative">
 			<input
 				bind:this={input}
-				{disabled}
-				{maxlength}
-				{autocomplete}
-				{spellcheck}
+				{...$$restProps}
 				{name}
-				{pattern}
 				{required}
 				id={name}
+				form={formId}
 				{type}
 				value={value || ''}
 				on:input={handleInput}
@@ -98,7 +94,7 @@
 				on:focus
 				on:blur
 				placeholder={label || placeholder}
-				aria-invalid={Boolean(error)}
+				aria-invalid={Boolean(invalid || error)}
 				class={clsx(
 					bg,
 					border,

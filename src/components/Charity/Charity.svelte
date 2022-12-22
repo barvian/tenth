@@ -1,12 +1,18 @@
 <script lang="ts">
-	import clsx from 'clsx'
+	import clsx, { type ClassValue } from 'clsx'
 	import type { Nonprofit } from 'types/change'
 
-	let cls = ''
+	let cls: ClassValue = null
 	export { cls as class }
-	export let unstyled = false
+	export let titleSize = 'text-lg'
+	export let bg: ClassValue = 'bg-white'
+	export let border: ClassValue = 'border'
+	export let padding: ClassValue = 'p-4'
+	export let shadow: ClassValue = 'shadow'
+	export let imgWidth: ClassValue = 'w-13'
+	export let titleMargin: ClassValue = 'mb-1.5'
 	export let charity: Nonprofit | null = null
-	let url: URL | null, location: String
+	let url: URL | null
 
 	$: if (charity?.website) {
 		let site = charity.website
@@ -14,7 +20,9 @@
 		try {
 			url = new URL(site)
 			if (!url.hostname?.includes('.')) url = null
-		} catch (e) {}
+		} catch (e) {
+			// we'll not use the url, that's fine
+		}
 	}
 </script>
 
@@ -22,19 +30,24 @@
 	on:click
 	class={clsx(
 		cls,
-		'rounded-2xl relative flex gap-x-3 items-center',
-		!unstyled && 'bg-white border p-4 shadow'
+		'rounded-2xl relative flex items-center',
+		bg,
+		border,
+		padding,
+		shadow
 	)}
 >
 	<img
-		class="w-12 object-fit aspect-square"
+		class="{imgWidth} object-fit aspect-square mr-3"
 		class:rounded-lg={!charity?.logo_url}
 		src={charity?.logo_url ?? charity?.icon_url}
 		alt="{charity?.name} logo"
 	/>
-	<div class="flex-1 pt-0.5">
-		<h3 class="font-medium text-lg leading-tight mb-1">{charity?.name}</h3>
-		<span class="block text-gray-500 leading-none break-words w-full">
+	<div class="flex-1">
+		<h3 class="font-medium {titleSize} leading-tight {titleMargin}">
+			{charity?.name}
+		</h3>
+		<span class="block text-gray-500 break-words leading-none w-full">
 			{#if url}
 				{url?.hostname?.replace(/^wwww*\./i, '') +
 					url?.pathname?.replace(/\/$/, '')}

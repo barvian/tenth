@@ -1,33 +1,36 @@
 <script lang="ts" context="module">
 	import { getContext, type InjectionKey } from 'svelte-typed-context'
 	import type { Writable } from 'svelte/store'
+	import { getFormById } from '~/routes/layout'
 
 	const key: InjectionKey<{
-		hasUniqueId: Writable<boolean>
+		id: Writable<string>
 		loading: Writable<boolean>
 		complete: Writable<boolean>
-		values: Writable<Record<string, string>>
-		invalid: Writable<Record<string, string>>
+		values: Writable<Record<string, string> | null | undefined>
+		invalid: Writable<Record<string, string> | null | undefined>
 	}> = Symbol()
 
-	export const getForm = () => getContext(key)
+	export const getFormByIdOrContext = (id?: string) =>
+		id ? getFormById(id)?.$$.context.get(key) : getContext(key)
 </script>
 
 <script lang="ts">
-	import { applyAction, enhance, type SubmitFunction } from '$app/forms'
+	import { applyAction, enhance } from '$app/forms'
 	import { invalidateAll } from '$app/navigation'
 	import { page } from '$app/stores'
-	import { createEventDispatcher, onMount } from 'svelte'
+	import { createEventDispatcher } from 'svelte'
 	import { setContext } from 'svelte-typed-context'
 	import { writable } from 'svelte/store'
 	import { toast } from '@zerodevx/svelte-toast'
+	import { get_current_component } from 'svelte/internal'
+	import { registerForm } from '~/routes/layout'
+	import type { ActionResult } from '@sveltejs/kit'
 
+	export let id: string
 	export let action = ''
-	export let id = action
 	let cls = 'contents'
 	export { cls as class }
-
-	let form: HTMLFormElement
 
 	const dispatch = createEventDispatcher()
 
@@ -46,12 +49,13 @@
 	}
 	$: $page, handlePageUpdates()
 
-	const handleSubmit: SubmitFunction = ({ action, cancel }) => {
-		if (!dispatch('submit', null, { cancelable: true })) return cancel()
+	function submit({ cancel }: { cancel?: () => void } = {}) {
+		if (!dispatch('submit', null, { cancelable: true }) && cancel)
+			return cancel()
 
 		$loading = true
 
-		return async ({ result }) => {
+		return async ({ result }: { result: ActionResult }) => {
 			if (
 				result.type === 'success' &&
 				dispatch('load', result, { cancelable: true })
@@ -73,11 +77,14 @@
 		}
 	}
 
-	let hasUniqueId = writable<boolean>()
-	$: $hasUniqueId = id !== action
+	let idStore = writable<string>()
+	$: $idStore = id
+
+	const current = get_current_component()
+	$: registerForm(id, current)
 
 	setContext(key, {
-		hasUniqueId,
+		id: idStore,
 		loading,
 		complete,
 		values,
@@ -88,14 +95,7 @@
 {#if $$slots.complete && $complete}
 	<slot name="complete" values={$values} />
 {:else}
-	<form
-		{action}
-		method="post"
-		use:enhance={handleSubmit}
-		bind:this={form}
-		class={cls}
-		id={$hasUniqueId ? id : null}
-	>
+	<form {action} method="post" use:enhance={submit} class={cls} {id}>
 		<!-- Keep track of which form the request came from -->
 		<input type="hidden" name="$$id" value={id} />
 		<slot
@@ -103,7 +103,7 @@
 			complete={$complete}
 			invalid={$invalid}
 			values={$values}
-			submit={() => form?.requestSubmit()}
+			{submit}
 		/>
 	</form>
 {/if}

@@ -43,6 +43,7 @@ module.exports = {
 				sans: ['Value Sans Pro', ...defaultTheme.fontFamily.sans]
 			},
 			spacing: {
+				'13': '3.25rem',
 				xl: 'calc(theme(space.10) + 5vh)',
 				'2xl': 'calc(theme(space.12) + 10vh)'
 			},
@@ -105,6 +106,8 @@ module.exports = {
 			addComponents,
 			theme
 		}) {
+			addVariant('no-js', '.no-js:root &')
+			addVariant('js', ':not(.no-js):root &')
 			addVariant('not-disabled', '&:not(:disabled)')
 			addVariant('peer-not-disabled', ':merge(.peer):not(:disabled) ~ &')
 			addVariant('group-not-disabled', ':merge(.group):not(:disabled) &')

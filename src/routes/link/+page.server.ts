@@ -1,7 +1,9 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error } from '@sveltejs/kit'
+import type { Institution } from 'plaid'
 import type Stripe from 'stripe'
 import { withLoadAuth } from '~/lib/auth'
+import { parseJSON } from '~/lib/fetch'
 import stripeClient from '~/lib/stripe'
 import type { Actions, PageServerLoad } from './$types'
 
@@ -21,7 +23,7 @@ export const load = withLoadAuth<PageServerLoad>(async (event) => {
 			.fetch(
 				`/api/plaid/institutions/${parent.profile.plaid_institution_id}.json`
 			)
-			.then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+			.then((r) => parseJSON<Institution>(r))
 	}
 
 	return {

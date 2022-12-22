@@ -1,23 +1,16 @@
-<!-- <script lang="ts" context="module">
-    import type { Nonprofit } from 'types/change';
-
-    export interface DesignatedNonprofit {
-        nonprofit: Nonprofit
-        split: number
-    }
-</script> -->
 <script lang="ts">
 	import { PUBLIC_CHANGE_KEY } from '$env/static/public'
-	import clsx from 'clsx'
+	import clsx, { type ClassValue } from 'clsx'
 	import debounce from 'lodash/debounce'
 	import { createEventDispatcher } from 'svelte'
 	import type { Nonprofit, NonprofitSearchResults } from 'types/change'
+	import { parseJSON } from '~/lib/fetch'
 	import Input from '../forms/Input.svelte'
 	import Charity from './Charity.svelte'
 
 	const dispatch = createEventDispatcher()
 
-	let cls = ''
+	let cls: ClassValue = null
 	export { cls as class }
 	export let label: string
 	let results: Nonprofit[] | null
@@ -44,7 +37,7 @@
 						limit: limit.toString()
 					}),
 				{ signal }
-			).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+			).then(parseJSON)
 			results = response.nonprofits
 			loading = false
 		},
@@ -74,7 +67,10 @@
 </script>
 
 <div
-	class="relative bg-white shadow border transition-all border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10 {cls}"
+	class={clsx([
+		'relative bg-white shadow border transition-all border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10',
+		cls
+	])}
 	style:border-radius={searchRadius}
 >
 	<div bind:clientHeight={searchInputHeight}>
@@ -105,8 +101,14 @@
 				{#each results as charity (charity.id)}
 					<Charity
 						{charity}
-						unstyled
-						class="cursor-pointer hover:bg-gray-100 p-3"
+						bg="hover:bg-gray-100"
+						padding="p-3"
+						shadow={false}
+						border={false}
+						titleSize="text-lg"
+						titleMargin="mb-1"
+						imgWidth="w-12"
+						class="cursor-pointer"
 						on:click={() => onClickCharity(charity)}
 					/>
 				{/each}

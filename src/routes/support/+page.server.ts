@@ -12,7 +12,7 @@ export const load: PageServerLoad = async () => ({
 	faqs: await Promise.all(
 		faqs.map(async ({ q, a }: { q: string; a: string }) => ({
 			q,
-			a: (await compile(a))!.code
+			a: (await compile(a))?.code
 		}))
 	)
 })

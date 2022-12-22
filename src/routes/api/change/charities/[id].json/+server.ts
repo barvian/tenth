@@ -1,6 +1,7 @@
 import { SECRET_CHANGE_KEY } from '$env/static/private'
 import { PUBLIC_CHANGE_KEY } from '$env/static/public'
 import { json } from '@sveltejs/kit'
+import { parseJSON } from '~/lib/fetch'
 import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ params }) => {
@@ -12,7 +13,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		{
 			headers: { Authorization: `Basic ${creds}` }
 		}
-	).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+	).then(parseJSON)
 
 	return json(res, {
 		headers: {
