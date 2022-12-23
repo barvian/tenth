@@ -48,7 +48,7 @@
 		(browser &&
 			$formInvalids &&
 			Object.keys(name ? omit($formInvalids, name) : $formInvalids).length > 0)}
-	{type}
+	type={href ? null : type}
 	{name}
 	{value}
 	on:click
