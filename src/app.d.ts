@@ -11,6 +11,7 @@ declare namespace App {
 		meta?: {
 			title: string
 			description?: string
+			last_updated?: string
 		}
 		session?: import('@supabase/supabase-js').Session
 		profile?: {
@@ -29,6 +30,8 @@ declare namespace App {
 
 declare namespace svelte.JSX {
 	interface HTMLAttributes<T> {
-		onoutclick: () => void
+		triggerSubmit?: () => void
+		onoutclick?: () => void
+		onescape?: () => void
 	}
 }

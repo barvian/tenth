@@ -1,40 +1,49 @@
 <script lang="ts" context="module">
 	import { getContext, type InjectionKey } from 'svelte-typed-context'
 	import type { Writable } from 'svelte/store'
+	import { getFormById } from '~/routes/layout'
 
 	const key: InjectionKey<{
-		hasUniqueId: Writable<boolean>
+		el: Writable<HTMLFormElement>
+		id: Writable<string>
+		$on: (eventName: string, handler: (event: CustomEvent) => void) => void
+		abort: () => void
+		submit: () => void
 		loading: Writable<boolean>
 		complete: Writable<boolean>
-		values: Writable<Record<string, string>>
-		invalid: Writable<Record<string, string>>
+		values: Writable<Record<string, string> | null | undefined>
+		invalid: Writable<Record<string, string> | null | undefined>
+		data: Writable<any>
 	}> = Symbol()
 
-	export const getForm = () => getContext(key)
+	export const getFormByIdOrContext = (id?: string) =>
+		id ? getFormById(id)?.$$.context.get(key) : getContext(key)
 </script>
 
 <script lang="ts">
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms'
 	import { invalidateAll } from '$app/navigation'
 	import { page } from '$app/stores'
-	import { createEventDispatcher, onMount } from 'svelte'
-	import { setContext } from 'svelte-typed-context'
-	import { writable } from 'svelte/store'
 	import { toast } from '@zerodevx/svelte-toast'
+	import { createEventDispatcher } from 'svelte'
+	import { setContext } from 'svelte-typed-context'
+	import { get_current_component } from 'svelte/internal'
+	import { writable } from 'svelte/store'
+	import { registerForm } from '~/routes/layout'
 
+	export let id: string
 	export let action = ''
-	export let id = action
 	let cls = 'contents'
 	export { cls as class }
 
-	let form: HTMLFormElement
-
 	const dispatch = createEventDispatcher()
 
-	let loading = writable(false)
-	let complete = writable(false)
-	let values = writable<Record<string, string> | null | undefined>()
-	let invalid = writable<Record<string, string> | null | undefined>()
+	export const el = writable<HTMLFormElement>()
+	export const loading = writable(false)
+	export const complete = writable(false)
+	export const values = writable<Record<string, string> | null | undefined>()
+	export const invalid = writable<Record<string, string> | null | undefined>()
+	export const data = writable<any>()
 
 	const handlePageUpdates = () => {
 		$complete =
@@ -42,24 +51,28 @@
 		if ($page.form?.id != null && $page.form?.id == id) {
 			$values = $page.form?.values
 			$invalid = $page.form?.invalid
+			$data = $page.form?.data
 		}
 	}
 	$: $page, handlePageUpdates()
 
-	const handleSubmit: SubmitFunction = ({ action, cancel }) => {
+	let abortController: AbortController
+	const submit: SubmitFunction = ({ cancel, controller, action }) => {
 		if (!dispatch('submit', null, { cancelable: true })) return cancel()
 
 		$loading = true
-
+		abortController = controller
 		return async ({ result }) => {
 			if (
 				result.type === 'success' &&
-				dispatch('load', result, { cancelable: true })
+				dispatch('load', { result, action }, { cancelable: true })
 			) {
+				// TODO: wouldn't need this at all if client actions were supported,
+				// as they could just invalidate things selectively
 				await invalidateAll()
 			}
 
-			const apply = dispatch('loadend', result)
+			const apply = dispatch('loadend', { result, action })
 
 			// On the client, let's skip the error boundary and just show a toast
 			if (result.type === 'error') {
@@ -68,33 +81,51 @@
 				await applyAction(result)
 			}
 
-			if (result.type === 'success') dispatch('complete', result)
+			if (result.type === 'success') dispatch('complete', { result, action })
 			$loading = false
 		}
 	}
 
-	let hasUniqueId = writable<boolean>()
-	$: $hasUniqueId = id !== action
+	const triggerSubmit = () => {
+		$el?.triggerSubmit()
+	}
+	export { triggerSubmit as submit }
+
+	export const abort = () => {
+		abortController?.abort()
+		$loading = false
+	}
+
+	let idStore = writable<string>()
+	$: $idStore = id
+
+	const current = get_current_component()
+	$: registerForm(id, current)
 
 	setContext(key, {
-		hasUniqueId,
+		el,
+		$on: (name, handler) => current.$on && current.$on(name, handler),
+		id: idStore,
+		abort,
+		submit: triggerSubmit,
 		loading,
 		complete,
 		values,
-		invalid
+		invalid,
+		data
 	})
 </script>
 
 {#if $$slots.complete && $complete}
-	<slot name="complete" values={$values} />
+	<slot name="complete" values={$values} data={$data} />
 {:else}
 	<form
+		bind:this={$el}
 		{action}
 		method="post"
-		use:enhance={handleSubmit}
-		bind:this={form}
+		use:enhance={submit}
 		class={cls}
-		id={$hasUniqueId ? id : null}
+		{id}
 	>
 		<!-- Keep track of which form the request came from -->
 		<input type="hidden" name="$$id" value={id} />
@@ -103,7 +134,8 @@
 			complete={$complete}
 			invalid={$invalid}
 			values={$values}
-			submit={() => form?.requestSubmit()}
+			data={$data}
+			submit={triggerSubmit}
 		/>
 	</form>
 {/if}

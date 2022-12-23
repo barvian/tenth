@@ -16,7 +16,8 @@
 		}}
 		on:loadend={(event) => {
 			// Show the complete animation before the redirect
-			if (['success', 'redirect'].includes(event.detail?.type)) complete()
+			if (['success', 'redirect'].includes(event.detail?.result?.type))
+				complete()
 		}}
 		on:complete={next}
 		let:values
@@ -34,7 +35,6 @@
 				description="We'll send you a code to get you signed in."
 			/>
 			<Button
-				type="submit"
 				formaction="/api/auth?/send-otp"
 				disabled={!active}
 				class="mt-7 max-w-xs"
@@ -60,7 +60,7 @@
 				name="next"
 				value={$page.url.searchParams.get('next')}
 			/>
-			<Button class="mt-7 max-w-xs" type="submit">Continue</Button>
+			<Button class="mt-7 max-w-xs">Continue</Button>
 		</Step>
 	</Form>
 </MultiStep>

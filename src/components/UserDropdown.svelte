@@ -2,7 +2,7 @@
 	import { afterNavigate } from '$app/navigation'
 	import { page } from '$app/stores'
 	import md5 from 'crypto-js/md5'
-	import { clickOutside } from '~/lib/actions'
+	import { clickOutside, escape } from '~/lib/actions'
 	import Button from './forms/Button.svelte'
 	import Caret from './icons/Caret.svelte'
 
@@ -24,19 +24,15 @@
 	}
 
 	afterNavigate(() => (open = false))
-
-	function handleWindowKeyDown(event: KeyboardEvent) {
-		if (event.key === 'Escape') open = false
-	}
 </script>
-
-<svelte:window on:keydown={handleWindowKeyDown} />
 
 <details
 	class="group relative inline-block {cls}"
 	bind:open
 	use:clickOutside
+	use:escape
 	on:outclick={() => (open = false)}
+	on:escape={() => (open = false)}
 >
 	<summary
 		class="whitespace-nowrap group-open:text-black {active
@@ -78,7 +74,6 @@
 		>
 			<Button
 				unstyled
-				type="submit"
 				class="block hover:bg-gray-100 p-3 w-full leading-tight text-left rounded-xl"
 				>Log out</Button
 			>

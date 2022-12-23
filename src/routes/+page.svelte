@@ -12,16 +12,30 @@
 	import Step from '~/components/MultiStep/Step.svelte'
 
 	let designated: Nonprofit[] = []
-	function addCharity(event: CustomEvent) {
-		const charity = event.detail as Nonprofit
+	function addCharity(charity: Nonprofit) {
 		removeCharity(charity)
+		percentages = weights
+			.concat(1)
+			.map((w) => parseFloat(((w / (totalWeight + 1)) * 100).toFixed(1)) + '')
 		designated = [...designated, charity]
 	}
 	function removeCharity(charity: Nonprofit) {
-		designated = designated.filter((d) => d.id !== charity.id)
+		const i = designated.findIndex((c) => c.id === charity.id)
+		if (i < 0) return
+		designated.splice(i, 1)
+		percentages.splice(i, 1)
+		designated = designated
+		percentages = percentages
 	}
+
+	let percentages: string[] = []
+	$: weights = percentages.map(
+		(p) => ((parseFloat(p) || 0) / 100) * percentages.length
+	)
+	$: totalWeight = weights.reduce((total, w) => total + w, 0)
 </script>
 
+<Form id="search-charity" action="/dashboard?/search-charity" />
 <MultiStep
 	let:next
 	let:complete
@@ -36,12 +50,13 @@
 		}}
 		on:loadend={(event) => {
 			// We have to call this before complete, because we have a leaveAlert
-			if (['success', 'redirect'].includes(event.detail?.type)) complete()
+			if (['success', 'redirect'].includes(event.detail.result?.type))
+				complete()
 		}}
 		on:complete={next}
 		let:values
 	>
-		<Step as="fieldset" let:active>
+		<Step as="fieldset">
 			<div
 				role="heading"
 				aria-level={1}
@@ -53,38 +68,70 @@
 				Donated in monthly increments. Cancelable anytime.
 			</p>
 			{#if designated.length > 0}
-				<div class="space-y-4 w-full max-w-md mb-5">
-					{#each designated as item (item.id)}
-						<Charity charity={item}>
+				<div
+					class="space-y-5 w-full max-w-md mb-5 [&:focus-within_.charity]:border-gray-200 [&:focus-within_.charity]:shadow-transparent [&:focus-within_input]:shadow [&:focus-within_input]:border-black"
+				>
+					{#each designated as item, i (item.id)}
+						<Charity charity={item} class="charity transition-all">
+							{#if designated.length > 1}
+								<Input
+									type="number"
+									step="0.1"
+									bind:value={percentages[i]}
+									shadow="shadow-shadow focus:shadow-orange-500/10"
+									border="border-transparent hover:border-gray-300 focus:!border-orange-500"
+									padding="pl-0 pr-5 pb-2 pt-2.5"
+									rounded="rounded-lg"
+									align="text-right"
+									width="w-16"
+									min="0"
+									max="100"
+								>
+									<span
+										class="absolute top-1/2 right-2 -translate-y-1/2 font-medium text-gray-450"
+										>%</span
+									>
+								</Input>
+							{/if}
 							<Button
+								type="button"
 								unstyled
-								on:click={(e) => {
+								on:click={() => {
 									removeCharity(item)
 									if (designated.length === 0) reset()
 								}}
 								class="py-2 pl-2 transition-colors text-gray-300 hover:text-red-500"
 							>
-								<X class="h-3.5" />
+								<X class="h-4" />
 							</Button>
 						</Charity>
 					{/each}
 				</div>
 			{/if}
 			<CharitySearch
+				form="search-charity"
 				class="max-w-md w-full"
 				label={designated.length > 0
 					? 'Support another charity'
 					: 'Which charity do you want to support?'}
-				on:charity={addCharity}
+				on:select={(event) => {
+					event.preventDefault()
+					addCharity(event.detail)
+				}}
 			/>
 			<input
 				type="hidden"
 				name="designated"
-				value={JSON.stringify(designated.map((c) => c.id))}
+				value={JSON.stringify(
+					designated.map((c, i) => ({
+						change_id: c.id,
+						weight: weights[i]
+					}))
+				)}
 			/>
 			{#if designated.length > 0}
 				<div in:fade|local class="mt-8 max-w-md w-full">
-					<Button on:click={next}>Get started</Button>
+					<Button type="button" on:click={next}>Get started</Button>
 				</div>
 			{/if}
 		</Step>
@@ -116,7 +163,6 @@
 				/>
 			</div>
 			<Button
-				type="submit"
 				disabled={!active}
 				formaction="/api/auth?/send-otp"
 				name="new-user"
@@ -140,9 +186,7 @@
 				name="token"
 				label="Code"
 			/>
-			<Button type="submit" disabled={!active} class="mt-8 max-w-xs"
-				>Continue</Button
-			>
+			<Button disabled={!active} class="mt-8 max-w-xs">Continue</Button>
 		</Step>
 	</Form>
 </MultiStep>

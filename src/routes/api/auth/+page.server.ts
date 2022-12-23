@@ -5,13 +5,14 @@ import { AuthApiError } from '@supabase/supabase-js'
 import { redirect } from '@sveltejs/kit'
 import type stripe from 'stripe'
 import { invalid, success } from '~/lib/actions'
+import { parseJSON } from '~/lib/fetch'
 import stripeClient from '~/lib/stripe'
 import type { Actions, PageServerLoad } from './$types'
 const changeCreds = Buffer.from(
 	PUBLIC_CHANGE_KEY + ':' + SECRET_CHANGE_KEY
 ).toString('base64')
 
-export const load: PageServerLoad = async (event) => {
+export const load: PageServerLoad = async () => {
 	throw redirect(301, '/')
 }
 
@@ -83,7 +84,7 @@ export const actions: Actions = {
 						name: `${first} ${last}`
 					})
 				}
-			).then((r) => (r.ok ? r.json() : Promise.reject(r.text())))
+			).then(parseJSON)
 			console.log(`Created change account for ${email}`, changeAccount)
 
 			const { error: registerError } = await supabaseClient.rpc('register', {

@@ -13,6 +13,7 @@ module.exports = {
 		colors: {
 			transparent: 'transparent',
 			current: 'currentColor',
+			shadow: 'rgba(0,0,0,0.08)',
 			bank: `rgb(var(--color-bank, ${parseToRgba(colors.orange[500])
 				.slice(0, 3)
 				.join(' ')}) / <alpha-value>)`,
@@ -24,13 +25,13 @@ module.exports = {
 			rose: colors.red
 		},
 		boxShadow: {
-			sm: 'theme(space[0.5]) theme(space[1]) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
+			sm: 'theme(space[0.5]) theme(space[1]) 0 var(--tw-shadow-color, theme(colors.shadow))',
 			DEFAULT:
-				'theme(space.1) theme(space[1.5]) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
+				'theme(space.1) theme(space[1.5]) 0 var(--tw-shadow-color, theme(colors.shadow))',
 			elevated:
-				'theme(space.1) theme(space[2.5]) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
-			md: 'theme(space[1.5]) theme(space.2) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))',
-			lg: 'theme(space.2) theme(space.3) 0 var(--tw-shadow-color, rgba(0,0,0,0.08))'
+				'theme(space.1) theme(space[2.5]) 0 var(--tw-shadow-color, theme(colors.shadow))',
+			md: 'theme(space[1.5]) theme(space.2) 0 var(--tw-shadow-color, theme(colors.shadow))',
+			lg: 'theme(space.2) theme(space.3) 0 var(--tw-shadow-color, theme(colors.shadow))'
 		},
 		extend: {
 			screens: {
@@ -43,6 +44,7 @@ module.exports = {
 				sans: ['Value Sans Pro', ...defaultTheme.fontFamily.sans]
 			},
 			spacing: {
+				'13': '3.25rem',
 				xl: 'calc(theme(space.10) + 5vh)',
 				'2xl': 'calc(theme(space.12) + 10vh)'
 			},
@@ -105,6 +107,8 @@ module.exports = {
 			addComponents,
 			theme
 		}) {
+			addVariant('no-js', '.no-js:root &')
+			addVariant('js', ':not(.no-js):root &')
 			addVariant('not-disabled', '&:not(:disabled)')
 			addVariant('peer-not-disabled', ':merge(.peer):not(:disabled) ~ &')
 			addVariant('group-not-disabled', ':merge(.group):not(:disabled) &')

@@ -1,14 +1,18 @@
 import { invalid as svelteInvalid } from '@sveltejs/kit'
 
 // Page actions
+// ===
 
+type GetValuesOptions = { omit?: string[] }
+
+// Return the values of the form as an object, excluding the internal IDs
 export const getValues = (
-	data: FormData,
-	{ omit = ['$$id'] }: { omit?: string[] } = {}
+	formData: FormData,
+	{ omit = [] }: GetValuesOptions = {}
 ) => {
 	const values: Record<string, string> = {}
-	data.forEach((value, key) => {
-		if (!omit.includes(key)) values[key] = value as string
+	formData.forEach((value, key) => {
+		if (key !== '$$id' && !omit.includes(key)) values[key] = value as string
 	})
 	return values
 }
@@ -18,25 +22,32 @@ export const getValues = (
 
 export const invalid = (
 	status: number,
-	data: FormData,
-	fields: Record<string, string>
+	formData: FormData,
+	fields: Record<string, string>,
+	opts?: GetValuesOptions
 ) => {
 	return svelteInvalid(status, {
-		id: data.get('$$id') as string,
+		id: formData.get('$$id') as string,
 		invalid: fields,
-		values: getValues(data)
+		values: getValues(formData, opts)
 	})
 }
 
-export const success = (data: FormData) => ({
-	id: data.get('$$id') as string,
-	values: getValues(data)
+export const success = (
+	formData: FormData,
+	data?: any,
+	opts?: GetValuesOptions
+) => ({
+	id: formData.get('$$id') as string,
+	values: getValues(formData, opts),
+	data
 })
 
 // Component actions
+// ===
 
 export function clickOutside(node: HTMLElement) {
-	const handleClick = (event: Event) => {
+	function handleClick(event: Event) {
 		if (!node.contains(event.target as Node)) {
 			node.dispatchEvent(new CustomEvent('outclick'))
 		}
@@ -47,6 +58,20 @@ export function clickOutside(node: HTMLElement) {
 	return {
 		destroy() {
 			document.removeEventListener('click', handleClick, true)
+		}
+	}
+}
+
+export function escape(node: HTMLElement) {
+	function handleWindowKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Escape') node.dispatchEvent(new CustomEvent('escape'))
+	}
+
+	window.addEventListener('keydown', handleWindowKeyDown, true)
+
+	return {
+		destroy() {
+			window.removeEventListener('keydown', handleWindowKeyDown, true)
 		}
 	}
 }
