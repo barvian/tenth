@@ -22,6 +22,7 @@
 	export let textSize: ClassValue = 'text-lg'
 	export let align: ClassValue = 'text-center'
 	export let font: ClassValue = 'font-medium'
+	export let overlap: ClassValue = 'overlap-inline'
 	let cls = ''
 	export { cls as class }
 	let formId: string | undefined = undefined
@@ -48,7 +49,8 @@
 	form={formId}
 	class={clsx(
 		cls,
-		'overlap-inline items-center justify-items-center',
+		overlap,
+		'items-center justify-items-center',
 		!unstyled && [
 			width,
 			bg,

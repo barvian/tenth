@@ -3,6 +3,8 @@
 	import type { Nonprofit } from 'types/change'
 	import Charity from '~/components/Charity/Charity.svelte'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
+	import Dropdown from '~/components/Dropdown/Dropdown.svelte'
+	import DropdownItem from '~/components/Dropdown/Item.svelte'
 	import Button from '~/components/forms/Button.svelte'
 	import Form from '~/components/forms/Form.svelte'
 	import Input from '~/components/forms/Input.svelte'
@@ -82,17 +84,15 @@
 		/>
 	</Form>
 	of your
-	<details
-		class="group relative inline-block align-baseline"
-		bind:open={bankOpen}
-		use:clickOutside
-		on:outclick={() => (bankOpen = false)}
+	<Dropdown
+		class="align-baseline"
+		menuClass="min-w-[160px]"
+		summaryClass={[
+			'border-current leading-extra-tight border-b-4 mb-2 border-dotted text-bank',
+			data.institution?.logo && 'whitespace-nowrap'
+		]}
 	>
-		<summary
-			class="border-current leading-extra-tight border-b-4 mb-2 border-dotted text-bank"
-			class:whitespace-nowrap={data.institution?.logo}
-			aria-haspopup="menu"
-		>
+		<svelte:fragment slot="summary">
 			{#if data.institution?.logo}
 				<img
 					class="h-9 inline-block -mt-1"
@@ -123,33 +123,19 @@
 					/>
 				</svg>
 			</span>
-		</summary>
-		<div
-			class="rounded-2xl text-left font-normal border text-base p-2 z-50 bg-white right-0 absolute top-full min-w-[160px] shadow-md animate-fly-b"
-			role="menu"
+		</svelte:fragment>
+		<DropdownItem href="/link">Replace</DropdownItem>
+		<Form
+			id="unlink"
+			action="/link?/unlink"
+			on:submit={(event) => {
+				if (!confirm('Are you sure you want to unlink this account?'))
+					event.preventDefault()
+			}}
 		>
-			<a
-				href="/link"
-				role="menuitem"
-				class="block hover:bg-gray-100 p-3 leading-tight rounded-xl w-full"
-				>Replace</a
-			>
-			<Form
-				id="unlink"
-				action="/link?/unlink"
-				on:submit={(event) => {
-					if (!confirm('Are you sure you want to unlink this account?'))
-						event.preventDefault()
-				}}
-			>
-				<Button
-					unstyled
-					class="p-3 leading-tight text-left not-disabled:hover:bg-gray-100 text-red-500 rounded-xl block w-full"
-					>Unlink</Button
-				>
-			</Form>
-		</div>
-	</details>
+			<DropdownItem class="text-red-500">Unlink</DropdownItem>
+		</Form>
+	</Dropdown>
 	account every year.
 </div>
 <p class="text-xl max-w-xl text-center text-gray-500 mt-5 mb-8">
