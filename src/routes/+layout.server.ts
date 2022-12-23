@@ -20,7 +20,9 @@ export const load: LayoutServerLoad = async (event) => {
 		const stripeCustomer = await stripeClient.customers.retrieve(
 			profile.stripe_id
 		)
-		stripe_linked = Boolean(stripeCustomer?.default_source)
+		stripe_linked = Boolean(
+			!stripeCustomer.deleted && stripeCustomer.default_source
+		)
 	}
 
 	return {
