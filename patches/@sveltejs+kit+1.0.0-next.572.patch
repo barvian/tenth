@@ -1,12 +1,45 @@
 diff --git a/node_modules/@sveltejs/kit/src/runtime/app/forms.js b/node_modules/@sveltejs/kit/src/runtime/app/forms.js
-index 7a0f975..5835a65 100644
+index 7a0f975..5d71d79 100644
 --- a/node_modules/@sveltejs/kit/src/runtime/app/forms.js
 +++ b/node_modules/@sveltejs/kit/src/runtime/app/forms.js
-@@ -57,6 +57,7 @@ export function enhance(form, submit = () => {}) {
- 	/** @param {SubmitEvent} event */
+@@ -54,21 +54,22 @@ export function enhance(form, submit = () => {}) {
+ 		}
+ 	};
+ 
+-	/** @param {SubmitEvent} event */
++	/** @param {SubmitEvent} [event] */
  	async function handle_submit(event) {
- 		event.preventDefault();
-+		if (event.submitter?.disabled) return; // Fix a safari bug with disabled submitters
+-		event.preventDefault();
++		event?.preventDefault();
++		if (event?.submitter?.disabled) return; // Fix a safari bug with disabled submitters
  
  		const action = new URL(
  			// We can't do submitter.formAction directly because that property is always set
+ 			// We do cloneNode for avoid DOM clobbering - https://github.com/sveltejs/kit/issues/7593
+-			event.submitter?.hasAttribute('formaction')
++			event?.submitter?.hasAttribute('formaction')
+ 				? /** @type {HTMLButtonElement | HTMLInputElement} */ (event.submitter).formAction
+ 				: /** @type {HTMLFormElement} */ (HTMLFormElement.prototype.cloneNode.call(form)).action
+ 		);
+ 
+ 		const data = new FormData(form);
+ 
+-		const submitter_name = event.submitter?.getAttribute('name');
++		const submitter_name = event?.submitter?.getAttribute('name');
+ 		if (submitter_name) {
+ 			data.append(submitter_name, event.submitter?.getAttribute('value') ?? '');
+ 		}
+@@ -131,11 +132,13 @@ export function enhance(form, submit = () => {}) {
+ 
+ 	// @ts-expect-error
+ 	HTMLFormElement.prototype.addEventListener.call(form, 'submit', handle_submit);
++	form.triggerSubmit = handle_submit
+ 
+ 	return {
+ 		destroy() {
+ 			// @ts-expect-error
+ 			HTMLFormElement.prototype.removeEventListener.call(form, 'submit', handle_submit);
++			delete form.triggerSubmit
+ 		}
+ 	};
+ }

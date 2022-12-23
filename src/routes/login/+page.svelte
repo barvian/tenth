@@ -16,7 +16,8 @@
 		}}
 		on:loadend={(event) => {
 			// Show the complete animation before the redirect
-			if (['success', 'redirect'].includes(event.detail?.type)) complete()
+			if (['success', 'redirect'].includes(event.detail?.result?.type))
+				complete()
 		}}
 		on:complete={next}
 		let:values

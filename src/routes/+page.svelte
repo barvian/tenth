@@ -12,8 +12,7 @@
 	import Step from '~/components/MultiStep/Step.svelte'
 
 	let designated: Nonprofit[] = []
-	function addCharity(event: CustomEvent) {
-		const charity = event.detail as Nonprofit
+	function addCharity(charity: Nonprofit) {
 		removeCharity(charity)
 		percentages = weights
 			.concat(1)
@@ -36,6 +35,7 @@
 	$: totalWeight = weights.reduce((total, w) => total + w, 0)
 </script>
 
+<Form id="search-charity" action="/dashboard?/search-charity" />
 <MultiStep
 	let:next
 	let:complete
@@ -50,7 +50,8 @@
 		}}
 		on:loadend={(event) => {
 			// We have to call this before complete, because we have a leaveAlert
-			if (['success', 'redirect'].includes(event.detail?.type)) complete()
+			if (['success', 'redirect'].includes(event.detail.result?.type))
+				complete()
 		}}
 		on:complete={next}
 		let:values
@@ -68,7 +69,7 @@
 			</p>
 			{#if designated.length > 0}
 				<div
-					class="space-y-5 w-full max-w-md mb-5 [&:focus-within_.charity]:border-gray-200 [&:focus-within_.charity]:shadow-transparent [&:focus-within_input]:shadow [&:focus-within_input]:border-orange-500"
+					class="space-y-5 w-full max-w-md mb-5 [&:focus-within_.charity]:border-gray-200 [&:focus-within_.charity]:shadow-transparent [&:focus-within_input]:shadow [&:focus-within_input]:border-black"
 				>
 					{#each designated as item, i (item.id)}
 						<Charity charity={item} class="charity transition-all">
@@ -77,9 +78,9 @@
 									type="number"
 									step="0.1"
 									bind:value={percentages[i]}
-									shadow="shadow-orange-500/10"
-									border="border-transparent hover:border-gray-300"
-									padding="pl-0 pr-5 pb-1.5 pt-2"
+									shadow="shadow-shadow focus:shadow-orange-500/10"
+									border="border-transparent hover:border-gray-300 focus:!border-orange-500"
+									padding="pl-0 pr-5 pb-2 pt-2.5"
 									rounded="rounded-lg"
 									align="text-right"
 									width="w-16"
@@ -108,11 +109,15 @@
 				</div>
 			{/if}
 			<CharitySearch
+				form="search-charity"
 				class="max-w-md w-full"
 				label={designated.length > 0
 					? 'Support another charity'
 					: 'Which charity do you want to support?'}
-				on:charity={addCharity}
+				on:select={(event) => {
+					event.preventDefault()
+					addCharity(event.detail)
+				}}
 			/>
 			<input
 				type="hidden"

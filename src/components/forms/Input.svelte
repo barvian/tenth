@@ -6,6 +6,7 @@
 	import Spinner from '../icons/Spinner.svelte'
 	import omit from 'lodash/omit'
 	import { getFormByIdOrContext } from './Form.svelte'
+	import { browser } from '$app/environment'
 
 	let formId: string | undefined = undefined
 	export { formId as form }
@@ -16,7 +17,7 @@
 	export let name: string | undefined = undefined
 	export let label = ''
 	export let type = 'text'
-	export let value: any = $formValues && name && $formValues[name] // non-reactive, only applies to SSR contexts
+	export let value: any = undefined
 	export let required = false
 	export let showRequired = true
 	export let description = ''
@@ -51,12 +52,19 @@
 
 	const dispatch = createEventDispatcher()
 
+	const handleFormValuesUpdate = () => {
+		// In SSR, fill the value from the form value (client can handle itself)
+		if (!browser && $formValues && name && $formValues[name] != null)
+			value = $formValues[name]
+	}
+	$: $formValues, handleFormValuesUpdate()
+
 	// Order matters with these next two:
-	const handleFormUpdate = () => {
+	const handleFormInvalidsUpdate = () => {
 		if ($formInvalids && name && $formInvalids[name])
 			error = $formInvalids[name]
 	}
-	$: $formInvalids, handleFormUpdate()
+	$: $formInvalids, handleFormInvalidsUpdate()
 
 	const errors: Record<string, string> = {}
 	const handleErrorUpdate = () => {
@@ -162,7 +170,7 @@
 					{@html description}
 				</p>
 			{:else}
-				<noscript class="contents">
+				<noscript>
 					<p class="text-gray-500 {descriptionAlign} leading-snug mt-4">
 						{@html description}
 					</p>

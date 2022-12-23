@@ -1,48 +1,18 @@
-import { getSupabase } from '@supabase/auth-helpers-sveltekit'
-import type { TypedSupabaseClient } from '@supabase/auth-helpers-sveltekit/dist/types'
-import type { Session } from '@supabase/supabase-js'
-import { invalid as svelteInvalid, type RequestEvent } from '@sveltejs/kit'
-import type { MaybePromise } from '@sveltejs/kit/types/private'
+import { invalid as svelteInvalid } from '@sveltejs/kit'
 
 // Page actions
+// ===
 
-export interface ClientActionEvent {
-	fetch: typeof fetch
-	supabaseClient: TypedSupabaseClient
-	data: FormData
-	session: Session | null
-}
-export type ClientAction = (
-	event: ClientActionEvent
-) => MaybePromise<Record<string, any> | void>
-
-export const addClientActionsToServer = (
-	actions: Record<string, ClientAction>
-) =>
-	Object.fromEntries(
-		Object.entries(actions).map(([id, action]) => [
-			id,
-			async (event: RequestEvent) => {
-				const { request } = event
-				const { session, supabaseClient } = await getSupabase(event)
-				return action({
-					supabaseClient,
-					session,
-					fetch: event.fetch,
-					data: await request.formData()
-				})
-			}
-		])
-	)
+type GetValuesOptions = { omit?: string[] }
 
 // Return the values of the form as an object, excluding the internal IDs
 export const getValues = (
-	data: FormData,
-	{ omit = ['$$id'] }: { omit?: string[] } = {}
+	formData: FormData,
+	{ omit = [] }: GetValuesOptions = {}
 ) => {
 	const values: Record<string, string> = {}
-	data.forEach((value, key) => {
-		if (!omit.includes(key)) values[key] = value as string
+	formData.forEach((value, key) => {
+		if (key !== '$$id' && !omit.includes(key)) values[key] = value as string
 	})
 	return values
 }
@@ -52,22 +22,29 @@ export const getValues = (
 
 export const invalid = (
 	status: number,
-	data: FormData,
-	fields: Record<string, string>
+	formData: FormData,
+	fields: Record<string, string>,
+	opts?: GetValuesOptions
 ) => {
 	return svelteInvalid(status, {
-		id: data.get('$$id') as string,
+		id: formData.get('$$id') as string,
 		invalid: fields,
-		values: getValues(data)
+		values: getValues(formData, opts)
 	})
 }
 
-export const success = (data: FormData) => ({
-	id: data.get('$$id') as string,
-	values: getValues(data)
+export const success = (
+	formData: FormData,
+	data?: any,
+	opts?: GetValuesOptions
+) => ({
+	id: formData.get('$$id') as string,
+	values: getValues(formData, opts),
+	data
 })
 
 // Component actions
+// ===
 
 export function clickOutside(node: HTMLElement) {
 	function handleClick(event: Event) {

@@ -30,6 +30,7 @@ declare namespace App {
 
 declare namespace svelte.JSX {
 	interface HTMLAttributes<T> {
+		triggerSubmit?: () => void
 		onoutclick?: () => void
 		onescape?: () => void
 	}

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation'
-	import { toast } from '@zerodevx/svelte-toast'
 	import { fade } from 'svelte/transition'
 	import type { Nonprofit } from 'types/change'
 	import Charity from '~/components/Charity/Charity.svelte'
@@ -11,7 +9,7 @@
 	import Percentage from '~/components/forms/Percentage.svelte'
 	import X from '~/components/icons/X.svelte'
 	import { clickOutside, escape } from '~/lib/actions'
-	import supabaseClient, { type Designation } from '~/lib/db'
+	import type { Designation } from '~/lib/db'
 	import type { PageData } from './$types'
 
 	export let data: PageData
@@ -20,22 +18,14 @@
 		(((data.profile?.percentage ?? 0) / 12) * 100).toFixed(3)
 	)
 
-	async function addCharity(event: CustomEvent) {
-		const charity = event.detail as Nonprofit
-		const { error } = await supabaseClient.from('designated').insert({
-			change_id: charity.id
-		})
-		await invalidate('supabase:designated')
-		if (error) {
-			toast.push(`Couldn't add charity. Please try again later.`, {
-				classes: ['error']
-			})
-		}
-	}
-
 	$: totalWeight = data.designated.reduce(
 		(acc: number, cur: { weight: number }) => acc + cur.weight,
 		0
+	)
+
+	let adding: Nonprofit[] = []
+	$: adding = adding.filter(
+		(c) => !data.designated.find((d: Designation) => d.nonprofit.id === c.id)
 	)
 
 	let editingPercentages = false
@@ -67,6 +57,8 @@
 	let bankOpen = false
 </script>
 
+<Form id="search-charity" action="?/search-charity" />
+
 <div
 	role="heading"
 	aria-level={1}
@@ -79,7 +71,7 @@
 	{/if}
 	<Form
 		id="update-percentage"
-		action="?/update_percentage"
+		action="?/update-percentage"
 		let:loading
 		let:submit
 	>
@@ -173,12 +165,11 @@
 		if you select some charities:
 	{/if}
 </p>
-{#if data.designated.length > 0}
-	{#if data.designated.length > 1}
-		<Form id="update-split" action="?/update_split" />
-	{/if}
+
+<Form id="update-split" action="?/update-split" />
+<div class="flex flex-col gap-5 w-full max-w-md">
 	<div
-		class="space-y-5 w-full max-w-md mb-5 [&:focus-within_.charity]:border-gray-200 [&:focus-within_.charity]:shadow-transparent [&:focus-within_input]:shadow [&:focus-within_input]:border-orange-500"
+		class="contents [&:focus-within_.charity]:border-gray-200 [&:focus-within_.charity]:shadow-transparent [&:focus-within_input]:shadow [&:focus-within_input]:border-black"
 		use:clickOutside
 		use:escape
 		on:outclick={stopEditingPercentages}
@@ -200,12 +191,15 @@
 						bind:value={percentages[i]}
 						on:focus={() => (editingPercentages = true)}
 						form="update-split"
-						shadow={['shadow-orange-500/10', editingPercentages && '!shadow']}
-						border={[
-							'border-transparent hover:border-gray-300',
-							editingPercentages && '!border-orange-500'
+						shadow={[
+							editingPercentages && '!shadow',
+							'shadow-shadow focus:shadow-orange-500/10'
 						]}
-						padding="pl-0 pr-5 pb-1.5 pt-2"
+						border={[
+							editingPercentages && '!border-black',
+							'border-transparent hover:border-gray-300 focus:!border-orange-500'
+						]}
+						padding="pl-0 pr-5 pb-2 pt-2.5"
 						rounded="rounded-lg"
 						align="text-right"
 						width="w-16"
@@ -230,8 +224,17 @@
 				</Form>
 			</Charity>
 		{/each}
+		<!-- Optimistic UI for updates -->
+		<Form id="add-charity" action="?/add-charity">
+			{#each adding as charity (charity.id)}
+				<Charity {charity}>
+					<!-- Loading indicator -->
+					<Button unstyled disabled type="button" class="text-gray-300" />
+				</Charity>
+			{/each}
+		</Form>
 		{#if editingPercentages}
-			<div in:fade|local={{ duration: 250 }} class="w-full max-w-md">
+			<div in:fade|local={{ duration: 250 }}>
 				<Button
 					form="update-split"
 					disabled={!percentagesDirty || totalPercentages != 100}
@@ -239,23 +242,22 @@
 				>
 			</div>
 		{/if}
+		{#if data.designated.length > 1}
+			<noscript>
+				<Button form="update-split">Update split</Button>
+			</noscript>
+		{/if}
 	</div>
-{/if}
-{#if data.designated.length > 1}
-	<noscript class="contents">
-		<Button form="update-split" width="w-full max-w-md" class="mb-5"
-			>Update split</Button
-		>
-	</noscript>
-{/if}
-{#if !editingPercentages}
-	<div class="max-w-md w-full" in:fade|local={{ duration: 250 }}>
-		<CharitySearch
-			class="max-w-md w-full"
-			label={data.designated.length > 0
-				? 'Support another charity'
-				: 'Which charity do you want to support?'}
-			on:charity={addCharity}
-		/>
-	</div>
-{/if}
+	{#if !editingPercentages}
+		<div in:fade|local={{ duration: 250 }}>
+			<CharitySearch
+				form="search-charity"
+				addForm="add-charity"
+				on:select={(event) => (adding = [...adding, event.detail])}
+				label={data.designated.length > 0
+					? 'Support another charity'
+					: 'Which charity do you want to support?'}
+			/>
+		</div>
+	{/if}
+</div>

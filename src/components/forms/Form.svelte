@@ -4,11 +4,16 @@
 	import { getFormById } from '~/routes/layout'
 
 	const key: InjectionKey<{
+		el: Writable<HTMLFormElement>
 		id: Writable<string>
+		$on: (eventName: string, handler: (event: CustomEvent) => void) => void
+		abort: () => void
+		submit: () => void
 		loading: Writable<boolean>
 		complete: Writable<boolean>
 		values: Writable<Record<string, string> | null | undefined>
 		invalid: Writable<Record<string, string> | null | undefined>
+		data: Writable<any>
 	}> = Symbol()
 
 	export const getFormByIdOrContext = (id?: string) =>
@@ -16,16 +21,15 @@
 </script>
 
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms'
+	import { applyAction, enhance, type SubmitFunction } from '$app/forms'
 	import { invalidateAll } from '$app/navigation'
 	import { page } from '$app/stores'
+	import { toast } from '@zerodevx/svelte-toast'
 	import { createEventDispatcher } from 'svelte'
 	import { setContext } from 'svelte-typed-context'
-	import { writable } from 'svelte/store'
-	import { toast } from '@zerodevx/svelte-toast'
 	import { get_current_component } from 'svelte/internal'
+	import { writable } from 'svelte/store'
 	import { registerForm } from '~/routes/layout'
-	import type { ActionResult } from '@sveltejs/kit'
 
 	export let id: string
 	export let action = ''
@@ -34,10 +38,12 @@
 
 	const dispatch = createEventDispatcher()
 
-	let loading = writable(false)
-	let complete = writable(false)
-	let values = writable<Record<string, string> | null | undefined>()
-	let invalid = writable<Record<string, string> | null | undefined>()
+	export const el = writable<HTMLFormElement>()
+	export const loading = writable(false)
+	export const complete = writable(false)
+	export const values = writable<Record<string, string> | null | undefined>()
+	export const invalid = writable<Record<string, string> | null | undefined>()
+	export const data = writable<any>()
 
 	const handlePageUpdates = () => {
 		$complete =
@@ -45,25 +51,28 @@
 		if ($page.form?.id != null && $page.form?.id == id) {
 			$values = $page.form?.values
 			$invalid = $page.form?.invalid
+			$data = $page.form?.data
 		}
 	}
 	$: $page, handlePageUpdates()
 
-	function submit({ cancel }: { cancel?: () => void } = {}) {
-		if (!dispatch('submit', null, { cancelable: true }) && cancel)
-			return cancel()
+	let abortController: AbortController
+	const submit: SubmitFunction = ({ cancel, controller, action }) => {
+		if (!dispatch('submit', null, { cancelable: true })) return cancel()
 
 		$loading = true
-
-		return async ({ result }: { result: ActionResult }) => {
+		abortController = controller
+		return async ({ result }) => {
 			if (
 				result.type === 'success' &&
-				dispatch('load', result, { cancelable: true })
+				dispatch('load', { result, action }, { cancelable: true })
 			) {
+				// TODO: wouldn't need this at all if client actions were supported,
+				// as they could just invalidate things selectively
 				await invalidateAll()
 			}
 
-			const apply = dispatch('loadend', result)
+			const apply = dispatch('loadend', { result, action })
 
 			// On the client, let's skip the error boundary and just show a toast
 			if (result.type === 'error') {
@@ -72,9 +81,19 @@
 				await applyAction(result)
 			}
 
-			if (result.type === 'success') dispatch('complete', result)
+			if (result.type === 'success') dispatch('complete', { result, action })
 			$loading = false
 		}
+	}
+
+	const triggerSubmit = () => {
+		$el?.triggerSubmit()
+	}
+	export { triggerSubmit as submit }
+
+	export const abort = () => {
+		abortController?.abort()
+		$loading = false
 	}
 
 	let idStore = writable<string>()
@@ -84,18 +103,30 @@
 	$: registerForm(id, current)
 
 	setContext(key, {
+		el,
+		$on: (name, handler) => current.$on && current.$on(name, handler),
 		id: idStore,
+		abort,
+		submit: triggerSubmit,
 		loading,
 		complete,
 		values,
-		invalid
+		invalid,
+		data
 	})
 </script>
 
 {#if $$slots.complete && $complete}
-	<slot name="complete" values={$values} />
+	<slot name="complete" values={$values} data={$data} />
 {:else}
-	<form {action} method="post" use:enhance={submit} class={cls} {id}>
+	<form
+		bind:this={$el}
+		{action}
+		method="post"
+		use:enhance={submit}
+		class={cls}
+		{id}
+	>
 		<!-- Keep track of which form the request came from -->
 		<input type="hidden" name="$$id" value={id} />
 		<slot
@@ -103,7 +134,8 @@
 			complete={$complete}
 			invalid={$invalid}
 			values={$values}
-			{submit}
+			data={$data}
+			submit={triggerSubmit}
 		/>
 	</form>
 {/if}

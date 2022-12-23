@@ -2,6 +2,7 @@
 	import clsx, { type ClassValue } from 'clsx'
 	import type { Nonprofit } from 'types/change'
 
+	export let as = 'div'
 	let cls: ClassValue = null
 	export { cls as class }
 	export let titleSize = 'text-lg'
@@ -26,16 +27,18 @@
 	}
 </script>
 
-<div
+<svelte:element
+	this={as}
 	on:click
 	class={clsx(
 		cls,
-		'rounded-2xl relative flex items-center',
+		'rounded-2xl relative flex w-full text-left items-center',
 		bg,
 		border,
 		padding,
 		shadow
 	)}
+	{...$$restProps}
 >
 	<img
 		class="{imgWidth} object-fit aspect-square mr-3"
@@ -61,4 +64,4 @@
 		</span>
 	</div>
 	<slot />
-</div>
+</svelte:element>
