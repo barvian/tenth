@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	import { getContext, type InjectionKey } from 'svelte-typed-context'
 	import type { Writable } from 'svelte/store'
-	import { getFormById } from '~/routes/layout'
+	import { getFormById } from './FormProvider.svelte'
 
 	const key: InjectionKey<{
 		el: Writable<HTMLFormElement>
@@ -29,7 +29,7 @@
 	import { setContext } from 'svelte-typed-context'
 	import { get_current_component } from 'svelte/internal'
 	import { writable } from 'svelte/store'
-	import { registerForm } from '~/routes/layout'
+	import { registerForm } from './FormProvider.svelte'
 
 	export let id: string
 	export let action = ''
