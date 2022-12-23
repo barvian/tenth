@@ -127,12 +127,13 @@
 	account every year.
 </div>
 <p class="text-xl max-w-xl text-center text-gray-500 mt-5 mb-8">
+	Each month,
 	{#if designated.length > 0}
-		We send
+		we send
 	{:else}
-		We'll donate
+		we'll donate
 	{/if}
-	{monthlyPercentage}% of your account on the 20th of each month
+	{monthlyPercentage}% of your account
 	{#if designated.length > 0}
 		to your selected charities{#if designated.length > 1}, divided evenly{/if}:
 	{:else}
