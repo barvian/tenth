@@ -5,8 +5,8 @@
 <header class="mb-12 max-w-2xl text-center">
 	<h1 class="text-4xl font-bold">Lower fees than doing it yourself</h1>
 	<p class="text-xl text-gray-500 mt-5">
-		Tenth's fees are (much) lower than what you'd pay with monthly credit card
-		donations.
+		Tenth's fees are (usually) lower than what you'd pay with monthly credit
+		card donations.
 	</p>
 </header>
 <div class="max-w-4xl grid md:grid-cols-2 lg:gap-10">
