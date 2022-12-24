@@ -1,3 +1,17 @@
+diff --git a/node_modules/@sveltejs/kit/package.json b/node_modules/@sveltejs/kit/package.json
+index dcbdca9..c20e319 100644
+--- a/node_modules/@sveltejs/kit/package.json
++++ b/node_modules/@sveltejs/kit/package.json
+@@ -72,6 +72,9 @@
+     },
+     "./vite": {
+       "import": "./src/exports/vite/index.js"
++    },
++    "./runtime/control": {
++      "import": "./src/runtime/control.js"
+     }
+   },
+   "types": "types/index.d.ts",
 diff --git a/node_modules/@sveltejs/kit/src/runtime/app/forms.js b/node_modules/@sveltejs/kit/src/runtime/app/forms.js
 index 7a0f975..5d71d79 100644
 --- a/node_modules/@sveltejs/kit/src/runtime/app/forms.js
