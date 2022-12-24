@@ -3,7 +3,7 @@
 	import { invalidateAll } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { SvelteToast } from '@zerodevx/svelte-toast'
-	import { parseToRgba } from 'color2k'
+	import { parseToRgba, readableColorIsBlack } from 'color2k'
 	import { onMount } from 'svelte'
 	import '~/app.css'
 	import FormProvider from '~/components/forms/FormProvider.svelte'
@@ -27,8 +27,14 @@
 	$: bankColor = $page.data.institution?.primary_color
 		? parseToRgba($page.data.institution.primary_color).slice(0, 3).join(' ')
 		: null
+	$: bankReadableColor =
+		$page.data.institution?.primary_color &&
+		(readableColorIsBlack($page.data.institution.primary_color)
+			? '0 0 0'
+			: '255 255 255')
 	$: bankStyle =
-		bankColor && `<style>:root { --color-bank: ${bankColor}; }</style>`
+		bankColor &&
+		`<style>:root { --color-bank: ${bankColor}; --color-bank-readable: ${bankReadableColor}; }</style>`
 
 	const toastOptions = {
 		intro: { y: 40 }

@@ -39,6 +39,7 @@
 	<Form
 		id="update-percentage"
 		action="?/update-percentage"
+		class="js:contents no-js:inline no-js:whitespace-nowrap"
 		let:loading
 		let:submit
 	>
@@ -47,6 +48,15 @@
 			{loading}
 			on:change={() => submit()}
 		/>
+		<noscript class="inline">
+			<Button
+				width="w-min"
+				class="h-[3em] align-middle ml-1 shadow-bank/10"
+				padding="px-5"
+				bg="bg-bank"
+				color="text-bank-readable">Save</Button
+			>
+		</noscript>
 	</Form>
 	of your
 	<Dropdown

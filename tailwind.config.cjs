@@ -17,6 +17,7 @@ module.exports = {
 			bank: `rgb(var(--color-bank, ${parseToRgba(colors.orange[500])
 				.slice(0, 3)
 				.join(' ')}) / <alpha-value>)`,
+			'bank-readable': `rgb(var(--color-bank-readable, 255 255 255) / <alpha-value>)`,
 			black: colors.black,
 			white: colors.white,
 			gray: { ...colors.neutral, 450: '#8c8c8c' },
@@ -42,6 +43,9 @@ module.exports = {
 			}),
 			fontFamily: {
 				sans: ['Value Sans Pro', ...defaultTheme.fontFamily.sans]
+			},
+			fontSize: {
+				'inherit': 'inherit'
 			},
 			spacing: {
 				'13': '3.25rem',

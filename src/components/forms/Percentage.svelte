@@ -1,4 +1,5 @@
 <script lang="ts">
+	import clsx from 'clsx'
 	import Spinner from '../icons/Spinner.svelte'
 
 	const options = [0.33, 0.25, 0.2, 0.15, 0.1, 0.05, 0.03, 0.02, 0.01]
@@ -11,16 +12,21 @@
 	<select
 		name="percentage"
 		disabled={loading}
-		class="appearance-none bg-transparent border-none opacity-0 absolute inset-0 peer"
+		class={clsx(
+			'peer',
+			'appearance-none bg-transparent',
+			'no-js:text-bank no-js:text-inherit no-js:border-current no-js:leading-none no-js:border-0 no-js:border-b-4 no-js:mb-2 no-js:border-dotted no-js:disabled:text-gray-300',
+			'js:opacity-0 js:absolute js:inset-0'
+		)}
 		bind:value
 		on:change
 	>
 		{#each options as p}
-			<option value={p}>{p * 100}%</option>
+			<option value={p} selected={value === p}>{p * 100}%</option>
 		{/each}
 	</select>
 	<label
-		class="relative whitespace-nowrap flex pl-0.5 pr-1 items-baseline text-bank border-current leading-none border-b-4 mb-2 border-dotted pointer-events-none peer-disabled:text-gray-300"
+		class="relative no-js:hidden whitespace-nowrap flex pl-0.5 pr-1 items-baseline text-bank border-current leading-none border-b-4 mb-2 border-dotted pointer-events-none peer-disabled:text-gray-300"
 		for="percentage"
 	>
 		{#if loading}<Spinner class="inline-block align-middle h-7 mr-1.5" />{/if}
