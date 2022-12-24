@@ -111,7 +111,7 @@
 	</main>
 
 	<footer class="flex gap-3 flex-wrap inner justify-center text-gray-500 mb-9">
-		<span>© 2022 Tenth, LLC.</span>
+		<span>© 2022 Tenth, LLC</span>
 		<!-- <span>·</span>
 		<a href="/about" class="font-medium {$page.url.pathname === '/about' ? '!text-black' : 'text-gray-450'}">About</a> -->
 		<span>·</span>
