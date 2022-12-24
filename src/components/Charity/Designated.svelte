@@ -104,7 +104,7 @@
 					}}
 					class="py-2 pl-2 text-gray-300 hover:text-red-500 transition-colors"
 				>
-					<X class="h-4" />
+					<X class="h-5" />
 				</Button>
 			</Form>
 		</Charity>
