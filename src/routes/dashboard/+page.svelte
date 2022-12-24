@@ -125,7 +125,15 @@
 	>
 		<svelte:fragment slot="editor">
 			<!-- Optimistic UI for updates -->
-			<Form id="add-charity" action="?/add-charity">
+			<Form
+				id="add-charity"
+				action="?/add-charity"
+				on:error={(event) => {
+					const { formData } = event.detail
+					const change_id = formData.get('change_id')
+					adding = adding.filter((c) => c.id !== change_id)
+				}}
+			>
 				{#each adding as charity (charity.id)}
 					<Charity {charity}>
 						<!-- Loading indicator -->

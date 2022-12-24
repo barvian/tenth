@@ -57,7 +57,12 @@
 	$: $page, handlePageUpdates()
 
 	let abortController: AbortController
-	const submit: SubmitFunction = ({ cancel, controller, action }) => {
+	const submit: SubmitFunction = ({
+		cancel,
+		controller,
+		action,
+		data: formData
+	}) => {
 		if (!dispatch('submit', null, { cancelable: true })) return cancel()
 
 		$loading = true
@@ -65,14 +70,16 @@
 		return async ({ result }) => {
 			if (
 				result.type === 'success' &&
-				dispatch('load', { result, action }, { cancelable: true })
+				dispatch('load', { result, action, formData }, { cancelable: true })
 			) {
 				// TODO: wouldn't need this at all if client actions were supported,
 				// as they could just invalidate things selectively
 				await invalidateAll()
+			} else if (result.type === 'error') {
+				dispatch('error', { result, action, formData })
 			}
 
-			const apply = dispatch('loadend', { result, action })
+			const apply = dispatch('loadend', { result, action, formData })
 
 			// On the client, let's skip the error boundary and just show a toast
 			if (result.type === 'error') {
@@ -81,7 +88,8 @@
 				await applyAction(result)
 			}
 
-			if (result.type === 'success') dispatch('complete', { result, action })
+			if (result.type === 'success')
+				dispatch('complete', { result, action, formData })
 			$loading = false
 		}
 	}
