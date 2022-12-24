@@ -55,7 +55,7 @@
 
 <div
 	class={clsx([
-		'relative bg-white shadow border transition-all border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10',
+		'relative w-full bg-white shadow border transition-all border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10',
 		$results ? 'no-js:!rounded-3xl' : 'no-js:!rounded-full',
 		cls
 	])}

@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
 	import type { Nonprofit } from 'types/change'
-	import Button from '~/components/forms/Button.svelte'
-	import Charity from '~/components/Charity/Charity.svelte'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
+	import Designated from '~/components/Charity/Designated.svelte'
+	import Button from '~/components/forms/Button.svelte'
 	import Form from '~/components/forms/Form.svelte'
 	import Input from '~/components/forms/Input.svelte'
 	import Percentage from '~/components/forms/Percentage.svelte'
-	import X from '~/components/icons/X.svelte'
 	import MultiStep from '~/components/MultiStep/MultiStep.svelte'
 	import Step from '~/components/MultiStep/Step.svelte'
 	import type { Designation } from '~/lib/db'
@@ -21,36 +20,14 @@
 		designated = designated.filter((d) => d.nonprofit.id !== charity.id)
 	}
 
-	$: totalWeight = designated.reduce((total, d) => total + d.weight, 0)
-
-	let percentages: string[], initialPercentages: string[]
-	const handleDesignatedUpdate = () => {
-		percentages = designated.map(
-			(d) => parseFloat(((d.weight / totalWeight) * 100).toFixed(1)) + ''
-		)
-		initialPercentages = [...percentages] // make a copy
-	}
-	$: designated, handleDesignatedUpdate()
-
-	$: percentagesDirty = percentages.some((p, i) => p != initialPercentages[i])
-	$: totalPercentages = percentages.reduce(
-		(total, p) => total + parseFloat(p),
-		0
-	)
-
-	const updateSplit = () => {
+	// Auto-save split when it's valid
+	const handleSplitValid = (event: CustomEvent) => {
+		const percentages = event.detail
 		designated = designated.map((d, i) => ({
 			...d,
-			weight: (+percentages[i] / 100) * designated.length || 1 // don't allow 0
+			weight: (+percentages[i] / 100) * designated.length
 		}))
 	}
-	// Update the weights when the percentages all add up to 100
-	$: if (
-		percentagesDirty &&
-		totalPercentages === 100 &&
-		!percentages.some((p) => !+p)
-	)
-		updateSplit()
 </script>
 
 <Form id="search-charity" action="/dashboard?/search-charity" />
@@ -85,79 +62,42 @@
 			<p class="text-xl max-w-2xl text-center text-gray-500 mt-5 mb-8">
 				Donated in monthly increments. Cancelable anytime.
 			</p>
-			{#if designated.length > 0}
-				<div
-					class="space-y-5 w-full max-w-md mb-5 [&:focus-within_.charity]:border-gray-200 [&:focus-within_.charity]:shadow-transparent [&:focus-within_input]:shadow [&:focus-within_input]:border-black"
+			<div class="flex flex-col gap-y-5 w-full max-w-md">
+				<Designated
+					{designated}
+					on:remove={(event) => removeCharity(event.detail.nonprofit)}
+					on:valid={handleSplitValid}
+					let:valid
 				>
-					{#each designated as item, i (item.nonprofit.id)}
-						<Charity charity={item.nonprofit} class="charity transition-all">
-							{#if designated.length > 1}
-								<Input
-									type="number"
-									step="0.1"
-									bind:value={percentages[i]}
-									shadow="shadow-shadow focus:shadow-orange-500/10"
-									border="border-transparent hover:border-gray-300 focus:!border-orange-500"
-									padding="pl-0 pr-5 pb-2 pt-2.5"
-									rounded="rounded-lg"
-									align="text-right"
-									width="w-17"
-									min="0"
-									max="100"
-								>
-									<span
-										class="absolute top-1/2 right-2 -translate-y-1/2 font-medium text-gray-450"
-										>%</span
-									>
-								</Input>
-							{/if}
-							<Button
-								type="button"
-								unstyled
-								on:click={() => {
-									removeCharity(item.nonprofit)
-									if (designated.length === 0) reset()
-								}}
-								class="py-2 pl-2 transition-colors text-gray-300 hover:text-red-500"
-							>
-								<X class="h-4" />
+					<CharitySearch
+						form="search-charity"
+						label={designated.length > 0
+							? 'Support another charity'
+							: 'Which charity do you want to support?'}
+						on:select={(event) => {
+							event.preventDefault()
+							addCharity(event.detail)
+						}}
+					/>
+					<input
+						type="hidden"
+						name="designated"
+						value={JSON.stringify(
+							designated.map((d, i) => ({
+								change_id: d.nonprofit.id,
+								weight: d.weight
+							}))
+						)}
+					/>
+					{#if designated.length > 0}
+						<div in:fade|local class="mt-3">
+							<Button type="button" on:click={next} disabled={!valid}>
+								Get started
 							</Button>
-						</Charity>
-					{/each}
-				</div>
-			{/if}
-			<CharitySearch
-				form="search-charity"
-				class="max-w-md w-full"
-				label={designated.length > 0
-					? 'Support another charity'
-					: 'Which charity do you want to support?'}
-				on:select={(event) => {
-					event.preventDefault()
-					addCharity(event.detail)
-				}}
-			/>
-			<input
-				type="hidden"
-				name="designated"
-				value={JSON.stringify(
-					designated.map((d, i) => ({
-						change_id: d.nonprofit.id,
-						weight: d.weight
-					}))
-				)}
-			/>
-			{#if designated.length > 0}
-				<div in:fade|local class="mt-8 max-w-md w-full">
-					<Button
-						type="button"
-						on:click={next}
-						disabled={totalPercentages != 100 || percentages.some((p) => !+p)}
-					>
-						Get started
-					</Button>
-				</div>
-			{/if}
+						</div>
+					{/if}
+				</Designated>
+			</div>
 		</Step>
 		<Step as="fieldset" let:active>
 			<h2 class="text-3xl max-w-2xl font-bold mb-8 text-center">
