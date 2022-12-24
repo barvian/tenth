@@ -165,7 +165,7 @@
 							src="data:image/png;base64,{data.institution?.logo}"
 						/>
 					{/if}
-					<div class="overflow-hidden font-medium">
+					<div class="overflow-hidden font-medium text-lg">
 						{data.institution?.name}
 						<span class="inline-block">
 							<span
