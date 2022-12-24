@@ -8,7 +8,7 @@
 		id: Writable<string>
 		$on: (eventName: string, handler: (event: CustomEvent) => void) => void
 		abort: () => void
-		submit: () => void
+		submit: () => Promise<void>
 		loading: Writable<boolean>
 		complete: Writable<boolean>
 		values: Writable<Record<string, string> | null | undefined>
@@ -21,7 +21,12 @@
 </script>
 
 <script lang="ts">
-	import { applyAction, enhance, type SubmitFunction } from '$app/forms'
+	import {
+		applyAction,
+		deserialize,
+		enhance,
+		type SubmitFunction
+	} from '$app/forms'
 	import { invalidateAll } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { toast } from '@zerodevx/svelte-toast'
@@ -30,6 +35,7 @@
 	import { get_current_component } from 'svelte/internal'
 	import { writable } from 'svelte/store'
 	import { registerForm } from './FormProvider.svelte'
+	import type { ActionResult } from '@sveltejs/kit'
 
 	export let id: string
 	export let action = ''
@@ -56,53 +62,92 @@
 	}
 	$: $page, handlePageUpdates()
 
-	let abortController: AbortController
-	const submit: SubmitFunction = ({
-		cancel,
-		controller,
-		action,
-		data: formData
-	}) => {
-		if (!dispatch('submit', null, { cancelable: true })) return cancel()
+	let controller: AbortController
+
+	// This is basically just a copy of use:enhance, but we
+	// can't use that directly because we need to be able to call this
+	// outside of an event, and form.requestSubmit() isn't super well supported yet:
+	// https://caniuse.com/mdn-api_htmlformelement_requestsubmit
+	async function submit(event?: SubmitEvent) {
+		const submitter = event?.submitter as
+			| HTMLButtonElement
+			| HTMLInputElement
+			| null
+			| undefined
+		if (
+			submitter?.disabled || // Fix a safari bug with disabled submitters
+			!dispatch('submit', event, { cancelable: true })
+		)
+			return
+
+		const action = new URL(
+			submitter?.hasAttribute('formaction')
+				? submitter.formAction
+				: // We can't do submitter.formAction directly because that property is always set
+				  // We do cloneNode for avoid DOM clobbering - https://github.com/sveltejs/kit/issues/7593
+				  (HTMLFormElement.prototype.cloneNode.call($el) as HTMLFormElement)
+						.action
+		)
+
+		const formData = new FormData($el)
+
+		const submitter_name = submitter?.getAttribute('name')
+		if (submitter_name) {
+			formData.append(submitter_name, submitter?.getAttribute('value') ?? '')
+		}
+
+		const controller = new AbortController()
 
 		$loading = true
-		abortController = controller
-		return async ({ result }) => {
-			if (
-				result.type === 'success' &&
-				dispatch('load', { result, action, formData }, { cancelable: true })
-			) {
-				// TODO: wouldn't need this at all if client actions were supported,
-				// as they could just invalidate things selectively
-				await invalidateAll()
-			} else if (result.type === 'error') {
-				dispatch('error', { result, action, formData })
+		let result: ActionResult
+		try {
+			const response = await fetch(action, {
+				method: 'POST',
+				headers: {
+					accept: 'application/json',
+					'x-sveltekit-action': 'true'
+				},
+				cache: 'no-store',
+				body: formData,
+				signal: controller.signal
+			})
+
+			result = deserialize(await response.text())
+		} catch (error) {
+			if ((error as any)?.name === 'AbortError') {
+				$loading = false
+				return
 			}
-
-			const apply = dispatch('loadend', { result, action, formData })
-
-			// On the client, let's skip the error boundary and just show a toast
-			if (result.type === 'error') {
-				toast.push(result.error.message, { classes: ['error'] })
-			} else if (apply) {
-				await applyAction(result)
-			}
-
-			if (result.type === 'success')
-				dispatch('complete', { result, action, formData })
-			$loading = false
+			result = { type: 'error', error }
 		}
-	}
 
-	const triggerSubmit = () => {
-		$el?.triggerSubmit()
-	}
-	export { triggerSubmit as submit }
+		if (
+			result.type === 'success' &&
+			dispatch('load', { result, action, formData }, { cancelable: true })
+		) {
+			// TODO: wouldn't need this at all if client actions were supported,
+			// as they could just invalidate things selectively
+			await invalidateAll()
+		} else if (result.type === 'error') {
+			dispatch('error', { result, action, formData })
+		}
 
-	export const abort = () => {
-		abortController?.abort()
+		const apply = dispatch('loadend', { result, action, formData })
+
+		// On the client, let's skip the error boundary and just show a toast
+		if (result.type === 'error') {
+			toast.push(result.error.message, { classes: ['error'] })
+		} else if (apply) {
+			await applyAction(result)
+		}
+
+		if (result.type === 'success')
+			dispatch('complete', { result, action, formData })
+
 		$loading = false
 	}
+
+	export const abort = () => controller?.abort()
 
 	let idStore = writable<string>()
 	$: $idStore = id
@@ -115,7 +160,7 @@
 		$on: (name, handler) => current.$on && current.$on(name, handler),
 		id: idStore,
 		abort,
-		submit: triggerSubmit,
+		submit,
 		loading,
 		complete,
 		values,
@@ -131,7 +176,7 @@
 		bind:this={$el}
 		{action}
 		method="post"
-		use:enhance={submit}
+		on:submit|preventDefault={submit}
 		class={cls}
 		{id}
 	>
@@ -143,7 +188,7 @@
 			invalid={$invalid}
 			values={$values}
 			data={$data}
-			submit={triggerSubmit}
+			{submit}
 		/>
 	</form>
 {/if}
