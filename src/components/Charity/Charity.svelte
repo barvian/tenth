@@ -5,7 +5,7 @@
 	export let as = 'div'
 	let cls: ClassValue = null
 	export { cls as class }
-	export let titleSize = 'text-xl'
+	export let titleSize = 'text-lg'
 	export let bg: ClassValue = 'bg-white'
 	export let border: ClassValue = 'border'
 	export let padding: ClassValue = 'p-4'
