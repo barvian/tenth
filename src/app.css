@@ -41,10 +41,11 @@
 	}
 
 	body {
-		@apply min-h-screen flex flex-col;
+		@apply min-h-screen flex flex-col relative;
 	}
 
-	:disabled {
+	:disabled,
+	:disabled + label {
 		@apply cursor-not-allowed;
 	}
 

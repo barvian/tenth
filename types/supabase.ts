@@ -11,25 +11,22 @@ export interface Database {
 		Tables: {
 			designated: {
 				Row: {
-					id: number
-					created_at: string
 					user_id: string
 					change_id: string
 					weight: number
+					created_at: string
 				}
 				Insert: {
-					id?: number
-					created_at?: string
 					user_id?: string
 					change_id: string
 					weight?: number
+					created_at?: string
 				}
 				Update: {
-					id?: number
-					created_at?: string
 					user_id?: string
 					change_id?: string
 					weight?: number
+					created_at?: string
 				}
 			}
 			profiles: {
@@ -44,9 +41,10 @@ export interface Database {
 					plaid_account_mask: string | null
 					plaid_account_type: string | null
 					plaid_account_subtype: string | null
+					recurring_tip: number | null
 				}
 				Insert: {
-					user_id: string
+					user_id?: string
 					first_name?: string | null
 					last_name?: string | null
 					percentage: number
@@ -56,6 +54,7 @@ export interface Database {
 					plaid_account_mask?: string | null
 					plaid_account_type?: string | null
 					plaid_account_subtype?: string | null
+					recurring_tip?: number | null
 				}
 				Update: {
 					user_id?: string
@@ -68,6 +67,7 @@ export interface Database {
 					plaid_account_mask?: string | null
 					plaid_account_type?: string | null
 					plaid_account_subtype?: string | null
+					recurring_tip?: number | null
 				}
 			}
 			requests: {
@@ -88,6 +88,23 @@ export interface Database {
 					change_id?: string
 					user_id?: string | null
 					email?: unknown | null
+				}
+			}
+			tips: {
+				Row: {
+					only_one: boolean
+					ytd: number
+					updated_at: string
+				}
+				Insert: {
+					only_one?: boolean
+					ytd?: number
+					updated_at?: string
+				}
+				Update: {
+					only_one?: boolean
+					ytd?: number
+					updated_at?: string
 				}
 			}
 		}
