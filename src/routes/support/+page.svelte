@@ -14,12 +14,14 @@
 	class="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8 w-full max-w-4xl items-start"
 >
 	{#each data.faqs as { q, a }}
-		<details class="rounded-3xl border shadow-md group">
-			<summary class="flex gap-x-3 items-center text-lg font-medium p-8">
+		<details class="rounded-3xl border shadow-md group pb-3">
+			<summary
+				class="flex gap-x-3 items-center text-lg font-medium px-8 pb-5 pt-8"
+			>
 				{q}
 				<Expander class="-mt-1 ml-auto" />
 			</summary>
-			<div class="p-8 pt-0 text-gray-500">{@html a}</div>
+			<div class="px-8 pb-5 pt-0 text-gray-500">{@html a}</div>
 		</details>
 	{/each}
 </div>
