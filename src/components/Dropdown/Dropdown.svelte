@@ -24,10 +24,10 @@
 		<slot name="summary" />
 	</summary>
 	<div
-		class={clsx([
+		class={clsx(
 			menuClass,
 			'rounded-2xl text-left border p-2 z-50 bg-white right-0 absolute top-full shadow-md animate-fly-b'
-		])}
+		)}
 		role="menu"
 	>
 		<slot />

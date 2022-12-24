@@ -9,10 +9,10 @@
 <Button
 	role="menuitem"
 	unstyled
-	class={clsx([
+	class={clsx(
 		cls,
 		'not-disabled:hover:bg-gray-100 p-3 text-base font-normal leading-tight rounded-xl w-full text-left'
-	])}
+	)}
 	overlap="overlap"
 	{...$$restProps}
 >

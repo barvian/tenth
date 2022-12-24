@@ -54,11 +54,11 @@
 </script>
 
 <div
-	class={clsx([
+	class={clsx(
 		'relative w-full bg-white shadow border transition-all border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10',
 		$results ? 'no-js:!rounded-3xl' : 'no-js:!rounded-full',
 		cls
-	])}
+	)}
 	style:border-radius={searchRadius}
 	use:clickOutside
 	on:outclick={() => (searching = false)}

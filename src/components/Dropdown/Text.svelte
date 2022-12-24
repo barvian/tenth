@@ -5,6 +5,6 @@
 	export { cls as class }
 </script>
 
-<p class={clsx([cls, 'p-3 pt-2.5 text-gray-500'])}>
+<p class={clsx(cls, 'px-3 py-2 text-gray-500')}>
 	<slot />
 </p>

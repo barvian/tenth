@@ -5,4 +5,4 @@
 	export { cls as class }
 </script>
 
-<hr class={clsx([cls, 'border-gray-200 my-2'])} />
+<hr class={clsx(cls, 'border-gray-200 my-2')} />
