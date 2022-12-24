@@ -45,6 +45,7 @@ module.exports = {
 			},
 			spacing: {
 				'13': '3.25rem',
+				'17': '4.25rem',
 				xl: 'calc(theme(space.10) + 5vh)',
 				'2xl': 'calc(theme(space.12) + 10vh)'
 			},

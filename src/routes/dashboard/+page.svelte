@@ -184,7 +184,7 @@
 						padding="pl-0 pr-5 pb-2 pt-2.5"
 						rounded="rounded-lg"
 						align="text-right"
-						width="w-16"
+						width="w-17"
 						min="0"
 						max="100"
 					>

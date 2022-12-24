@@ -10,29 +10,47 @@
 	import X from '~/components/icons/X.svelte'
 	import MultiStep from '~/components/MultiStep/MultiStep.svelte'
 	import Step from '~/components/MultiStep/Step.svelte'
+	import type { Designation } from '~/lib/db'
 
-	let designated: Nonprofit[] = []
-	function addCharity(charity: Nonprofit) {
-		removeCharity(charity)
-		percentages = weights
-			.concat(1)
-			.map((w) => parseFloat(((w / (totalWeight + 1)) * 100).toFixed(1)) + '')
-		designated = [...designated, charity]
+	let designated: Designation[] = []
+	function addCharity(nonprofit: Nonprofit) {
+		removeCharity(nonprofit)
+		designated = [...designated, { nonprofit, weight: 1 }]
 	}
 	function removeCharity(charity: Nonprofit) {
-		const i = designated.findIndex((c) => c.id === charity.id)
-		if (i < 0) return
-		designated.splice(i, 1)
-		percentages.splice(i, 1)
-		designated = designated
-		percentages = percentages
+		designated = designated.filter((d) => d.nonprofit.id !== charity.id)
 	}
 
-	let percentages: string[] = []
-	$: weights = percentages.map(
-		(p) => ((parseFloat(p) || 0) / 100) * percentages.length
+	$: totalWeight = designated.reduce((total, d) => total + d.weight, 0)
+
+	let percentages: string[], initialPercentages: string[]
+	const handleDesignatedUpdate = () => {
+		percentages = designated.map(
+			(d) => parseFloat(((d.weight / totalWeight) * 100).toFixed(1)) + ''
+		)
+		initialPercentages = [...percentages] // make a copy
+	}
+	$: designated, handleDesignatedUpdate()
+
+	$: percentagesDirty = percentages.some((p, i) => p != initialPercentages[i])
+	$: totalPercentages = percentages.reduce(
+		(total, p) => total + parseFloat(p),
+		0
 	)
-	$: totalWeight = weights.reduce((total, w) => total + w, 0)
+
+	const updateSplit = () => {
+		designated = designated.map((d, i) => ({
+			...d,
+			weight: (+percentages[i] / 100) * designated.length || 1 // don't allow 0
+		}))
+	}
+	// Update the weights when the percentages all add up to 100
+	$: if (
+		percentagesDirty &&
+		totalPercentages === 100 &&
+		!percentages.some((p) => !+p)
+	)
+		updateSplit()
 </script>
 
 <Form id="search-charity" action="/dashboard?/search-charity" />
@@ -71,8 +89,8 @@
 				<div
 					class="space-y-5 w-full max-w-md mb-5 [&:focus-within_.charity]:border-gray-200 [&:focus-within_.charity]:shadow-transparent [&:focus-within_input]:shadow [&:focus-within_input]:border-black"
 				>
-					{#each designated as item, i (item.id)}
-						<Charity charity={item} class="charity transition-all">
+					{#each designated as item, i (item.nonprofit.id)}
+						<Charity charity={item.nonprofit} class="charity transition-all">
 							{#if designated.length > 1}
 								<Input
 									type="number"
@@ -83,7 +101,7 @@
 									padding="pl-0 pr-5 pb-2 pt-2.5"
 									rounded="rounded-lg"
 									align="text-right"
-									width="w-16"
+									width="w-17"
 									min="0"
 									max="100"
 								>
@@ -97,7 +115,7 @@
 								type="button"
 								unstyled
 								on:click={() => {
-									removeCharity(item)
+									removeCharity(item.nonprofit)
 									if (designated.length === 0) reset()
 								}}
 								class="py-2 pl-2 transition-colors text-gray-300 hover:text-red-500"
@@ -123,15 +141,21 @@
 				type="hidden"
 				name="designated"
 				value={JSON.stringify(
-					designated.map((c, i) => ({
-						change_id: c.id,
-						weight: weights[i]
+					designated.map((d, i) => ({
+						change_id: d.nonprofit.id,
+						weight: d.weight
 					}))
 				)}
 			/>
 			{#if designated.length > 0}
 				<div in:fade|local class="mt-8 max-w-md w-full">
-					<Button type="button" on:click={next}>Get started</Button>
+					<Button
+						type="button"
+						on:click={next}
+						disabled={totalPercentages != 100 || percentages.some((p) => !+p)}
+					>
+						Get started
+					</Button>
 				</div>
 			{/if}
 		</Step>
