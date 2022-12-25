@@ -19,9 +19,22 @@
 	)
 
 	let adding: Nonprofit[] = []
+	// Remove them when they're in designated
 	$: adding = adding.filter(
 		(c) => !data.designated.find((d: Designation) => d.nonprofit.id === c.id)
 	)
+
+	// Silently fail if they try to re-add a charity
+	function handleCharitySelect(event: CustomEvent<Nonprofit>) {
+		if (
+			adding.find((c) => event.detail.id === c.id) ||
+			data.designated.find(
+				(d: Designation) => d.nonprofit.id === event.detail.id
+			)
+		)
+			event.preventDefault()
+		else adding = [...adding, event.detail]
+	}
 </script>
 
 <Form id="search-charity" action="?/search-charity" />
@@ -169,7 +182,7 @@
 				<CharitySearch
 					form="search-charity"
 					addForm="add-charity"
-					on:select={(event) => (adding = [...adding, event.detail])}
+					on:select={handleCharitySelect}
 					label={data.designated.length > 0
 						? 'Support another charity'
 						: 'Which charity do you want to support?'}
