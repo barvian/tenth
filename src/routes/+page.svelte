@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
-	import type { Nonprofit } from 'types/change'
+	import { SELF_CHANGE_ID, type Nonprofit } from '~/lib/change'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
 	import Designated from '~/components/Charity/Designated.svelte'
 	import Button from '~/components/forms/Button.svelte'
@@ -13,8 +13,14 @@
 
 	let designated: Designation[] = []
 	function addCharity(nonprofit: Nonprofit) {
-		removeCharity(nonprofit)
-		designated = [...designated, { nonprofit, weight: 1 }]
+		if (designated.find((d) => d.nonprofit.id === nonprofit.id)) return
+
+		let weight = 1
+		if (nonprofit.id === SELF_CHANGE_ID) {
+			const totalWeight = designated.reduce((total, d) => total + d.weight, 0)
+			weight = Math.max(0.01 * totalWeight, 0.01)
+		}
+		designated = [...designated, { nonprofit, weight }]
 	}
 	function removeCharity(charity: Nonprofit) {
 		designated = designated.filter((d) => d.nonprofit.id !== charity.id)

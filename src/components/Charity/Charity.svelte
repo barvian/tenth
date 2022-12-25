@@ -1,6 +1,6 @@
 <script lang="ts">
 	import clsx, { type ClassValue } from 'clsx'
-	import type { Nonprofit } from 'types/change'
+	import { SELF_CHANGE_ID, type Nonprofit } from '~/lib/change'
 
 	export let as = 'div'
 	let cls: ClassValue = null
@@ -15,12 +15,14 @@
 	export let charity: Nonprofit | null = null
 	let url: URL | null
 
+	$: self = charity?.id === SELF_CHANGE_ID
+
 	$: if (charity?.website) {
 		let site = charity.website
 		if (!/^https?:\/\//i.test(site)) site = 'http://' + site
 		try {
 			url = new URL(site)
-			if (!url.hostname?.includes('.')) url = null
+			if (!self && !url.hostname?.includes('.')) url = null
 		} catch (e) {
 			// we'll not use the url, that's fine
 		}
@@ -49,6 +51,12 @@
 	<div class="flex-1">
 		<h3 class="font-medium {titleSize} leading-tight {titleMargin}">
 			{charity?.name}
+			{#if self}
+				<span
+					class="bg-gray-200/60 text-sm rounded-full px-2 pb-0.5 pt-1 font-normal"
+					>Tip, not tax-deductible</span
+				>
+			{/if}
 		</h3>
 		<span class="block text-gray-500 break-words leading-none w-full">
 			{#if url}

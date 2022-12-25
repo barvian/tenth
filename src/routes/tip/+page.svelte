@@ -35,9 +35,10 @@
 				if (payload.errors.length > 0) return
 				ytd = payload.new.ytd
 				if (
-					new Date(payload.new.updated_at).getFullYear() >
-						new Date(payload.old.updated_at).getFullYear() ||
-					payload.new.ytd > payload.old.ytd
+					payload.new.ytd > payload.old.ytd ||
+					(new Date(payload.new.updated_at).getFullYear() >
+						new Date(payload.old.updated_at).getFullYear() &&
+						payload.new.ytd > 0)
 				) {
 					coins?.addCoin()
 				}
