@@ -96,7 +96,7 @@
 			formData.append(submitter_name, submitter?.getAttribute('value') ?? '')
 		}
 
-		const controller = new AbortController()
+		controller = new AbortController()
 
 		$loading = true
 		let result: ActionResult
