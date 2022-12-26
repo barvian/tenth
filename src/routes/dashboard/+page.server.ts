@@ -98,11 +98,16 @@ export const actions: Actions = {
 		const { request } = event
 		const formData = await request.formData()
 
+		const q = formData.get('q') as string
+		// Change will actually return featured charities if you don't
+		// pass a search term. This disables that behavior.
+		if (!q.trim()) return success(formData)
+
 		const response = await fetch(
 			`https://api.getchange.io/api/v1/nonprofits?` +
 				new URLSearchParams({
 					public_key: PUBLIC_CHANGE_KEY,
-					search_term: formData.get('q') as string,
+					search_term: q,
 					limit: SEARCH_RESULTS_LIMIT.toString()
 				})
 		).then((r) => parseJSON<NonprofitSearchResults>(r))
