@@ -72,7 +72,10 @@
 			<div class="flex flex-col gap-y-5 w-full max-w-md">
 				<Designated
 					{designated}
-					on:remove={(event) => removeCharity(event.detail.nonprofit)}
+					on:remove={(event) => {
+						removeCharity(event.detail.nonprofit)
+						if (designated.length <= 0) reset()
+					}}
 					on:valid={handleSplitValid}
 					let:valid
 				>
