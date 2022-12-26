@@ -86,6 +86,7 @@
 				padding="px-4"
 				rounded="rounded-full"
 				shadow={false}
+				disabled={browser && !term}
 			>
 				Search
 			</Button>
