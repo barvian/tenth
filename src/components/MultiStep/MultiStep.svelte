@@ -108,5 +108,5 @@
 			</p>
 		</div>
 	</noscript>
-	<slot {next} {prev} {complete} {reset} />
+	<slot {next} {prev} {complete} step={$step} {reset} />
 </div>

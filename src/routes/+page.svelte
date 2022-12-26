@@ -35,11 +35,18 @@
 	let:next
 	let:complete
 	let:reset
+	let:step
 	leaveAlert="Are you sure you want to exit? You'll have to start the sign-up process again."
 >
 	<Form
 		id="register"
 		action="/api/auth?/register"
+		on:submit={(event) => {
+			if (step === 0) {
+				event.preventDefault()
+				next()
+			}
+		}}
 		on:load={(event) => {
 			event.preventDefault() // prevent invalidating the page, which messes up the history stack & MultiStep
 		}}
@@ -91,9 +98,7 @@
 					/>
 					{#if designated.length > 0}
 						<div in:fade|local class="mt-3">
-							<Button type="button" on:click={next} disabled={!valid}>
-								Get started
-							</Button>
+							<Button disabled={!valid}>Get started</Button>
 						</div>
 					{/if}
 				</Designated>
