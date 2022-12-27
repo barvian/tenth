@@ -13,7 +13,7 @@
 
 	let designated: Designation[] = []
 	function addCharity(nonprofit: Nonprofit) {
-		removeCharity(nonprofit)
+		if (designated.find((d) => d.nonprofit.id === nonprofit.id)) return
 		designated = [...designated, { nonprofit, weight: 1 }]
 	}
 	function removeCharity(charity: Nonprofit) {
