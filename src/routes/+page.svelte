@@ -78,6 +78,7 @@
 					}}
 					on:valid={handleSplitValid}
 					let:valid
+					let:dirty
 				>
 					<CharitySearch
 						form="search-charity"
@@ -101,7 +102,7 @@
 					/>
 					{#if designated.length > 0}
 						<div in:fade|local class="mt-3">
-							<Button disabled={!valid}>Get started</Button>
+							<Button disabled={dirty && !valid}>Get started</Button>
 						</div>
 					{/if}
 				</Designated>
