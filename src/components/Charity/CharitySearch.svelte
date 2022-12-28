@@ -22,17 +22,6 @@
 	$: loading = form?.loading
 	$: results = form?.data
 
-	$: formEl = form?.el
-	$: if (form)
-		form.$on('load', (event: any) => {
-			// IMPORTANT: == coerces URL and string types
-			if (event.detail?.action && event.detail?.action == $formEl.action) {
-				// Don't trigger invalidateAll if we just submit the form,
-				// as it screws up searching
-				event.preventDefault()
-			}
-		})
-
 	let searching = false,
 		term = '',
 		searchInput: HTMLInputElement | null = null,
@@ -51,6 +40,19 @@
 		} else search()
 	}
 	$: term, handleTermChange()
+
+	$: formEl = form?.el
+	$: form?.$on('submit', (event: CustomEvent) => {
+		event.preventDefault()
+	})
+	$: form?.$on('load', (event: CustomEvent) => {
+		// IMPORTANT: == coerces URL and string types
+		if (event.detail?.action && event.detail?.action == $formEl.action) {
+			// Don't trigger invalidateAll if we just submit the form,
+			// as it screws up searching
+			event.preventDefault()
+		}
+	})
 </script>
 
 <div
