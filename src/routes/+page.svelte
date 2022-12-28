@@ -64,7 +64,7 @@
 		on:complete={next}
 		let:values
 	>
-		<Step as="fieldset">
+		<Step as="fieldset" let:active>
 			<div
 				role="heading"
 				aria-level={1}
@@ -108,7 +108,9 @@
 					/>
 					{#if designated.length > 0}
 						<div in:fade|local class="mt-3">
-							<Button disabled={dirty && !valid}>Get started</Button>
+							<Button disabled={(dirty && !valid) || !active}
+								>Get started</Button
+							>
 						</div>
 					{/if}
 				</Designated>
