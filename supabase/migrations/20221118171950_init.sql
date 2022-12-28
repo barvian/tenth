@@ -193,3 +193,29 @@ CREATE POLICY "Owner can update own profile"
     FOR UPDATE
     TO public
     USING (auth.uid() = user_id);
+
+CREATE TABLE IF NOT EXISTS public.deleted_profiles
+(
+    email character varying NOT NULL,
+    change_id text NOT NULL COLLATE pg_catalog."default",
+    deleted_at timestamptz NOT NULL DEFAULT NOW(),
+    CONSTRAINT deleted_profiles_pkey PRIMARY KEY (email)
+);
+
+REVOKE ALL ON TABLE public.deleted_profiles FROM public, anon, authenticated;
+GRANT ALL ON TABLE public.deleted_profiles TO postgres, service_role;
+
+CREATE FUNCTION archive_user()
+  RETURNS TRIGGER AS $$
+  BEGIN
+    INSERT INTO public.deleted_profiles (email, change_id)
+        SELECT u.email, p.change_id FROM auth.users u JOIN public.profiles p ON u.id = p.user_id WHERE u.email = OLD.email
+        ON CONFLICT (email) DO UPDATE SET change_id = EXCLUDED.change_id;
+    RETURN OLD;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER handle_delete_user
+  BEFORE DELETE ON auth.users
+  FOR EACH ROW
+  EXECUTE PROCEDURE archive_user();

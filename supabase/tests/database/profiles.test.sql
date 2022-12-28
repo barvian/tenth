@@ -1,5 +1,5 @@
 begin;
-select plan(10);
+select plan(11);
 
 insert into auth.users (id, email) values
 ('b9511b07-87eb-4e02-bfb5-3b7095129c73', 'unregistered@test.com'),
@@ -108,6 +108,19 @@ select results_eq(
     'A user can update their percentage'
 );
 
+set local role postgres;
+
+delete from auth.users where id = 'b9511b07-87eb-4e02-bfb5-3b7095129c73';
+
+select results_eq(
+    $$
+    select email, change_id from public.deleted_profiles
+    $$,
+    $$
+    values ('unregistered@test.com'::varchar, 'fake-change-id2')
+    $$,
+    'Deleted users get archived in deleted_profiles'
+);
 
 select * from finish();
 rollback;
