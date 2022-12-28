@@ -21,21 +21,16 @@
 </script>
 
 <script lang="ts">
-	import {
-		applyAction,
-		deserialize,
-		enhance,
-		type SubmitFunction
-	} from '$app/forms'
+	import { applyAction, deserialize } from '$app/forms'
 	import { invalidateAll } from '$app/navigation'
 	import { page } from '$app/stores'
+	import type { ActionResult } from '@sveltejs/kit'
 	import { toast } from '@zerodevx/svelte-toast'
 	import { createEventDispatcher } from 'svelte'
 	import { setContext } from 'svelte-typed-context'
 	import { get_current_component } from 'svelte/internal'
 	import { writable } from 'svelte/store'
 	import { registerForm } from './FormProvider.svelte'
-	import type { ActionResult } from '@sveltejs/kit'
 
 	export let id: string
 	export let action = ''
@@ -76,7 +71,7 @@
 			| undefined
 		if (
 			submitter?.disabled || // Fix a safari bug with disabled submitters
-			!dispatch('submit', event, { cancelable: true })
+			(event && !dispatch('submit', event, { cancelable: true }))
 		)
 			return
 
