@@ -51,19 +51,21 @@ module.exports = {
 				'13': '3.25rem',
 				'17': '4.25rem',
 				xl: 'calc(theme(space.10) + 5vh)',
-				'2xl': 'calc(theme(space.12) + 10vh)'
+				'2xl': 'calc(theme(space.12) + 7vh)'
 			},
 			padding: {
 				page: '5vw'
 			},
 			maxWidth: {
+				'2xs': '18rem',
 				prose: '54ch'
 			},
 			animation: {
 				spin: 'spin 0.9s cubic-bezier(0.62, 0.37, 0.3, 0.63) infinite',
 				shake: 'shake 1s ease-in-out',
 				'fly-b': 'fly-b 150ms ease-out',
-				'fly-t': 'fly-t 150ms ease-out'
+				'fly-t': 'fly-t 150ms ease-out',
+				'tooltip-t': 'tooltip-t 5s ease-in-out both'
 			},
 			keyframes: {
 				shake: {
@@ -94,6 +96,20 @@ module.exports = {
 						transform: 'translateY(1rem)',
 						opacity: 0
 					}
+				},
+				'tooltip-t': {
+					'0%': {
+						transform: 'translateY(1rem)',
+						opacity: 0
+					},
+					'4%, 96%': {
+						transform: 'translateY(0)',
+						opacity: 1
+					},
+					'100%': {
+						transform: 'translateY(-1rem)',
+						opacity: 0
+					}
 				}
 			},
 			lineHeight: {
@@ -114,6 +130,10 @@ module.exports = {
 		}) {
 			addVariant('no-js', '.no-js:root &')
 			addVariant('js', ':not(.no-js):root &')
+			addVariant('sibling', '.sibling + &')
+			addVariant('sibling-checked', ':merge(.sibling):checked + &')
+			addVariant('sibling-disabled', ':merge(.sibling):disabled + &')
+			addVariant('sibling-not-disabled', ':merge(.sibling):not(:disabled) + &')
 			addVariant('not-disabled', '&:not(:disabled)')
 			addVariant('peer-not-disabled', ':merge(.peer):not(:disabled) ~ &')
 			addVariant('group-not-disabled', ':merge(.group):not(:disabled) &')

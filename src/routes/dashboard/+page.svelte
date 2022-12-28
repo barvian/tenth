@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
-	import type { Nonprofit } from 'types/change'
+	import type { Nonprofit } from '~/lib/change'
 	import Charity from '~/components/Charity/Charity.svelte'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
 	import Designated from '~/components/Charity/Designated.svelte'
@@ -129,10 +129,10 @@
 <p class="text-xl max-w-xl text-center text-gray-500 mt-5 mb-8">
 	{#if data.designated.length > 0}
 		Each month, we send {monthlyPercentage}% of your account to your selected
-		charit{#if data.designated.length > 1}ies{:else}y{/if}:
+		organization{#if data.designated.length > 1}s{/if}:
 	{:else}
 		We'll donate {monthlyPercentage}% of your account each month if you select
-		some charities:
+		some organizations:
 	{/if}
 </p>
 

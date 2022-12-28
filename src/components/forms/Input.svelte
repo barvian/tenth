@@ -45,7 +45,8 @@
 		type === 'search' ? 'rounded-full' : 'rounded-2xl'
 	export let align: ClassValue = type === 'search' && 'text-center'
 	export let textSize: ClassValue = 'text-lg'
-	let cls = ''
+	export let labelColor: ClassValue = 'text-gray-500 peer-focus:text-orange-500'
+	let cls: ClassValue = undefined
 	export { cls as class }
 
 	export let input: HTMLInputElement | null = null
@@ -122,26 +123,35 @@
 			{#if loading && (icon || type === 'search')}
 				<div
 					transition:scale|local
-					class="absolute top-1/2 left-5 -translate-y-1/2 text-gray-500 peer-focus:text-orange-500"
+					class={clsx('absolute top-1/2 left-5 -translate-y-1/2', labelColor)}
 				>
 					<Spinner class="h-5" />
 				</div>
 			{:else if type === 'search'}
 				<div
 					transition:scale|local
-					class="absolute top-1/2 left-5 -translate-y-1/2 -mt-[1px] text-gray-500 peer-focus:text-orange-500"
+					class={clsx(
+						'absolute top-1/2 left-5 -translate-y-1/2 -mt-[1px]',
+						labelColor
+					)}
 				>
 					<Search class="w-4 transition-colors" />
 				</div>
 			{:else if icon}
 				<svelte:component
 					this={icon}
-					class="w-5 absolute top-1/2 left-4 -translate-y-1/2 -mt-[1px] transition-colors text-gray-500 peer-focus:text-orange-500 "
+					class={clsx(
+						'w-5 absolute top-1/2 left-4 -translate-y-1/2 -mt-[1px] transition-colors',
+						labelColor
+					)}
 				/>
 			{:else if label}
 				<label
 					for={name}
-					class="absolute overflow-hidden text-ellipsis max-w-[calc(100%-theme(space.4)*2)] normal-case whitespace-nowrap pointer-events-none scale-[0.55] text-gray-450 peer-focus:text-orange-500 peer-invalid:text-red-500 peer-focus:peer-placeholder-shown:text-gray-450 [&_span]:opacity-0 peer-placeholder-shown:[&_span]:opacity-100 translate-y-[0.7rem] peer-placeholder-shown:translate-y-[1.1rem] peer-placeholder-shown:scale-100 left-4 ml-[0.05em] top-0 origin-top-left {textSize} transition-all"
+					class={clsx(
+						labelColor,
+						'absolute overflow-hidden text-ellipsis max-w-[calc(100%-theme(space.4)*2)] normal-case whitespace-nowrap pointer-events-none scale-[0.55] peer-invalid:text-red-500 peer-focus:peer-placeholder-shown:text-gray-450 [&_span]:opacity-0 peer-placeholder-shown:[&_span]:opacity-100 translate-y-[0.7rem] peer-placeholder-shown:translate-y-[1.1rem] peer-placeholder-shown:scale-100 left-4 ml-[0.05em] top-0 origin-top-left {textSize} transition-all'
+					)}
 				>
 					{label}{#if required && showRequired}<span class="transition-opacity"
 							>*</span
