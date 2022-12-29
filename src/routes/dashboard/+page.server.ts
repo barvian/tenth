@@ -2,10 +2,9 @@ import { PUBLIC_CHANGE_KEY } from '$env/static/public'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error, redirect } from '@sveltejs/kit'
 import type { Institution } from 'plaid'
+import type { Nonprofit, NonprofitSearchResults } from 'types/change'
 import { getValues, success } from '~/lib/actions'
 import { withLoadAuth } from '~/lib/auth'
-import type { Nonprofit, NonprofitSearchResults } from '~/lib/change'
-import { getSelf, SELF_CHANGE_ID } from '~/lib/change'
 import type { Designation } from '~/lib/db'
 import { parseJSON } from '~/lib/fetch'
 import type { Actions, PageServerLoad } from './$types'
@@ -104,10 +103,6 @@ export const actions: Actions = {
 		// pass a search term. This disables that behavior.
 		if (!q.trim()) return success(formData)
 
-		const nonprofits: Nonprofit[] = []
-		if ('tenth'.startsWith(q.trim().toLowerCase()))
-			nonprofits.push(getSelf(event.url))
-
 		const response = await fetch(
 			`https://api.getchange.io/api/v1/nonprofits?` +
 				new URLSearchParams({
@@ -116,35 +111,19 @@ export const actions: Actions = {
 					limit: SEARCH_RESULTS_LIMIT.toString()
 				})
 		).then((r) => parseJSON<NonprofitSearchResults>(r))
-		nonprofits.push(...response.nonprofits)
 
-		return success(formData, nonprofits)
+		return success(formData, response.nonprofits)
 	},
 	async 'add-charity'(event) {
 		const { request } = event
 		const { session, supabaseClient } = await getSupabase(event)
 		if (!session) throw error(403, 'No user logged in')
 		const formData = await request.formData()
-		const change_id = formData.get('change_id') as string
-
-		let weight
-		// Default self to 1% weight
-		if (change_id === SELF_CHANGE_ID) {
-			const { data: designated } = await supabaseClient
-				.from('designated')
-				.select('weight')
-			if (designated && designated.length > 0) {
-				// ignore errors
-				const totalWeight = designated.reduce((total, d) => total + d.weight, 0)
-				weight = Math.max(0.01 * totalWeight, 0.01)
-			}
-		}
 
 		const { error: insertError } = await supabaseClient
 			.from('designated')
 			.insert({
-				change_id,
-				weight
+				change_id: formData.get('change_id') as string
 			})
 		if (insertError) throw insertError
 

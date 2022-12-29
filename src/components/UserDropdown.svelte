@@ -35,17 +35,18 @@
 				email.toLowerCase().trim()
 			)}?d=mp"
 			alt="Your avatar"
-			class="rounded-full aspect-square object-fill h-6 xs:h-7 align-middle inline-block group-open:!opacity-100"
+			class="rounded-full aspect-square object-fill h-6 align-middle inline-block group-open:!opacity-100"
 			class:opacity-60={!active}
 		/>
-		<!-- <span class="hidden lg:inline-block lg:ml-1.5">{email}</span> -->
+		<span class="hidden lg:inline-block lg:ml-1.5">{email}</span>
 		<Caret strokeWidth={1} class="inline-block align-middle md:ml-1 h-1.5" />
 	</svelte:fragment>
-	<Text>
+	<Text class="lg:hidden">
 		{email}
 	</Text>
-	<Divider />
+	<Divider class="lg:hidden" />
 	<Item href="/profile">Edit profile</Item>
+	<Divider />
 	<form
 		class="contents border-t border-gray-200 pt-2 mt-2"
 		action="/api/auth?/logout"

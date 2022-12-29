@@ -1,5 +1,5 @@
 begin;
-select plan(11);
+select plan(10);
 
 insert into auth.users (id, email) values
 ('b9511b07-87eb-4e02-bfb5-3b7095129c73', 'unregistered@test.com'),
@@ -78,15 +78,6 @@ select throws_ok(
     23505,
     'duplicate key value violates unique constraint "profiles_stripe_id_key"',
     'A user cannot set their stripe_id to an existing one'
-);
-
-select throws_ok(
-    $$
-    update public.profiles set recurring_tip = -100;
-    $$,
-    23514,
-    'new row for relation "profiles" violates check constraint "profiles_recurring_tip_check"',
-    'A recurring_tip cannot be negative'
 );
 
 select throws_ok(

@@ -9,29 +9,45 @@ export type Json =
 export interface Database {
 	public: {
 		Tables: {
+			deleted_profiles: {
+				Row: {
+					email: string
+					change_id: string
+					deleted_at: string
+				}
+				Insert: {
+					email: string
+					change_id: string
+					deleted_at?: string
+				}
+				Update: {
+					email?: string
+					change_id?: string
+					deleted_at?: string
+				}
+			}
 			designated: {
 				Row: {
-					user_id: string
 					change_id: string
+					user_id: string
 					weight: number
 					created_at: string
 				}
 				Insert: {
-					user_id?: string
 					change_id: string
+					user_id?: string
 					weight?: number
 					created_at?: string
 				}
 				Update: {
-					user_id?: string
 					change_id?: string
+					user_id?: string
 					weight?: number
 					created_at?: string
 				}
 			}
 			profiles: {
 				Row: {
-					user_id: string
 					first_name: string | null
 					last_name: string | null
 					percentage: number
@@ -41,10 +57,9 @@ export interface Database {
 					plaid_account_mask: string | null
 					plaid_account_type: string | null
 					plaid_account_subtype: string | null
-					recurring_tip: number | null
+					user_id: string
 				}
 				Insert: {
-					user_id?: string
 					first_name?: string | null
 					last_name?: string | null
 					percentage: number
@@ -54,10 +69,9 @@ export interface Database {
 					plaid_account_mask?: string | null
 					plaid_account_type?: string | null
 					plaid_account_subtype?: string | null
-					recurring_tip?: number | null
+					user_id?: string
 				}
 				Update: {
-					user_id?: string
 					first_name?: string | null
 					last_name?: string | null
 					percentage?: number
@@ -67,44 +81,27 @@ export interface Database {
 					plaid_account_mask?: string | null
 					plaid_account_type?: string | null
 					plaid_account_subtype?: string | null
-					recurring_tip?: number | null
+					user_id?: string
 				}
 			}
 			requests: {
 				Row: {
 					id: number
 					change_id: string
-					user_id: string | null
 					email: unknown | null
+					user_id: string | null
 				}
 				Insert: {
 					id?: number
 					change_id: string
-					user_id?: string | null
 					email?: unknown | null
+					user_id?: string | null
 				}
 				Update: {
 					id?: number
 					change_id?: string
-					user_id?: string | null
 					email?: unknown | null
-				}
-			}
-			tips: {
-				Row: {
-					only_one: boolean
-					ytd: number
-					updated_at: string
-				}
-				Insert: {
-					only_one?: boolean
-					ytd?: number
-					updated_at?: string
-				}
-				Update: {
-					only_one?: boolean
-					ytd?: number
-					updated_at?: string
+					user_id?: string | null
 				}
 			}
 		}

@@ -3,7 +3,7 @@ import {
 	PUBLIC_SUPABASE_URL
 } from '$env/static/public'
 import { createClient } from '@supabase/auth-helpers-sveltekit'
-import type { Nonprofit } from './change'
+import type { Nonprofit } from 'types/change'
 
 export type Designation = { nonprofit: Nonprofit; weight: number }
 

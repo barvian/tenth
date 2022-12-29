@@ -1,17 +1,14 @@
 <script lang="ts">
 	import { dev } from '$app/environment'
-	import { afterNavigate, invalidateAll } from '$app/navigation'
+	import { invalidateAll } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { SvelteToast } from '@zerodevx/svelte-toast'
 	import { parseToRgba, readableColorIsBlack } from 'color2k'
 	import { onMount } from 'svelte'
 	import '~/app.css'
-	import Button from '~/components/forms/Button.svelte'
 	import FormProvider from '~/components/forms/FormProvider.svelte'
 	import Arrow from '~/components/icons/Arrow.svelte'
-	import Heart from '~/components/icons/Heart.svelte'
 	import Logo from '~/components/icons/Logo.svelte'
-	import Tip from '~/components/icons/Tip.svelte'
 	import UserDropdown from '~/components/UserDropdown.svelte'
 	import supabaseClient from '~/lib/db'
 
@@ -38,11 +35,6 @@
 	$: bankStyle =
 		bankColor &&
 		`<style>:root { --color-bank: ${bankColor}; --color-bank-readable: ${bankReadableColor}; }</style>`
-
-	let changedPage = false
-	afterNavigate(({ from, to }) => {
-		changedPage = Boolean(from?.url && to?.url && from.url.href !== to.url.href)
-	})
 
 	const toastOptions = {
 		intro: { y: 40 }
@@ -99,39 +91,6 @@
 
 		{#if $page.data.session}
 			<UserDropdown class="ml-auto" />
-			{#if $page.data.profile?.stripe_linked || $page.data.profile?.recurring_tip || ($page.url.pathname === '/tip' && $page.form?.id === 'tip')}
-				<Button
-					href="/tip"
-					on:click={(event) => {
-						if ($page.url.pathname === '/tip' && changedPage) {
-							event.preventDefault()
-							window.history.back()
-						}
-					}}
-					class="relative ml-3 xs:ml-6 group"
-					width="w-min"
-					textSize="text-sm"
-					bg="xs:bg-rose-100/70 xs:active:bg-rose-200 {$page.url.pathname ===
-					'/tip'
-						? 'xs:!bg-rose-500'
-						: ''}"
-					color="text-rose-400 xs:text-rose-500 {$page.url.pathname === '/tip'
-						? 'text-rose-500 xs:text-white'
-						: ''}"
-					shadow={false}
-					rounded="rounded-full"
-					padding="xs:pl-2.5 xs:pr-3 xs:pb-1.5 xs:pt-1.5"
-				>
-					<Heart
-						class="h-5 xs:hidden inline-block align-middle relative"
-						fill={$page.url.pathname === '/tip'}
-					/>
-					<Tip
-						class="hidden h-4 xs:inline-block align-middle -mt-[3px] group-hover:animate-shake relative"
-					/>
-					<span class="hidden xs:inline relative">Tip</span>
-				</Button>
-			{/if}
 		{:else}
 			{@const active = $page.url.pathname === '/login'}
 			<a
