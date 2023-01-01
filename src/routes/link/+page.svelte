@@ -111,7 +111,7 @@
 				}
 			})
 
-			await fetch('/api/stripe/add-bank-account', {
+			await fetch('/api/attach', {
 				method: 'POST',
 				body: JSON.stringify({
 					plaid_public_token,
@@ -152,7 +152,7 @@
 			access to your account lets them withdraw your donations directly, saving you
 			<mark>~1% in processing fees</mark>.
 		</p>
-		{#if data.profile?.plaid_institution_id && !data.profile.stripe_linked}
+		{#if data.profile?.plaid_institution_id && !data.profile.plaid_access_token}
 			<div
 				class="w-full max-w-xs bg-white rounded-2xl flex gap-x-3 items-center border px-4 pt-2 pb-2.5 mb-8 shadow"
 			>

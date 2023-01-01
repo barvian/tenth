@@ -47,6 +47,17 @@ export const POST: RequestHandler = async (event) => {
 			amounts: [32, 45]
 		})
 	}
+
+	// And finally, update Supabase profile
+	const { error: updateError } = await supabaseClient
+		.from('profiles')
+		.update({
+			plaid_access_token: accessToken
+		})
+		.eq('user_id', session.user.id)
+	if (updateError) throw updateError
+
+	// Charge and swallow error
 	await stripeClient.charges
 		.create({
 			amount: 155,

@@ -17,11 +17,11 @@ declare namespace App {
 		profile?: {
 			plaid_institution_id: string | null
 			plaid_account_mask: string | null
+			plaid_access_token: string | null
 			percentage: number
 			first_name: string | null
 			last_name: string | null
 			recurring_tip: number | null
-			stripe_linked: boolean
 		}
 	}
 	// interface Error {}

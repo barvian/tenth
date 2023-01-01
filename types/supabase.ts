@@ -53,6 +53,7 @@ export interface Database {
 					percentage: number
 					stripe_id: string
 					change_id: string
+					plaid_access_token: string | null
 					plaid_institution_id: string | null
 					plaid_account_mask: string | null
 					plaid_account_type: string | null
@@ -65,6 +66,7 @@ export interface Database {
 					percentage: number
 					stripe_id: string
 					change_id: string
+					plaid_access_token?: string | null
 					plaid_institution_id?: string | null
 					plaid_account_mask?: string | null
 					plaid_account_type?: string | null
@@ -77,6 +79,7 @@ export interface Database {
 					percentage?: number
 					stripe_id?: string
 					change_id?: string
+					plaid_access_token?: string | null
 					plaid_institution_id?: string | null
 					plaid_account_mask?: string | null
 					plaid_account_type?: string | null

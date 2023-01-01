@@ -53,7 +53,7 @@ export const POST: RequestHandler = async (event) => {
 		)
 
 	// And update the profile
-	await supabaseClient
+	const { error: updateError } = await supabaseClient
 		.from('profiles')
 		.update({
 			plaid_institution_id: body.plaid_institution_id,
@@ -62,6 +62,7 @@ export const POST: RequestHandler = async (event) => {
 			plaid_account_subtype: body.plaid_account_subtype
 		})
 		.eq('user_id', session.user.id)
+	if (updateError) throw updateError
 
 	return json({})
 }

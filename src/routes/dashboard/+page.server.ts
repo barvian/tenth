@@ -1,55 +1,10 @@
 import { PUBLIC_CHANGE_KEY } from '$env/static/public'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
-import { error, redirect } from '@sveltejs/kit'
-import type { Institution } from 'plaid'
-import type { Nonprofit, NonprofitSearchResults } from 'types/change'
+import { error } from '@sveltejs/kit'
+import type { NonprofitSearchResults } from 'types/change'
 import { getValues, success } from '~/lib/actions'
-import { withLoadAuth } from '~/lib/auth'
-import type { Designation } from '~/lib/db'
 import { parseJSON } from '~/lib/fetch'
-import type { Actions, PageServerLoad } from './$types'
-
-export const load = withLoadAuth<PageServerLoad>(async (event) => {
-	const { supabaseClient } = await getSupabase(event)
-	const parent = await event.parent()
-
-	// Redirect if linking process isn't complete
-	if (!parent.profile?.plaid_institution_id || !parent.profile?.stripe_linked)
-		throw redirect(303, '/link')
-
-	const institution = await event
-		.fetch(
-			`/api/plaid/institutions/${parent.profile.plaid_institution_id}.json`
-		)
-		.then((r) => parseJSON<Institution>(r))
-
-	const { data } = await supabaseClient
-		.from('designated')
-		.select('change_id, weight')
-		.order('created_at', { ascending: true })
-	event.depends('supabase:designated')
-
-	let designated: Designation[] = []
-	if (data?.length) {
-		designated = await Promise.all(
-			data.map(async (row) => ({
-				nonprofit: await event
-					.fetch(`/api/change/charities/${row.change_id}.json`)
-					.then((r) => parseJSON<Nonprofit>(r)),
-				weight: row.weight
-			}))
-		)
-	}
-
-	return {
-		meta: {
-			title: 'Dashboard',
-			description: `Manage your donation amount, designated charities, and bank account on Tenth`
-		},
-		institution,
-		designated
-	}
-})
+import type { Actions } from './$types'
 
 const SEARCH_RESULTS_LIMIT = 10
 

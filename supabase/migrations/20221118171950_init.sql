@@ -155,6 +155,7 @@ CREATE TABLE IF NOT EXISTS public.profiles
     percentage numeric(3,3) NOT NULL CHECK (percentage > 0),
     stripe_id text NOT NULL COLLATE pg_catalog."default" UNIQUE,
     change_id text NOT NULL COLLATE pg_catalog."default" UNIQUE,
+    plaid_access_token text COLLATE pg_catalog."default" UNIQUE,
     plaid_institution_id text COLLATE pg_catalog."default" UNIQUE,
     plaid_account_mask text COLLATE pg_catalog."default" UNIQUE,
     plaid_account_type text COLLATE pg_catalog."default" UNIQUE,
