@@ -54,6 +54,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sentry/browser": "^7.28.1",
+		"@sentry/node": "^7.28.1",
 		"@supabase/auth-helpers-sveltekit": "^0.8.3",
 		"@supabase/supabase-js": "^2.0.4",
 		"@zerodevx/svelte-toast": "^1.0.0-rc.1",
