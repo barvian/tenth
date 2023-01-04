@@ -7,10 +7,9 @@
 	import { onMount } from 'svelte'
 	import '~/app.css'
 	import FormProvider from '~/components/forms/FormProvider.svelte'
-	import Arrow from '~/components/icons/Arrow.svelte'
 	import Logo from '~/components/icons/Logo.svelte'
-	import UserDropdown from '~/components/UserDropdown.svelte'
 	import supabaseClient from '~/lib/db'
+	import CurrentUser from '~/components/CurrentUser.svelte'
 
 	onMount(() => {
 		const {
@@ -89,25 +88,7 @@
 			</li>
 		</ul>
 
-		{#if $page.data.session}
-			<UserDropdown class="ml-auto" />
-		{:else}
-			{@const active = $page.url.pathname === '/login'}
-			<a
-				class="font-medium whitespace-nowrap group ml-auto {active
-					? '!text-black'
-					: 'text-gray-450'}"
-				href="/login"
-			>
-				Sign in
-				<Arrow
-					strokeWidth={1}
-					class="inline-block align-baseline ml-1.5 h-2.5 -scale-x-100 transition-transform group-hover:translate-x-0.5 {active
-						? 'translate-x-0.5'
-						: ''}"
-				/>
-			</a>
-		{/if}
+		<CurrentUser class="ml-auto" />
 	</nav>
 
 	<main

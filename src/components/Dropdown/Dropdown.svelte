@@ -3,7 +3,7 @@
 	import clsx, { type ClassValue } from 'clsx'
 	import { clickOutside, escape } from '~/lib/actions'
 
-	let cls = ''
+	let cls: ClassValue = undefined
 	export { cls as class }
 	export let summaryClass: ClassValue = undefined
 	export let open = false
@@ -13,7 +13,7 @@
 </script>
 
 <details
-	class="group relative inline-block {cls}"
+	class={clsx('group relative inline-block', cls)}
 	bind:open
 	use:clickOutside
 	use:escape
