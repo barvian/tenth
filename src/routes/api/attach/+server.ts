@@ -58,18 +58,18 @@ export const POST: RequestHandler = async (event) => {
 	}
 
 	// Charge setup fee
-	await stripeClient.charges
-		.create({
-			amount: 155,
-			customer: customer.id,
-			description: 'Tenth setup fee',
-			currency: 'usd',
-			receipt_email: session.user.email
-		})
-		// Swallow error
-		.catch((e) =>
-			console.error(`Could not charge Stripe customer ${customer.id}`, e)
-		)
+	// await stripeClient.charges
+	// 	.create({
+	// 		amount: 155,
+	// 		customer: customer.id,
+	// 		description: 'Tenth setup fee',
+	// 		currency: 'usd',
+	// 		receipt_email: session.user.email
+	// 	})
+	// 	// Swallow error
+	// 	.catch((e) =>
+	// 		console.error(`Could not charge Stripe customer ${customer.id}`, e)
+	// 	)
 
 	return json({})
 }

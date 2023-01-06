@@ -218,15 +218,16 @@
 			on:click={linkStripe}
 			loading={!$plaidLoaded || linking}
 		>
-			<span class="flex w-full"
+			Link with Tenth
+			<!-- <span class="flex w-full"
 				><span>Link with Tenth</span><span
 					class="font-bold inline-block ml-auto">$1.55</span
 				></span
-			>
+			> -->
 		</Button>
-		<p class="text-gray-450 text-center max-w-xl leading-snug mt-10">
+		<!-- <p class="text-gray-450 text-center max-w-xl leading-snug mt-10">
 			We’ll charge you a one-time verification fee of $1.55 after successfully
 			linking.
-		</p>
+		</p> -->
 	</Step>
 </MultiStep>
