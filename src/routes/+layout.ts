@@ -8,7 +8,7 @@ export const load: LayoutLoad = async (event) => {
 	const { data: profile, error: profileError } = await supabaseClient
 		.from('profiles')
 		.select(
-			'stripe_id, first_name, last_name, plaid_institution_id, plaid_account_mask, plaid_access_token, percentage'
+			'stripe_id, first_name, last_name, plaid_institution_id, plaid_account_mask, plaid_access_token, percentage, recurring_tip'
 		)
 		.single()
 	event.depends('supabase:profile')
@@ -22,7 +22,8 @@ export const load: LayoutLoad = async (event) => {
 			plaid_access_token: profile.plaid_access_token,
 			percentage: profile.percentage,
 			first_name: profile.first_name,
-			last_name: profile.last_name
+			last_name: profile.last_name,
+			recurring_tip: profile.recurring_tip
 		}
 	}
 }

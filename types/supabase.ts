@@ -59,6 +59,7 @@ export interface Database {
 					plaid_account_type: string | null
 					plaid_account_subtype: string | null
 					user_id: string
+					recurring_tip: number | null
 				}
 				Insert: {
 					first_name?: string | null
@@ -72,6 +73,7 @@ export interface Database {
 					plaid_account_type?: string | null
 					plaid_account_subtype?: string | null
 					user_id?: string
+					recurring_tip?: number | null
 				}
 				Update: {
 					first_name?: string | null
@@ -85,6 +87,7 @@ export interface Database {
 					plaid_account_type?: string | null
 					plaid_account_subtype?: string | null
 					user_id?: string
+					recurring_tip?: number | null
 				}
 			}
 			requests: {
@@ -105,6 +108,23 @@ export interface Database {
 					change_id?: string
 					email?: unknown | null
 					user_id?: string | null
+				}
+			}
+			tips: {
+				Row: {
+					only_one: boolean
+					ytd: number
+					updated_at: string
+				}
+				Insert: {
+					only_one?: boolean
+					ytd?: number
+					updated_at?: string
+				}
+				Update: {
+					only_one?: boolean
+					ytd?: number
+					updated_at?: string
 				}
 			}
 		}
