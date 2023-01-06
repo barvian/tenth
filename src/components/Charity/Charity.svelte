@@ -53,7 +53,9 @@
 		<span class="block text-gray-500 break-words leading-none w-full">
 			{#if url}
 				{url?.hostname?.replace(/^wwww*\./i, '') +
-					url?.pathname?.replace(/\/$/, '')}
+					url?.pathname
+						?.replace(/(index|default)\.(html|htm|aspx|php)$/, '')
+						.replace(/\/+$/, '')}
 				<!-- some erroneously have wwww.-->
 			{:else if charity?.city && charity?.state}
 				<span class="capitalize">{charity?.city.toLocaleLowerCase()}</span>,
