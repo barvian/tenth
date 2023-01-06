@@ -18,11 +18,20 @@ export const POST: RequestHandler = async (event) => {
 
 	const body = await request.json()
 
-	// Exchange the public_token from Plaid Link
+	// Exchange the public token from Plaid Link for an access token
 	const tokenResponse = await plaidClient.itemPublicTokenExchange({
 		public_token: body.plaid_public_token
 	})
 	const accessToken = tokenResponse.data.access_token
+
+	// Save access token in profile
+	const { error: updateError } = await supabaseClient
+		.from('profiles')
+		.update({
+			plaid_access_token: accessToken
+		})
+		.eq('user_id', session.user.id)
+	if (updateError) throw updateError
 
 	// Generate a Stripe bank token
 	const stripeTokenResponse =
@@ -48,16 +57,7 @@ export const POST: RequestHandler = async (event) => {
 		})
 	}
 
-	// And finally, update Supabase profile
-	const { error: updateError } = await supabaseClient
-		.from('profiles')
-		.update({
-			plaid_access_token: accessToken
-		})
-		.eq('user_id', session.user.id)
-	if (updateError) throw updateError
-
-	// Charge and swallow error
+	// Charge setup fee
 	await stripeClient.charges
 		.create({
 			amount: 155,
@@ -66,6 +66,7 @@ export const POST: RequestHandler = async (event) => {
 			currency: 'usd',
 			receipt_email: session.user.email
 		})
+		// Swallow error
 		.catch((e) =>
 			console.error(`Could not charge Stripe customer ${customer.id}`, e)
 		)
