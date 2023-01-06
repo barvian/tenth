@@ -3,17 +3,17 @@
 </script>
 
 <header class="mb-12 max-w-2xl text-center">
-	<h1 class="text-4xl font-bold">Lower fees than doing it yourself</h1>
+	<h1 class="text-4xl font-bold">Pricing</h1>
 	<p class="text-xl text-gray-500 mt-5">
-		Tenth's fees are (usually) lower than what you'd pay with monthly credit
-		card donations.
+		Tenth's fees can be comparable to what you'd pay with monthly credit card
+		donations.
 	</p>
 </header>
 <div class="max-w-4xl grid md:grid-cols-2 lg:gap-10">
 	<div class="rounded-2xl bg-white shadow-lg border px-8 pt-12 pb-8">
 		<div class="text-center">
 			<h2 class="text-gray-500"><Logo class="inline-block h-3" /></h2>
-			<span class="block mt-3 text-5xl font-bold">1.5% + 50¢</span>
+			<span class="block mt-3 text-5xl font-bold">1.5% + $1.50</span>
 			<span class="block mt-2">per donation, + $1.55 one-time setup fee</span>
 		</div>
 		<table class="table-auto mt-6">
@@ -28,8 +28,9 @@
 							>, charges to process donations and pay out to charities.
 						</p>
 					</td>
-					<td class="py-4 align-top text-right border-b border-gray-500/25"
-						>1.5%</td
+					<td
+						class="py-4 align-top text-right border-b border-gray-500/25 whitespace-nowrap"
+						>1.5% + $1</td
 					>
 				</tr>
 				<tr>
