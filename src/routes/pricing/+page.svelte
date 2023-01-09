@@ -13,15 +13,13 @@
 	<div class="rounded-2xl bg-white shadow-lg border px-8 pt-12 pb-8">
 		<div class="text-center">
 			<h2 class="text-gray-500"><Logo class="inline-block h-3" /></h2>
-			<span class="block mt-3 text-5xl font-bold">1.5% + $1.05</span>
-			<span class="block mt-2"
-				>per donation<!--, + $1.55 one-time setup fee--></span
-			>
+			<span class="block mt-3 text-5xl font-bold">1.5% + $1.15</span>
+			<span class="block mt-2">per donation, + $1.55 one-time setup fee</span>
 		</div>
 		<table class="table-auto mt-6">
 			<tbody>
 				<tr>
-					<td class="pr-4 py-4">
+					<td class="pr-4 border-b border-gray-500/25 py-4">
 						<h4>Change fees</h4>
 						<p class="text-gray-500 leading-snug mt-0.5">
 							The fees our donation processor, <a
@@ -30,34 +28,35 @@
 							>, charges to process donations and pay out to charities.
 						</p>
 					</td>
-					<td class="py-4 align-top text-right whitespace-nowrap"
-						>1.5% + $1.05</td
+					<td
+						class="py-4 align-top text-right border-b border-gray-500/25 whitespace-nowrap"
+						>1.5% + $1</td
 					>
 				</tr>
-				<!-- <tr>
-					<td class="pr-4 border-t border-gray-500/25 py-4">
+				<tr>
+					<td class="pr-4 border-b border-gray-500/25 py-4">
 						<h4>Account balance fee</h4>
 						<p class="text-gray-500 leading-snug mt-0.5">
 							The fee we incur to check a bank account balance.
 						</p>
 					</td>
-					<td class="py-4 align-top text-right border-t border-gray-500/25"
+					<td class="py-4 align-top text-right border-b border-gray-500/25"
 						>15¢</td
 					>
-				</tr> -->
+				</tr>
 				<!-- <tr>
-					<td class="pr-4 border-t border-gray-500/25 py-4">
+					<td class="pr-4 border-b border-gray-500/25 py-4">
 						<h4>Tenth fee</h4>
 						<p class="text-gray-500 leading-snug mt-0.5">
 							Our fee, to cover ongoing expenses and further development.
 						</p>
 					</td>
-					<td class="py-4 align-top text-right border-t border-gray-500/25"
+					<td class="py-4 align-top text-right border-b border-gray-500/25"
 						>40¢</td
 					>
 				</tr> -->
-				<!-- <tr>
-					<td class="pr-4 py-4 border-t border-gray-500/25">
+				<tr>
+					<td class="pr-4 py-4">
 						<h4>Setup fee</h4>
 						<p class="text-gray-500 leading-snug mt-0.5">
 							The fee we incur to link your bank account with our platform, only
@@ -65,7 +64,7 @@
 						</p>
 					</td>
 					<td class="py-4 align-top text-right">$1.55</td>
-				</tr> -->
+				</tr>
 			</tbody>
 		</table>
 	</div>

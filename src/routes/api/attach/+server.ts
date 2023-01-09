@@ -1,6 +1,7 @@
 import { dev } from '$app/environment'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error, json } from '@sveltejs/kit'
+import { handleError } from '~/hooks.server'
 import plaidClient from '~/lib/plaid'
 import stripeClient from '~/lib/stripe'
 import type { RequestHandler } from './$types'
@@ -58,18 +59,16 @@ export const POST: RequestHandler = async (event) => {
 	}
 
 	// Charge setup fee
-	// await stripeClient.charges
-	// 	.create({
-	// 		amount: 155,
-	// 		customer: customer.id,
-	// 		description: 'Tenth setup fee',
-	// 		currency: 'usd',
-	// 		receipt_email: session.user.email
-	// 	})
-	// 	// Swallow error
-	// 	.catch((e) =>
-	// 		console.error(`Could not charge Stripe customer ${customer.id}`, e)
-	// 	)
+	await stripeClient.charges
+		.create({
+			amount: 155,
+			customer: customer.id,
+			description: 'Tenth setup fee',
+			currency: 'usd',
+			receipt_email: session.user.email
+		})
+		// Swallow error
+		.catch((error) => handleError({ error, event }))
 
 	return json({})
 }
