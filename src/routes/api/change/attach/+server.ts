@@ -1,5 +1,6 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error, json } from '@sveltejs/kit'
+import { handleError } from '~/hooks.server'
 import { parseJSON } from '~/lib/fetch'
 import { deleteDefaultSource } from '~/lib/stripe'
 import type { RequestHandler } from './$types'
@@ -26,9 +27,11 @@ export const POST: RequestHandler = async (event) => {
 		}
 	).then(parseJSON)
 	if (!updatedAccount?.active)
-		console.warn(
-			`Change account ${updatedAccount.id} not marked as active after attaching new account`
-		)
+		// Swallow error, but log it
+		handleError({
+			error: `Change account ${updatedAccount.id} not marked as active after attaching new account`,
+			event
+		})
 
 	// Then update the profile
 	const { data: profile, error: updateError } = await supabaseClient

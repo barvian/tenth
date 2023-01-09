@@ -85,7 +85,6 @@ export const actions: Actions = {
 					})
 				}
 			).then(parseJSON)
-			console.log(`Created change account for ${email}`, changeAccount)
 
 			const { error: registerError } = await supabaseClient.rpc('register', {
 				stripe_id: stripeCustomer.id,
