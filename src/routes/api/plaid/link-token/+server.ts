@@ -17,7 +17,7 @@ export const POST: RequestHandler = async (event) => {
 
 	const res = await plaidClient.linkTokenCreate({
 		client_name: 'Tenth',
-		products: [Products.Auth],
+		products: [Products.Auth], // Balance is not valid, it'll be added automatically
 		language: 'en',
 		country_codes: [CountryCode.Us],
 		user: {
