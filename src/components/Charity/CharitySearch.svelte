@@ -118,7 +118,7 @@
 						imgWidth="w-12"
 						class="cursor-pointer"
 						form={addForm}
-						name="change_id"
+						name="pledge_org_id"
 						value={charity.id}
 						on:click={(event) => {
 							const cancel = !dispatch('select', charity, { cancelable: true })
@@ -141,7 +141,10 @@
 				{:else}
 					Can't find the charity you're looking for?
 				{/if}
-				<a class="block mt-1 text-orange-500 font-medium" href="/request"
+				<a
+					class="block mt-1 text-orange-500 font-medium"
+					target="_blank"
+					href="https://www.pledge.to/support/organizations/new"
 					>Request it to be added</a
 				>
 			</div>

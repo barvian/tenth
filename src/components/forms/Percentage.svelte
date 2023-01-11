@@ -15,7 +15,7 @@
 		class={clsx(
 			'peer',
 			'appearance-none bg-transparent',
-			'no-js:text-bank no-js:text-inherit no-js:border-current no-js:leading-none no-js:border-0 no-js:border-b-4 no-js:mb-2 no-js:border-dotted no-js:disabled:text-gray-300',
+			'no-js:text-orange-500 no-js:text-inherit no-js:border-current no-js:leading-none no-js:border-0 no-js:border-b-4 no-js:mb-2 no-js:border-dotted no-js:disabled:text-gray-300',
 			'js:opacity-0 js:absolute js:inset-0'
 		)}
 		bind:value
@@ -26,7 +26,7 @@
 		{/each}
 	</select>
 	<label
-		class="relative no-js:hidden whitespace-nowrap flex pl-0.5 pr-1 items-baseline text-bank border-current leading-none border-b-4 mb-2 border-dotted pointer-events-none peer-disabled:text-gray-300"
+		class="relative no-js:hidden whitespace-nowrap flex pl-0.5 pr-1 items-baseline text-orange-500 border-current leading-none border-b-4 mb-2 border-dotted pointer-events-none peer-disabled:text-gray-300"
 		for="percentage"
 	>
 		{#if loading}<Spinner class="inline-block align-middle h-7 mr-1.5" />{/if}

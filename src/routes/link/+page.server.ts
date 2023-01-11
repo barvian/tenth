@@ -1,6 +1,6 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error } from '@sveltejs/kit'
-import { deleteDefaultSource } from '~/lib/stripe'
+import { deleteDefaultSource } from '~/lib/stripe.server'
 import type { Actions } from './$types'
 
 export const actions: Actions = {
@@ -11,7 +11,7 @@ export const actions: Actions = {
 		// Change doesn't support a detach method, so just
 		// update the profile
 		const { data: profile, error: updateError } = await supabaseClient
-			.from('profiles')
+			.from('users')
 			.update({
 				plaid_access_token: null,
 				plaid_institution_id: null,

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import clsx, { type ClassValue } from 'clsx'
-	import type { Nonprofit } from 'types/change'
+	import type { Organization } from '/types/pledge'
 
 	export let as = 'div'
 	let cls: ClassValue = null
@@ -12,11 +12,11 @@
 	export let shadow: ClassValue = 'shadow'
 	export let imgWidth: ClassValue = 'w-13'
 	export let titleMargin: ClassValue = 'mb-1.5'
-	export let charity: Nonprofit | null = null
+	export let charity: Organization | null = null
 	let url: URL | null
 
-	$: if (charity?.website) {
-		let site = charity.website
+	$: if (charity?.website_url) {
+		let site = charity.website_url
 		if (!/^https?:\/\//i.test(site)) site = 'http://' + site
 		try {
 			url = new URL(site)
@@ -41,9 +41,9 @@
 	{...$$restProps}
 >
 	<img
-		class="{imgWidth} object-fit aspect-square mr-3"
+		class="{imgWidth} object-contain aspect-square mr-3"
 		class:rounded-lg={!charity?.logo_url}
-		src={charity?.logo_url ?? charity?.icon_url}
+		src={charity?.logo_url}
 		alt="{charity?.name} logo"
 	/>
 	<div class="flex-1">
@@ -57,11 +57,12 @@
 						?.replace(/(index|default)\.(html|htm|aspx|php)$/, '')
 						.replace(/\/+$/, '')}
 				<!-- some erroneously have wwww.-->
-			{:else if charity?.city && charity?.state}
+			{:else if charity?.city && charity?.region && charity?.country}
 				<span class="capitalize">{charity?.city.toLocaleLowerCase()}</span>,
-				<span class="uppercase">{charity.state}</span>
+				<span class="uppercase">{charity.region}</span>,
+				<span class="uppercase">{charity.country}</span>
 			{:else}
-				EIN: {charity?.ein}
+				EIN: {charity?.ngo_id}
 			{/if}
 		</span>
 	</div>

@@ -10,53 +10,47 @@
 </script>
 
 <h1 class="text-4xl font-bold text-center mb-8 max-w-2xl">Your profile</h1>
-<div class="max-w-sm w-full">
-	<Input
-		class="mb-3"
-		label="First name"
-		value={data.profile?.first_name}
-		disabled
-	/>
-	<Input
-		label="Last name"
-		value={data.profile?.last_name}
-		disabled
-		description="You're not able to change your name at this time."
-	/>
-	<Form id="update" action="?/update" let:complete>
+<Form
+	id="update"
+	action="?/update"
+	class="grid grid-cols-2 gap-6 max-w-md w-full"
+	let:data={response}
+>
+	<Input name="first" label="First name" required value={data.first_name} />
+	<Input name="last" label="Last name" required value={data.last_name} />
+	{#if response?.email_changed}
 		<p
-			slot="complete"
-			class="mt-6 bg-gray-100 rounded-2xl p-6 text-center"
+			class="bg-gray-100 rounded-2xl p-6 text-center col-span-full"
 			role="alert"
 		>
 			Click the link we sent to your new and old email addresses to confirm your
 			change.
 		</p>
+	{:else}
 		<Input
-			class="mt-6"
 			type="email"
 			label="Email"
 			name="email"
+			class="col-span-full"
 			bind:value={email}
-			disabled={complete}
-			showDescription={!complete && email !== data.session?.user.email}
+			showDescription={email !== data.session?.user.email}
 			description="We'll send you a confirmation to complete your email change."
 		/>
-		<Button class="mt-8" disabled={complete}>Save profile</Button>
-	</Form>
-	<Form
-		id="delete"
-		action="?/delete"
-		on:submit={(event) => {
-			if (!confirm('Are you sure you want to delete your account?'))
-				event.preventDefault()
-		}}
+	{/if}
+	<Button class="mt-2 col-span-full">Save profile</Button>
+</Form>
+<Form
+	id="delete"
+	action="?/delete"
+	on:submit={(event) => {
+		if (!confirm('Are you sure you want to delete your account?'))
+			event.preventDefault()
+	}}
+>
+	<Button
+		unstyled
+		class="text-red-400 font-medium text-lg mt-8 max-w-md w-full text-center"
 	>
-		<Button
-			unstyled
-			class="text-red-400 font-medium text-lg mt-8 w-full text-center"
-		>
-			Delete account
-		</Button>
-	</Form>
-</div>
+		Delete account
+	</Button>
+</Form>

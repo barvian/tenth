@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
-	import type { Nonprofit } from 'types/change'
+	import type { Organization } from '/types/pledge'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
 	import Designated from '~/components/Charity/Designated.svelte'
 	import Button from '~/components/forms/Button.svelte'
@@ -12,12 +12,12 @@
 	import type { Designation } from '~/lib/db'
 
 	let designated: Designation[] = []
-	function addCharity(nonprofit: Nonprofit) {
-		if (designated.find((d) => d.nonprofit.id === nonprofit.id)) return
-		designated = [...designated, { nonprofit, weight: 1 }]
+	function addCharity(organization: Organization) {
+		if (designated.find((d) => d.organization.id === organization.id)) return
+		designated = [...designated, { organization, weight: 1 }]
 	}
-	function removeCharity(charity: Nonprofit) {
-		designated = designated.filter((d) => d.nonprofit.id !== charity.id)
+	function removeCharity(charity: Organization) {
+		designated = designated.filter((d) => d.organization.id !== charity.id)
 	}
 
 	// Auto-save split when it's valid
@@ -73,7 +73,7 @@
 				<Designated
 					{designated}
 					on:remove={(event) => {
-						removeCharity(event.detail.nonprofit)
+						removeCharity(event.detail.organization)
 						if (designated.length <= 0) reset()
 					}}
 					on:valid={handleSplitValid}
@@ -95,7 +95,7 @@
 						name="designated"
 						value={JSON.stringify(
 							designated.map((d, i) => ({
-								change_id: d.nonprofit.id,
+								pledge_org_id: d.organization.id,
 								weight: d.weight
 							}))
 						)}

@@ -1,30 +1,25 @@
 - q: Are donations tax-deductible?
   a: |-
-    Yes, depending on local regulations. All donations are processed by our donation partner [Change](https://getchange.io) via Our Change Foundation (EIN: 86-3353394) and granted to the selected nonprofit.
-- q: Why do I link my bank twice?
-  a: |-
-    Linking your bank directly with our donation partner [Change](https://getchange.io)
-    (in addition to Tenth) lets them withdraw your donations directly, which reduces
-    transfer fees by ~1% and ensures more of your money goes to your charities.
+    Yes, depending on local regulations. All donations are processed by our donation partner [Pledge](https://pledge.to) via Pledgeling Foundation, an IRS approved 501(c)3 entity, and granted to the selected nonprofit.
 - q: When are donations made?
   a: |-
-    Our donation partner [Change](https://getchange.io) withdraws donations at the end of each month. Tenth charges its monthly fee for checking the bank account balance on the 20th of each month.
-    All donations made on Tenth are to Our
-    Change Foundation (EIN: 86-3353394), a nonprofit organization that makes grants to the
-    nonprofits you suggest on Tenth. OCF will provide the donation to
-    your selected charity within 30 days.
+    Donations are withdrawn on the 20th of each month, then held for 60 days
+    to handle potential disputes. They're then sent to our donation partner [Pledge](https://pledge.to), which batches donations
+    for a calendar month together and regrants them to your selected organizations within the first fifteen days of the following month,
+    so please allow time for that to happen and for the nonprofit to process the payment. For more information, check the [Pledge support article](https://help.pledgeling.com/support/solutions/articles/36000036084-how-do-i-know-my-donation-was-received-by-the-nonprofit-).
+    You can check the status of your donations from your [donation history](/transactions) page. You'll be issued receipts for tax purposes as
+    soon as the donation is withdrawn successfully.
 - q: Can I support more than one charity?
   a: |-
     Yes, you can support as many charities as you like and adjust the
     percentage of your donation that goes to each.
 - q: Are fees included in my donations?
   a: |-
-    Yes, fees are included in your monthly donations.
+    Yes, fees are included in your monthly donations. This also means the minimum donation is $1.15, as per [our pricing](/pricing).
 - q: Who makes Tenth?
   a: |-
     Tenth is a service by [Maxwell Barvian](https://barvian.me), a
     web designer/developer based outside Chicago, Illinois.
 - q: Are donations refundable?
   a: |-
-    Unfortunately, our donation partner [Change](https://getchange.io) is unable to refund donations
-    after they have been withdrawn from your bank account.
+    Refunds may be possible in certain cases. Please contact us for more information.

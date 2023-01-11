@@ -1,6 +1,6 @@
 import { compile } from 'mdsvex'
-import faqs from '~/../data/faqs.yml'
 import type { PageServerLoad } from './$types'
+import faqs from '/data/faqs.yml'
 
 export const prerender = true
 

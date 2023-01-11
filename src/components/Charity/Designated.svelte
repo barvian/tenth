@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Designation } from '~/lib/db'
-	import Charity from './Charity.svelte'
-	import Input from '../forms/Input.svelte'
-	import Button from '../forms/Button.svelte'
 	import { createEventDispatcher } from 'svelte'
-	import X from '../icons/X.svelte'
+	import { clickOutside } from '~/lib/actions'
+	import type { Designation } from '~/lib/db'
+	import Button from '../forms/Button.svelte'
 	import Form from '../forms/Form.svelte'
-	import { clickOutside, escape } from '~/lib/actions'
+	import Input from '../forms/Input.svelte'
+	import X from '../icons/X.svelte'
+	import Charity from './Charity.svelte'
 
 	const dispatch = createEventDispatcher()
 
@@ -55,9 +55,9 @@
 	use:clickOutside
 	on:outclick={stopEditing}
 >
-	{#each designated as item, i (item.nonprofit.id)}
+	{#each designated as item, i (item.organization.id)}
 		<Charity
-			charity={item.nonprofit}
+			charity={item.organization}
 			class={[
 				'charity transition-all',
 				editing && '!border-gray-200 !shadow-transparent'
@@ -65,7 +65,7 @@
 		>
 			{#if designated.length > 1}
 				<Input
-					name={item.nonprofit.id}
+					name={item.organization.id}
 					type="number"
 					step="0.1"
 					bind:value={percentages[i]}
@@ -97,7 +97,7 @@
 				<Button
 					unstyled
 					name="id"
-					value={item.nonprofit.id}
+					value={item.organization.id}
 					on:click={(event) => {
 						if (!dispatch('remove', item, { cancelable: true }))
 							event.preventDefault()

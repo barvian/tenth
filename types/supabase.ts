@@ -9,102 +9,109 @@ export type Json =
 export interface Database {
 	public: {
 		Tables: {
-			deleted_profiles: {
+			accounts: {
 				Row: {
-					email: string
-					change_id: string
-					deleted_at: string
+					stripe_pm_id: string | null
+					stripe_fca_id: string | null
+					last4: string | null
+					institution_name: string | null
+					id: number
+					user_id: string
+					created_at: string
+					percentage: number
+					status: Database['public']['Enums']['account_status']
 				}
 				Insert: {
-					email: string
-					change_id: string
-					deleted_at?: string
+					stripe_pm_id?: string | null
+					stripe_fca_id?: string | null
+					last4?: string | null
+					institution_name?: string | null
+					id?: number
+					user_id?: string
+					created_at?: string
+					percentage?: number
+					status?: Database['public']['Enums']['account_status']
 				}
 				Update: {
-					email?: string
-					change_id?: string
-					deleted_at?: string
+					stripe_pm_id?: string | null
+					stripe_fca_id?: string | null
+					last4?: string | null
+					institution_name?: string | null
+					id?: number
+					user_id?: string
+					created_at?: string
+					percentage?: number
+					status?: Database['public']['Enums']['account_status']
 				}
 			}
 			designated: {
 				Row: {
-					change_id: string
+					account_id: number
+					pledge_org_id: string
 					user_id: string
 					weight: number
 					created_at: string
 				}
 				Insert: {
-					change_id: string
+					account_id: number
+					pledge_org_id: string
 					user_id?: string
 					weight?: number
 					created_at?: string
 				}
 				Update: {
-					change_id?: string
+					account_id?: number
+					pledge_org_id?: string
 					user_id?: string
 					weight?: number
 					created_at?: string
-				}
-			}
-			profiles: {
-				Row: {
-					first_name: string | null
-					last_name: string | null
-					percentage: number
-					stripe_id: string
-					change_id: string
-					plaid_access_token: string | null
-					plaid_institution_id: string | null
-					plaid_account_mask: string | null
-					plaid_account_type: string | null
-					plaid_account_subtype: string | null
-					user_id: string
-				}
-				Insert: {
-					first_name?: string | null
-					last_name?: string | null
-					percentage: number
-					stripe_id: string
-					change_id: string
-					plaid_access_token?: string | null
-					plaid_institution_id?: string | null
-					plaid_account_mask?: string | null
-					plaid_account_type?: string | null
-					plaid_account_subtype?: string | null
-					user_id?: string
-				}
-				Update: {
-					first_name?: string | null
-					last_name?: string | null
-					percentage?: number
-					stripe_id?: string
-					change_id?: string
-					plaid_access_token?: string | null
-					plaid_institution_id?: string | null
-					plaid_account_mask?: string | null
-					plaid_account_type?: string | null
-					plaid_account_subtype?: string | null
-					user_id?: string
 				}
 			}
 			requests: {
 				Row: {
-					id: number
-					change_id: string
+					ngo_id: string
 					email: unknown | null
+					id: number
 					user_id: string | null
 				}
 				Insert: {
-					id?: number
-					change_id: string
+					ngo_id: string
 					email?: unknown | null
+					id?: number
 					user_id?: string | null
 				}
 				Update: {
-					id?: number
-					change_id?: string
+					ngo_id?: string
 					email?: unknown | null
+					id?: number
 					user_id?: string | null
+				}
+			}
+			users: {
+				Row: {
+					stripe_cus_id: string
+					current_account_id: number | null
+					last_acceptance: Json | null
+					id: string
+					first_name: string | null
+					last_name: string | null
+					email: string
+				}
+				Insert: {
+					stripe_cus_id: string
+					current_account_id?: number | null
+					last_acceptance?: Json | null
+					id?: string
+					first_name?: string | null
+					last_name?: string | null
+				}
+				Update: {
+					stripe_cus_id?: string
+					current_account_id?: number | null
+					last_acceptance?: Json | null
+					id?: string
+					first_name?: string | null
+					last_name?: string | null
 				}
 			}
 		}
@@ -145,14 +152,17 @@ export interface Database {
 				Args: { '': unknown }
 				Returns: string
 			}
+			email: {
+				Args: { '': unknown }
+				Returns: string
+			}
 			email_exists: {
 				Args: { email: string }
 				Returns: boolean
 			}
 			register: {
 				Args: {
-					stripe_id: string
-					change_id: string
+					stripe_cus_id: string
 					first_name: string
 					last_name: string
 					percentage: number
@@ -162,7 +172,7 @@ export interface Database {
 			}
 		}
 		Enums: {
-			[_ in never]: never
+			account_status: 'active' | 'inactive' | 'disconnected'
 		}
 	}
 }

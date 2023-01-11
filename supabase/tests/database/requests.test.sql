@@ -11,7 +11,7 @@ set local role anon;
 
 select throws_ok(
     $$
-    insert into public.requests (change_id, email) values ('fake-change-id', 'anon@,@test.com');
+    insert into public.requests (ngo_id, email) values ('fake-ngo-id', 'anon@,@test.com');
     $$,
     23514,
     'value for domain email violates check constraint "email_check"',
@@ -20,7 +20,7 @@ select throws_ok(
 
 select throws_ok(
     $$
-    insert into public.requests (change_id) values ('fake-change-id');
+    insert into public.requests (ngo_id) values ('fake-ngo-id');
     $$,
     42501,
     'new row violates row-level security policy for table "requests"',
@@ -29,7 +29,7 @@ select throws_ok(
 
 select throws_ok(
     $$
-    insert into public.requests (change_id, user_id) values ('fake-change-id', '6ce7faef-966c-40f3-bb32-d7852c6e8430');
+    insert into public.requests (ngo_id, user_id) values ('fake-ngo-id', '6ce7faef-966c-40f3-bb32-d7852c6e8430');
     $$,
     42501,
     'new row violates row-level security policy for table "requests"',
@@ -38,7 +38,7 @@ select throws_ok(
 
 select lives_ok(
     $$
-    insert into public.requests (change_id, email) values ('fake-change-id', 'anon@test.com');
+    insert into public.requests (ngo_id, email) values ('fake-ngo-id', 'anon@test.com');
     $$,
     'An anonymous user can create requests with a valid email'
 );
@@ -48,7 +48,7 @@ set local "request.jwt.claim.sub" to '6ce7faef-966c-40f3-bb32-d7852c6e8430';
 
 select throws_ok(
     $$
-    insert into public.requests (change_id, user_id) values ('fake-change-id2', 'b9511b07-87eb-4e02-bfb5-3b7095129c73');
+    insert into public.requests (ngo_id, user_id) values ('fake-ngo-id2', 'b9511b07-87eb-4e02-bfb5-3b7095129c73');
     $$,
     42501,
     'new row violates row-level security policy for table "requests"',
@@ -57,7 +57,7 @@ select throws_ok(
 
 select throws_ok(
     $$
-    insert into public.requests (change_id, user_id, email) values ('fake-change-id2', '6ce7faef-966c-40f3-bb32-d7852c6e8430', 'random@email.com');
+    insert into public.requests (ngo_id, user_id, email) values ('fake-ngo-id2', '6ce7faef-966c-40f3-bb32-d7852c6e8430', 'random@email.com');
     $$,
     42501,
     'new row violates row-level security policy for table "requests"',
@@ -66,7 +66,7 @@ select throws_ok(
 
 select lives_ok(
     $$
-    insert into public.requests (change_id, user_id) values ('fake-change-id2', '6ce7faef-966c-40f3-bb32-d7852c6e8430');
+    insert into public.requests (ngo_id, user_id) values ('fake-ngo-id2', '6ce7faef-966c-40f3-bb32-d7852c6e8430');
     $$,
     'An authenticated user can create requests without an email'
 );

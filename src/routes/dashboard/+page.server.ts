@@ -1,10 +1,10 @@
-import { PUBLIC_CHANGE_KEY } from '$env/static/public'
+import { PLEDGE_KEY } from '$env/static/private'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error } from '@sveltejs/kit'
-import type { NonprofitSearchResults } from 'types/change'
 import { getValues, success } from '~/lib/actions'
 import { parseJSON } from '~/lib/fetch'
 import type { Actions } from './$types'
+import type { OrganizationSearchResults } from '/types/pledge'
 
 const SEARCH_RESULTS_LIMIT = 10
 
@@ -16,7 +16,7 @@ export const actions: Actions = {
 		const formData = await request.formData()
 
 		const { error: updateError } = await supabaseClient
-			.from('profiles')
+			.from('users')
 			.update({
 				percentage: +(formData.get('percentage') as string)
 			})
@@ -38,10 +38,10 @@ export const actions: Actions = {
 		const { error: updateError } = await supabaseClient
 			.from('designated')
 			.upsert(
-				Object.keys(split).map((change_id) => ({
+				Object.keys(split).map((pledge_org_id) => ({
 					user_id: session.user.id,
-					change_id,
-					weight: (+split[change_id] / 100) * length
+					pledge_org_id,
+					weight: (+split[pledge_id] / 100) * length
 				}))
 			)
 		if (updateError) throw updateError
@@ -54,20 +54,21 @@ export const actions: Actions = {
 		const formData = await request.formData()
 
 		const q = formData.get('q') as string
-		// Change will actually return featured charities if you don't
-		// pass a search term. This disables that behavior.
+		// Ignore empty queries
 		if (!q.trim()) return success(formData)
 
 		const response = await fetch(
-			`https://api.getchange.io/api/v1/nonprofits?` +
+			`https://api.pledge.to/v1/organizations?` +
 				new URLSearchParams({
-					public_key: PUBLIC_CHANGE_KEY,
-					search_term: q,
-					limit: SEARCH_RESULTS_LIMIT.toString()
-				})
-		).then((r) => parseJSON<NonprofitSearchResults>(r))
+					q,
+					per_page: SEARCH_RESULTS_LIMIT.toString()
+				}),
+			{
+				headers: { Authorization: `Bearer ${PLEDGE_KEY}` }
+			}
+		).then((r) => parseJSON<OrganizationSearchResults>(r))
 
-		return success(formData, response.nonprofits)
+		return success(formData, response.results)
 	},
 	async 'add-charity'(event) {
 		const { request } = event
@@ -78,7 +79,7 @@ export const actions: Actions = {
 		const { error: insertError } = await supabaseClient
 			.from('designated')
 			.insert({
-				change_id: formData.get('change_id') as string
+				pledge_id: formData.get('pledge_id') as string
 			})
 		if (insertError) throw insertError
 
@@ -97,7 +98,7 @@ export const actions: Actions = {
 		const { error: deleteError } = await supabaseClient
 			.from('designated')
 			.delete()
-			.eq('change_id', id)
+			.eq('pledge_id', id)
 		if (deleteError) throw deleteError
 
 		return success(formData)

@@ -2,10 +2,11 @@
 	let cls = ''
 	export { cls as class }
 	export let strokeWidth = 2
+	export let height = 'h-5'
 </script>
 
 <svg
-	class="{cls} h-5 group-open:rotate-90 transition-transform"
+	class="{cls} {height} group-open:rotate-90 transition-transform"
 	viewBox="0 0 25 25"
 	fill="none"
 	xmlns="http://www.w3.org/2000/svg"

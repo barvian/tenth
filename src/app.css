@@ -2,24 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-	font-family: 'Value Sans Pro';
-	font-weight: normal;
-	src: url('/fonts/value-sans-regular-pro.otf');
-}
-
-@font-face {
-	font-family: 'Value Sans Pro';
-	font-weight: 500;
-	src: url('/fonts/value-sans-medium-pro.otf');
-}
-
-@font-face {
-	font-family: 'Value Sans Pro';
-	font-weight: bold;
-	src: url('/fonts/value-sans-bold-pro.ttf');
-}
-
 @layer base {
 	:root {
 		@apply antialiased overflow-x-hidden scroll-smooth xl:text-[18px];

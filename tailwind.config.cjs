@@ -1,7 +1,6 @@
 const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 const plugin = require('tailwindcss/plugin')
-const { parseToRgba } = require('color2k')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -14,10 +13,6 @@ module.exports = {
 			transparent: 'transparent',
 			current: 'currentColor',
 			shadow: 'rgba(0,0,0,0.08)',
-			bank: `rgb(var(--color-bank, ${parseToRgba(colors.orange[500])
-				.slice(0, 3)
-				.join(' ')}) / <alpha-value>)`,
-			'bank-readable': `rgb(var(--color-bank-readable, 255 255 255) / <alpha-value>)`,
 			black: colors.black,
 			white: colors.white,
 			gray: { ...colors.neutral, 450: '#8c8c8c' },

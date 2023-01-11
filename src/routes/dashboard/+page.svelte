@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition'
-	import type { Nonprofit } from 'types/change'
+	import type { Organization } from '/types/pledge'
 	import Charity from '~/components/Charity/Charity.svelte'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
 	import Designated from '~/components/Charity/Designated.svelte'
@@ -18,18 +18,18 @@
 		(((data.profile?.percentage ?? 0) / 12) * 100).toFixed(3)
 	)
 
-	let adding: Nonprofit[] = []
+	let adding: Organization[] = []
 	// Remove them when they're in designated
 	$: adding = adding.filter(
-		(c) => !data.designated.find((d: Designation) => d.nonprofit.id === c.id)
+		(c) => !data.designated.find((d: Designation) => d.organization.id === c.id)
 	)
 
 	// Silently fail if they try to re-add a charity
-	function handleCharitySelect(event: CustomEvent<Nonprofit>) {
+	function handleCharitySelect(event: CustomEvent<Organization>) {
 		if (
 			adding.find((c) => event.detail.id === c.id) ||
 			data.designated.find(
-				(d: Designation) => d.nonprofit.id === event.detail.id
+				(d: Designation) => d.organization.id === event.detail.id
 			)
 		)
 			event.preventDefault()
@@ -62,21 +62,17 @@
 			on:change={() => submit()}
 		/>
 		<noscript class="inline">
-			<Button
-				width="w-min"
-				class="h-[3em] align-middle ml-1 shadow-bank/10"
-				padding="px-5"
-				bg="bg-bank"
-				color="text-bank-readable">Save</Button
+			<Button width="w-min" class="h-[3em] align-middle ml-1" padding="px-5"
+				>Save</Button
 			>
 		</noscript>
 	</Form>
-	of your
+	of
 	<Dropdown
 		class="align-baseline"
 		menuClass="min-w-[160px]"
 		summaryClass={[
-			'border-current leading-extra-tight border-b-4 mb-2 border-dotted text-bank',
+			'border-current leading-extra-tight border-b-4 mb-2 border-dotted text-orange-500',
 			data.institution?.logo && 'whitespace-nowrap'
 		]}
 	>
@@ -124,7 +120,7 @@
 			<DropdownItem class="text-red-500">Unlink</DropdownItem>
 		</Form>
 	</Dropdown>
-	account every year.
+	every year.
 </div>
 <p class="text-xl max-w-xl text-center text-gray-500 mt-5 mb-8">
 	{#if data.designated.length > 0}
@@ -153,8 +149,8 @@
 				action="?/add-charity"
 				on:error={(event) => {
 					const { formData } = event.detail
-					const change_id = formData.get('change_id')
-					adding = adding.filter((c) => c.id !== change_id)
+					const pledge_id = formData.get('pledge_id')
+					adding = adding.filter((c) => c.id !== pledge_id)
 				}}
 			>
 				{#each adding as charity (charity.id)}

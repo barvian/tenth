@@ -3,7 +3,6 @@
 	import { invalidateAll } from '$app/navigation'
 	import { page } from '$app/stores'
 	import { SvelteToast } from '@zerodevx/svelte-toast'
-	import { parseToRgba, readableColorIsBlack } from 'color2k'
 	import { onMount } from 'svelte'
 	import '~/app.css'
 	import FormProvider from '~/components/forms/FormProvider.svelte'
@@ -23,34 +22,24 @@
 		}
 	})
 
-	$: bankColor = $page.data.institution?.primary_color
-		? parseToRgba($page.data.institution.primary_color).slice(0, 3).join(' ')
-		: null
-	$: bankReadableColor =
-		$page.data.institution?.primary_color &&
-		(readableColorIsBlack($page.data.institution.primary_color)
-			? '0 0 0'
-			: '255 255 255')
-	$: bankStyle =
-		bankColor &&
-		`<style>:root { --color-bank: ${bankColor}; --color-bank-readable: ${bankReadableColor}; }</style>`
-
 	const toastOptions = {
 		intro: { y: 40 }
 	}
 
-	$: if (dev && !$page.data.meta?.title && !$page.error) {
+	$: if (dev && !$page.data.meta?.title && $page.status === 200) {
 		throw new Error('No page title specified')
 	}
 </script>
 
 <svelte:head>
-	<title>Tenth: {$page.error ? 'Error' : $page.data.meta?.title}</title>
-	{#if $page.data?.meta?.description}
-		<meta name="description" content={$page.data.meta.description} />
-	{/if}
-
-	{@html bankStyle ?? ''}
+	<title>Tenth: {$page.status === 200 ? $page.data.meta?.title : 'Error'}</title
+	>
+	<meta
+		name="description"
+		content={$page.status === 200
+			? $page.data.meta?.description
+			: $page.error?.message}
+	/>
 </svelte:head>
 
 <SvelteToast options={toastOptions} />

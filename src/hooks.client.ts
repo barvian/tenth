@@ -1,6 +1,7 @@
 import { dev } from '$app/environment'
 import { page } from '$app/stores'
-// import '~/../mocks/browser';
+// Haven't needed to do this yet:
+// import { mockRequests } from '/mocks/browser' I didn't like this
 import * as Sentry from '@sentry/browser'
 import type { HandleClientError } from '@sveltejs/kit'
 import { get } from 'svelte/store'

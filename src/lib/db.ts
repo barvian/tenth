@@ -3,9 +3,9 @@ import {
 	PUBLIC_SUPABASE_URL
 } from '$env/static/public'
 import { createClient } from '@supabase/auth-helpers-sveltekit'
-import type { Nonprofit } from 'types/change'
+import type { Organization } from '/types/pledge'
 
-export type Designation = { nonprofit: Nonprofit; weight: number }
+export type Designation = { organization: Organization; weight: number }
 
 export default createClient(
 	PUBLIC_SUPABASE_URL as string,

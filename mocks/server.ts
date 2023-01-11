@@ -1,8 +1,7 @@
-import { dev } from '$app/environment'
 import { setupServer } from 'msw/lib/node/index.js'
 import handlers from './handlers'
 
-if (dev) {
+export function mockRequests() {
 	const server = setupServer(...handlers)
 
 	server.listen({ onUnhandledRequest: 'bypass' })

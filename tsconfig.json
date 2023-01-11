@@ -5,6 +5,14 @@
 		"module": "es2020",
 		"lib": ["es2020", "DOM"],
 		"target": "es2020",
+		"paths": {
+			"~": ["src"],
+			"~/*": ["src/*"],
+			"inngest": ["node_modules/inngest"], // avoid conflicts
+			"/*": ["*"],
+			"$lib": ["src/lib"],
+			"$lib/*": ["src/lib/*"]
+		},
 		/**
 			svelte-preprocess cannot figure out whether you have a value or a type, so tell TypeScript
 			to enforce using \`import type\` instead of \`import\` for Types.
@@ -25,10 +33,20 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"baseUrl": ".",
 		"allowJs": true,
 		"checkJs": true,
 		"strict": true
 	},
-	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"]
+	"include": [
+		"emails/**/*.js",
+		"emails/**/*.ts",
+		"mocks/**/*.js",
+		"mocks/**/*.ts",
+		"inngest/**/*.js",
+		"inngest/**/*.ts",
+		"src/**/*.d.ts",
+		"src/**/*.js",
+		"src/**/*.ts",
+		"src/**/*.svelte"
+	]
 }

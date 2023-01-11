@@ -4,7 +4,7 @@
 // for information about these interfaces
 declare namespace App {
 	interface Supabase {
-		Database: import('../types/supabase').Database
+		Database: import('/types/supabase').Database
 		SchemaName: 'public'
 	}
 	interface PageData {
@@ -14,15 +14,6 @@ declare namespace App {
 			last_updated?: string
 		}
 		session?: import('@supabase/supabase-js').Session
-		profile?: {
-			plaid_institution_id: string | null
-			plaid_account_mask: string | null
-			plaid_access_token: string | null
-			percentage: number
-			first_name: string | null
-			last_name: string | null
-			recurring_tip: number | null
-		}
 	}
 	// interface Error {}
 	// interface Platform {}

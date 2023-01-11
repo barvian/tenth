@@ -1,4 +1,3 @@
-import changeHandlers from './change'
-import plaidHandlers from './plaid'
+import pledgeHandlers from './pledge'
 
-export default [...changeHandlers, ...plaidHandlers]
+export default [...pledgeHandlers]
