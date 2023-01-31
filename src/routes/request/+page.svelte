@@ -24,7 +24,7 @@
 	</svelte:fragment>
 
 	<header class="text-center max-w-2xl mb-8">
-		<h1 class="text-4xl font-bold">Request a charity</h1>
+		<h1 class="text-4xl">Request a charity</h1>
 		<p class="max-w-sm mx-auto mt-8 bg-gray-100 rounded-3xl p-6">
 			If you're a member of a charity and wish to accept donations from Tenth,
 			you can <a

@@ -6,9 +6,7 @@
 	export let data: PageData
 </script>
 
-<h1 class="text-4xl max-w-2xl mb-12 text-center leading-tight font-bold">
-	FAQs
-</h1>
+<h1 class="text-4xl max-w-2xl mb-12 text-center">FAQs</h1>
 
 <div
 	class="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8 w-full max-w-4xl items-start"

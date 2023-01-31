@@ -45,7 +45,7 @@
 <SvelteToast options={toastOptions} />
 
 <FormProvider>
-	<nav class="inner flex items-center justify-between mt-5 h-10">
+	<nav class="flex items-center justify-between mt-4 h-10 px-page">
 		<a
 			href={$page.data.session ? '/dashboard' : '/'}
 			class="{['/', '/dashboard'].includes($page.url.pathname)
@@ -81,12 +81,14 @@
 	</nav>
 
 	<main
-		class="inner pt-xl pb-2xl flex-1 flex flex-col items-center justify-center"
+		class="px-page pt-xl pb-2xl flex-1 flex flex-col items-center justify-center"
 	>
 		<slot />
 	</main>
 
-	<footer class="flex gap-3 flex-wrap inner justify-center text-gray-500 mb-9">
+	<footer
+		class="flex gap-3 flex-wrap px-page justify-center text-gray-500 mb-9"
+	>
 		<span>© 2022 Tenth, LLC</span>
 		<!-- <span>·</span>
 		<a href="/about" class="font-medium {$page.url.pathname === '/about' ? '!text-black' : 'text-gray-450'}">About</a> -->

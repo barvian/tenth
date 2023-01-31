@@ -39,11 +39,7 @@
 
 <Form id="search-charity" action="?/search-charity" />
 
-<div
-	role="heading"
-	aria-level={1}
-	class="text-4xl max-w-2xl text-center font-bold"
->
+<div role="heading" aria-level={1} class="text-4xl max-w-2xl text-center">
 	{#if data.designated.length > 0}
 		We're donating
 	{:else}

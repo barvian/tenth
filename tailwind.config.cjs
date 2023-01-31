@@ -40,7 +40,11 @@ module.exports = {
 				sans: ['Value Sans Pro', ...defaultTheme.fontFamily.sans]
 			},
 			fontSize: {
-				'inherit': 'inherit'
+				'inherit': 'inherit',
+				'4xl': ['2.75rem', {
+					lineHeight: '1.1',
+					fontWeight: '700',
+				}]
 			},
 			spacing: {
 				'13': '3.25rem',
@@ -49,7 +53,7 @@ module.exports = {
 				'2xl': 'calc(theme(space.12) + 7vh)'
 			},
 			padding: {
-				page: '5vw'
+				page: 'min(5vw, theme(padding.12))'
 			},
 			maxWidth: {
 				prose: '54ch'
@@ -121,21 +125,6 @@ module.exports = {
 				'group-invalid',
 				':merge(.group)[aria-invalid]:not([aria-invalid="false"]) &'
 			)
-			addComponents({
-				'.inner': {
-					'max-width': `calc(${theme('maxWidth.5xl')} + ${theme(
-						'padding.page'
-					)} * 2)`,
-					'padding-left': theme('padding.page'),
-					'padding-right': theme('padding.page'),
-					'margin-left': 'auto',
-					'margin-right': 'auto',
-					width: '100%',
-					'&:focus': {
-						outline: 'none'
-					}
-				}
-			})
 			addUtilities({
 				'.inherit-case': {
 					'text-transform': 'inherit'

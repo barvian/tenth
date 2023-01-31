@@ -9,7 +9,7 @@
 	let email = data.session?.user.email
 </script>
 
-<h1 class="text-4xl font-bold text-center mb-8 max-w-2xl">Your profile</h1>
+<h1 class="text-4xl text-center mb-8 max-w-2xl">Your profile</h1>
 <Form
 	id="update"
 	action="?/update"
