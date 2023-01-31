@@ -23,7 +23,7 @@
 		let:values
 	>
 		<Step as="fieldset" let:active>
-			<h1 class="text-4xl text-center mb-8">Sign in to Tenth</h1>
+			<h1 class="text-4xl text-center mb-8">Sign in</h1>
 			<Input
 				class="max-w-xs"
 				required
@@ -39,7 +39,7 @@
 				disabled={!active}
 				class="mt-7 max-w-xs"
 			>
-				Sign in
+				Continue
 			</Button>
 		</Step>
 		<Step as="fieldset" let:active>
