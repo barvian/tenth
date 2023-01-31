@@ -4,7 +4,7 @@
 
 @layer base {
 	:root {
-		@apply antialiased overflow-x-hidden scroll-smooth xl:text-[18px];
+		@apply overflow-x-hidden scroll-smooth xl:text-[18px];
 
 		--toastBackground: theme(colors.black);
 		--toastBarHeight: 0;
