@@ -1,5 +1,3 @@
-// import pledgeHandlers from './pledge'
+import pledgeHandlers from './pledge'
 
-export default [
-	/*...pledgeHandlers*/
-]
+export default [...pledgeHandlers]

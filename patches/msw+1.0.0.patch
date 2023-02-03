@@ -1,0 +1,15 @@
+diff --git a/node_modules/msw/lib/node/index.js b/node_modules/msw/lib/node/index.js
+index c3f51eb..0c23f4b 100644
+--- a/node_modules/msw/lib/node/index.js
++++ b/node_modules/msw/lib/node/index.js
+@@ -1485,8 +1485,9 @@ var SetupServerApi = class extends SetupApi {
+ // src/node/setupServer.ts
+ var import_ClientRequest = require("@mswjs/interceptors/lib/interceptors/ClientRequest/index.js");
+ var import_XMLHttpRequest = require("@mswjs/interceptors/lib/interceptors/XMLHttpRequest/index.js");
++var import_Fetch = require("@mswjs/interceptors/lib/interceptors/fetch/index.js");
+ var setupServer = (...handlers) => {
+-  return new SetupServerApi([import_ClientRequest.ClientRequestInterceptor, import_XMLHttpRequest.XMLHttpRequestInterceptor], ...handlers);
++  return new SetupServerApi([import_ClientRequest.ClientRequestInterceptor, import_XMLHttpRequest.XMLHttpRequestInterceptor, import_Fetch.FetchInterceptor], ...handlers);
+ };
+ // Annotate the CommonJS export names for ESM import in node:
+ 0 && (module.exports = {

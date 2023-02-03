@@ -19,7 +19,6 @@
 		"prepare": "husky install"
 	},
 	"devDependencies": {
-		"@mswjs/interceptors": "0.17.4",
 		"@rollup/plugin-yaml": "^3.1.0",
 		"@sveltejs/adapter-auto": "^1.0.0",
 		"@sveltejs/kit": "^1.0.0",
@@ -35,10 +34,10 @@
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.1",
-		"husky": "^8.0.2",
+		"husky": "^8.0.3",
 		"inngest-cli": "^0.8.5",
 		"lint-staged": "^13.1.0",
-		"msw": "0.46.0",
+		"msw": "^1.0.0",
 		"patch-package": "^6.4.7",
 		"postcss": "^8.4.16",
 		"prettier": "^2.5.1",
