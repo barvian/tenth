@@ -4,7 +4,7 @@
 	import { invalid, success } from '~/lib/actions'
 	import { parseJSON } from '~/lib/fetch'
 	import type { PageLoad, Actions, Action } from './request/$types'
-	import type { OrganizationRequestResponse } from '~/types/pledge'
+	import type { OrganizationRequestResponse } from '~/lib/pledge'
 
 	export const getData = (() => ({
 		meta: {

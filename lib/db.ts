@@ -1,6 +1,6 @@
 import env from '$env'
 import { createClient } from '@supabase/auth-helpers-sveltekit'
-import type { Organization } from '~/types/pledge'
+import type { Organization } from '~/lib/pledge'
 
 export type Designation = { organization: Organization; weight: number }
 

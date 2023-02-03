@@ -1,6 +1,6 @@
 <script lang="ts">
 	import clsx, { type ClassValue } from 'clsx'
-	import type { Organization } from '~/types/pledge'
+	import type { Organization } from '~/lib/pledge'
 
 	export let as = 'div'
 	let cls: ClassValue = null

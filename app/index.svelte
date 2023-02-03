@@ -14,7 +14,7 @@
 
 <script lang="ts">
 	import { fade } from 'svelte/transition'
-	import type { Organization } from '~/types/pledge'
+	import type { Organization } from '~/lib/pledge'
 	import CharitySearch from '~/components/Charity/CharitySearch.svelte'
 	import Designated from '~/components/Charity/Designated.svelte'
 	import Button from '~/components/forms/Button.svelte'

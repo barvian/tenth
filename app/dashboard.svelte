@@ -5,7 +5,7 @@
 	import { withLoadAuth } from '~/lib/auth'
 	import type { Designation } from '~/lib/db'
 	import { parseJSON } from '~/lib/fetch'
-	import type { Organization, OrganizationSearchResults } from '~/types/pledge'
+	import type { Organization, OrganizationSearchResults } from '~/lib/pledge'
 	import { getValues, success } from '~/lib/actions'
 	import type * as $types from './dashboard/$types'
 

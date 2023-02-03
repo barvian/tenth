@@ -12,7 +12,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"gen:types": "npx inngest-cli types ts --output types/inngest.ts && supabase gen types typescript --local > types/supabase.ts",
+		"gen:types": "npx inngest-cli types ts --output lib/inngest.d.ts && supabase gen types typescript --local > lib/supabase.d.ts",
 		"reset:db": "supabase db reset",
 		"test:db": "supabase test db",
 		"postinstall": "patch-package",

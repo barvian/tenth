@@ -3,7 +3,7 @@ import type {
 	Organization,
 	OrganizationRequestResponse,
 	OrganizationSearchResults
-} from '~/types/pledge'
+} from '~/lib/pledge'
 import data from './fixtures/organizations.json'
 
 export default [

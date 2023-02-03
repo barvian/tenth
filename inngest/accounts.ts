@@ -3,10 +3,10 @@ import { createScheduledFunction, createStepFunction, Inngest } from 'inngest'
 import type Stripe from 'stripe'
 import AccountStatusChanged from '~/emails/AccountStatusChanged.svelte'
 import serviceRoleClient, { getUserForStripeCustomerId } from '~/lib/db.server'
+import type { Events } from '~/lib/inngest'
 import { sendMail } from '~/lib/mail.server'
 import stripeClient from '~/lib/stripe.server'
-import type { Events } from '~/types/inngest'
-import type { Database } from '~/types/supabase'
+import type { Database } from '~/lib/supabase'
 
 export const setup = createStepFunction(
 	'Setup account',
