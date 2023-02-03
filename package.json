@@ -19,13 +19,15 @@
 		"prepare": "husky install"
 	},
 	"devDependencies": {
+		"@mswjs/interceptors": "0.17.4",
 		"@rollup/plugin-yaml": "^3.1.0",
-		"@sveltejs/adapter-vercel": "next",
-		"@sveltejs/kit": "^1.0.0-next.572",
+		"@sveltejs/adapter-auto": "^1.0.0",
+		"@sveltejs/kit": "^1.0.0",
 		"@tailwindcss/forms": "^0.5.2",
 		"@tailwindcss/typography": "^0.5.4",
 		"@types/crypto-js": "^4.1.1",
 		"@types/lodash": "^4.14.186",
+		"@types/marked": "^4.0.8",
 		"@types/nodemailer": "^6.4.7",
 		"@typescript-eslint/eslint-plugin": "^5.10.1",
 		"@typescript-eslint/parser": "^5.10.1",
@@ -36,24 +38,24 @@
 		"husky": "^8.0.2",
 		"inngest-cli": "^0.8.5",
 		"lint-staged": "^13.1.0",
-		"mdsvex": "^0.10.6",
-		"msw": "^0.46.0",
+		"msw": "0.46.0",
 		"patch-package": "^6.4.7",
 		"postcss": "^8.4.16",
 		"prettier": "^2.5.1",
 		"prettier-plugin-organize-imports": "^3.2.1",
 		"prettier-plugin-svelte": "^2.5.0",
 		"rimraf": "^3.0.2",
-		"supabase": "^1.14.3",
-		"svelte": "^3.44.0",
-		"svelte-check": "^2.2.6",
+		"ska": "github:barvian/ska",
+		"supabase": "^1.30.0",
+		"svelte": "^3.54.0",
+		"svelte-check": "^3.0.1",
 		"svelte-preprocess": "^4.10.1",
 		"tailwindcss": "^3.2.4",
 		"tailwindcss-bg-svg": "^2.0.0",
 		"tsconfig": "latest",
 		"tslib": "^2.3.1",
-		"typescript": "~4.5.4",
-		"vite": "^3.0.0"
+		"typescript": "^4.9.4",
+		"vite": "^4.0.0"
 	},
 	"type": "module",
 	"dependencies": {
@@ -67,9 +69,12 @@
 		"crypto-js": "^4.1.1",
 		"inngest": "^0.9.0",
 		"lodash": "^4.17.21",
+		"marked": "^4.2.12",
+		"mdsvex": "^0.10.6",
 		"nodemailer": "^6.9.0",
 		"stripe": "^10.17.0",
-		"svelte-typed-context": "^1.0.1"
+		"svelte-typed-context": "^1.0.1",
+		"sveltemail": "github:barvian/sveltemail"
 	},
 	"msw": {
 		"workerDirectory": "static"

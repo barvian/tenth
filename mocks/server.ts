@@ -1,8 +1,9 @@
-import { setupServer } from 'msw/lib/node/index.js'
 import handlers from './handlers'
 
-export function mockRequests() {
-	const server = setupServer(...handlers)
+export async function mockRequests() {
+	const msw = await import('msw/lib/node/index.js')
+	console.log('handlers', handlers, msw)
+	const server = msw.setupServer(...handlers)
 
 	server.listen({ onUnhandledRequest: 'bypass' })
 	console.info('🔶 Mock server installed')

@@ -9,8 +9,8 @@
 
 <Layout {subject}>
 	<svelte:fragment slot="heading">
-		Your verification code is &nbsp;<span
-			style="color: {colors.primary}; white-space: nowrap; letter-spacing: 0.175em;"
+		Your verification code is <span
+			style="color: {colors.primary}; white-space: nowrap; letter-spacing: 0.05em;"
 			>{otp}</span
 		>
 	</svelte:fragment>

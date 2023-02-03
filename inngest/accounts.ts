@@ -1,12 +1,12 @@
-import { INNGEST_EVENT_KEY } from '$env/static/private'
-import serviceRoleClient, { getUserForStripeCustomerId } from '$lib/db.server'
-import { sendMail } from '$lib/mail.server'
-import stripeClient from '$lib/stripe.server'
+import env from '$env'
 import { createScheduledFunction, createStepFunction, Inngest } from 'inngest'
 import type Stripe from 'stripe'
-import AccountStatusChanged from '/emails/AccountStatusChanged.svelte'
-import type { Events } from '/types/inngest'
-import type { Database } from '/types/supabase'
+import AccountStatusChanged from '~/emails/AccountStatusChanged.svelte'
+import serviceRoleClient, { getUserForStripeCustomerId } from '~/lib/db.$server'
+import { sendMail } from '~/lib/mail.$server'
+import stripeClient from '~/lib/stripe.$server'
+import type { Events } from '~/types/inngest'
+import type { Database } from '~/types/supabase'
 
 export const setup = createStepFunction(
 	'Setup account',
@@ -68,7 +68,7 @@ export const setup = createStepFunction(
 
 const inngest = new Inngest<Events>({
 	name: 'Scheduling Backend',
-	eventKey: INNGEST_EVENT_KEY
+	eventKey: env.INNGEST_EVENT_KEY
 })
 
 export const dispatchRecurs = createScheduledFunction(

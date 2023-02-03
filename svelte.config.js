@@ -1,28 +1,15 @@
-import adapter from '@sveltejs/adapter-vercel'
+import adapter from '@sveltejs/adapter-auto'
+import { vitePreprocess } from '@sveltejs/kit/vite'
 import { mdsvex } from 'mdsvex'
-import preprocess from 'svelte-preprocess'
+import { defineConfig } from 'ska'
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
+export default defineConfig({
 	extensions: ['.svelte', '.md'],
-
-	// Consult https://github.com/sveltejs/svelte-preprocess
-	// for more information about preprocessors
-	preprocess: [
-		mdsvex({
-			extension: '.md'
-		}),
-		preprocess({
-			postcss: true
-		})
-	],
-
+	preprocess: [mdsvex({ extension: '.md' }), vitePreprocess()],
 	kit: {
 		adapter: adapter(),
 		alias: {
-			'~': './src'
+			'~/*': './*'
 		}
 	}
-}
-
-export default config
+})

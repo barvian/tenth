@@ -1,12 +1,11 @@
 .DS_Store
 node_modules
 /build
-/.svelte-kit
+/.ska
 /package
 .env
 .env.*
 !.env.example
-.vercel
-.output
-.next
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
 .eslintcache

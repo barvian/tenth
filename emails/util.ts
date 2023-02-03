@@ -1,5 +1,5 @@
 // This could be running from the preview server
-export const env = process.env || import.meta.env
+import env from '$env'
 
 export default function path(p: string) {
 	if (!p.startsWith('/')) return p

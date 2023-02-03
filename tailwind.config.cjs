@@ -4,7 +4,7 @@ const plugin = require('tailwindcss/plugin')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: ['./src/**/*.{html,js,svelte,ts}'],
+	content: ['./{app,components}/**/*.{html,js,svelte,ts}', './app.svelte', './app.html'],
 	future: {
 		hoverOnlyWhenSupported: true
 	},

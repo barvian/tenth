@@ -1,10 +1,10 @@
 import { rest } from 'msw'
-import data from './fixtures/organizations.json'
 import type {
 	Organization,
 	OrganizationRequestResponse,
 	OrganizationSearchResults
-} from '/types/pledge'
+} from '~/types/pledge'
+import data from './fixtures/organizations.json'
 
 export default [
 	rest.get(
