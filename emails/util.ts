@@ -1,5 +1,5 @@
-// This could be running from the preview server
-import env from '$env'
+// This could be running from the preview server, so don't use $env
+import * as env from '$env/static/private'
 
 export default function path(p: string) {
 	if (!p.startsWith('/')) return p
