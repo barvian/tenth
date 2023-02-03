@@ -66,8 +66,17 @@
 		-moz-appearance: textfield;
 	}
 
+	.link,
 	main a:not([role='menuitem']):not([class]) {
-		@apply text-orange-500 font-medium;
+		@apply text-orange-500 font-medium no-underline;
+	}
+
+	.link[rel="external"], .link[href^="http"], .link[href^="//"],
+		main a:not([role='menuitem']):not([class])[rel="external"],
+		main a:not([role='menuitem']):not([class])[href^="http"],
+		main a:not([role='menuitem']):not([class])[href^="//"]
+	{
+		@apply underline underline-offset-[0.15em];
 	}
 
 	svg * {

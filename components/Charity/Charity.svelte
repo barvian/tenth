@@ -9,7 +9,7 @@
 	export let bg: ClassValue = 'bg-white'
 	export let border: ClassValue = 'border'
 	export let padding: ClassValue = 'p-4'
-	export let shadow: ClassValue = 'shadow'
+	export let shadow: ClassValue = 'shadow-md'
 	export let imgWidth: ClassValue = 'w-13'
 	export let titleMargin: ClassValue = 'mb-1.5'
 	export let charity: Organization | null = null

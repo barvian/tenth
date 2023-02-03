@@ -1,11 +1,11 @@
 <script context="module" lang="ts">
-	import type { PageServerLoad } from './support/$types'
+	import type * as $types from './support/$types'
 	import { marked } from 'marked'
 	import faqs from '~/data/faqs.yml'
 
 	export const prerender = true
 
-	export const getServerData: PageServerLoad = async () => ({
+	export const getServerData = (async () => ({
 		meta: {
 			title: 'Support',
 			description: `Find help and support for Tenth`
@@ -16,18 +16,19 @@
 				a: marked(a)
 			}))
 		)
-	})
+	})) satisfies $types.PageServerLoad
 </script>
 
 <script lang="ts">
-	import type { PageData } from './support/$types'
 	import Button from '~/components/forms/Button.svelte'
 	import Expander from '~/components/icons/Expander.svelte'
 
-	export let data: PageData
+	export let data: $types.PageData
 </script>
 
-<h1 class="text-4xl max-w-2xl mb-12 text-center">FAQs</h1>
+{#if data.session}
+	<h1 class="text-4xl max-w-2xl mb-12 text-center">FAQs</h1>
+{/if}
 
 <div
 	class="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8 w-full max-w-4xl items-start"
@@ -44,6 +45,9 @@
 		</details>
 	{/each}
 </div>
-
-<h2 class="text-xl text-gray-500 mt-20 mb-8">Not seeing your question?</h2>
-<Button width="w-min" href="mailto:support@tenth.to">Contact us</Button>
+<div
+	class="max-w-4xl w-full gap-8 mt-8 flex justify-between items-center border-gray-100 border rounded-3xl px-8 py-5"
+>
+	<h2 class="text-xl text-gray-500">Not seeing your question?</h2>
+	<Button width="w-min" href="mailto:support@tenth.to">Contact us</Button>
+</div>

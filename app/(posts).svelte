@@ -21,7 +21,7 @@
 </script>
 
 <article
-	class="w-full max-w-prose prose prose-neutral prose-h1:text-center prose-h1:text-4xl prose-lead:text-center prose-lead:text-xl prose-lead:text-gray-500 prose-lead:font-normal prose-h1:mb-5 prose-lead:mt-5 prose-lead:mb-12 prose-a:text-orange-500 prose-a:font-medium prose-a:no-underline"
+	class="w-full max-w-prose prose prose-neutral text-justify prose-h1:text-center prose-h1:text-4xl prose-lead:text-center prose-lead:text-xl prose-lead:text-gray-500 prose-lead:font-normal prose-h1:mb-5 prose-lead:mt-5 prose-lead:mb-12"
 >
 	<h1>{data.meta.title}</h1>
 	{#if data.meta.last_updated}

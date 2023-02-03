@@ -41,8 +41,7 @@
 			: icon
 			? 'pl-11 py-4 pr-4'
 			: 'p-4'
-	export let rounded: ClassValue =
-		type === 'search' ? 'rounded-full' : 'rounded-2xl'
+	export let rounded: ClassValue = 'rounded-2xl'
 	export let align: ClassValue = type === 'search' && 'text-center'
 	export let textSize: ClassValue = 'text-lg'
 	export let labelColor: ClassValue = 'text-gray-500 peer-focus:text-orange-500'

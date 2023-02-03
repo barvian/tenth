@@ -64,7 +64,7 @@
 <SvelteToast options={toastOptions} />
 
 <FormProvider>
-	<nav class="flex items-center justify-between mt-4 h-10 px-page">
+	<nav class="flex items-center justify-between h-16 px-page">
 		<a
 			href={$page.data.session ? '/dashboard' : '/'}
 			class="{['/', '/dashboard'].includes($page.url.pathname)
@@ -77,7 +77,7 @@
 		<ul
 			class="contents xs:flex items-center justify-center xs:absolute xs:left-1/2 xs:-translate-x-1/2 xs:gap-x-[calc(theme(space.2)+5vw)]"
 		>
-			<li class="ml-auto">
+			<li>
 				<a
 					href="/pricing"
 					class="font-medium {$page.url.pathname === '/pricing'
@@ -85,7 +85,7 @@
 						: 'text-gray-450'}">Pricing</a
 				>
 			</li>
-			<li class="ml-auto">
+			<li>
 				<a
 					href="/support"
 					class="font-medium {$page.url.pathname === '/support'
@@ -106,7 +106,7 @@
 	</main>
 
 	<footer
-		class="flex gap-3 flex-wrap px-page justify-center text-gray-500 mb-9"
+		class="flex gap-3 flex-wrap px-page justify-center text-gray-500 py-8"
 	>
 		<span>© 2022 Tenth, LLC</span>
 		<!-- <span>·</span>

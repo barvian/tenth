@@ -26,7 +26,6 @@
 		term = '',
 		searchInput: HTMLInputElement | null = null,
 		searchInputHeight = 999
-	$: searchRadius = searchInputHeight / 2 + 'px'
 
 	const search = debounce(() => form?.submit(), 500, { maxWait: 1000 })
 
@@ -57,11 +56,10 @@
 
 <div
 	class={clsx(
-		'relative w-full bg-white shadow border transition-all border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10',
+		'relative w-full rounded-2xl bg-white shadow-md border transition-all border-black focus-within:border-orange-500 focus-within:shadow-orange-500/10',
 		$results ? 'no-js:!rounded-3xl' : 'no-js:!rounded-full',
 		cls
 	)}
-	style:border-radius={searchRadius}
 	use:clickOutside
 	on:outclick={() => (searching = false)}
 >
@@ -141,12 +139,7 @@
 				{:else}
 					Can't find the charity you're looking for?
 				{/if}
-				<a
-					class="block mt-1 text-orange-500 font-medium"
-					target="_blank"
-					href="https://www.pledge.to/support/organizations/new"
-					>Request it to be added</a
-				>
+				<a class="block mt-1 link" href="/request">Request it to be added</a>
 			</div>
 		{/if}
 	</div>

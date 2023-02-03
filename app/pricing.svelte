@@ -22,8 +22,8 @@
 		donations.
 	</p>
 </header>
-<div class="max-w-4xl grid md:grid-cols-2 lg:gap-10">
-	<div class="rounded-2xl bg-white shadow-lg border px-8 pt-12 pb-8">
+<div class="max-w-5xl grid md:grid-cols-2 lg:gap-10">
+	<div class="rounded-3xl bg-white shadow-lg border px-8 pt-12 pb-8">
 		<div class="text-center">
 			<h2 class="text-gray-500"><Logo class="inline-block h-3" /></h2>
 			<span class="block mt-3 text-5xl font-bold">4.5% + $1.15</span>
@@ -35,9 +35,8 @@
 					<td class="pr-4 border-b border-gray-500/25 py-4">
 						<h4>Pledge fees</h4>
 						<p class="text-gray-500 leading-snug mt-0.5">
-							The fees our donation processor, <a
-								class="font-medium text-orange-500"
-								href="https://pledge.to">Pledge</a
+							The fees our donation processor, <a href="https://pledge.to"
+								>Pledge</a
 							>, charges to process donations and pay out to charities.
 						</p>
 					</td>

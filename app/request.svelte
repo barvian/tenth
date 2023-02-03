@@ -74,13 +74,11 @@
 
 	<header class="text-center max-w-2xl mb-8">
 		<h1 class="text-4xl">Request a charity</h1>
-		<p class="max-w-sm mx-auto mt-8 bg-gray-100 rounded-3xl p-6">
+		<p class="max-w-sm mx-auto mt-8 bg-gray-100 text-gray-600 rounded-3xl p-6">
 			If you're a member of a charity and wish to accept donations from Tenth,
-			you can <a
-				class="font-medium text-red-400"
-				href="https://www.pledge.to/claims/new"
+			you can <a href="https://www.pledge.to/claims/new"
 				>claim your charity on the Pledge network</a
-			>, which Tenth uses.
+			>.<!-- , which Tenth uses. -->
 		</p>
 	</header>
 
