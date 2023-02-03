@@ -1,12 +1,12 @@
 <script lang="ts" context="module">
-	import serviceRoleClient from '~/lib/db.server'
-	import { sendMail } from '~/lib/mail.server'
+	import serviceRoleClient from '~/lib/db.$server'
+	import { sendMail } from '~/lib/mail.$server'
 	import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 	import { AuthApiError } from '@supabase/supabase-js'
 	import { error, redirect } from '@sveltejs/kit'
 	import type stripe from 'stripe'
 	import { invalid, success } from '~/lib/actions'
-	import stripeClient from '~/lib/stripe.server'
+	import stripeClient from '~/lib/stripe.$server'
 	import type { Action, Actions, PageLoad } from './auth/$types'
 	import VerifyOtp from '~/emails/VerifyOTP.svelte'
 

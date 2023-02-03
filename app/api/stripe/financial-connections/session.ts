@@ -1,8 +1,8 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 import { error, json } from '@sveltejs/kit'
 import type Stripe from 'stripe'
-import serviceRoleClient from '~/lib/db.server'
-import stripeClient from '~/lib/stripe.server'
+import serviceRoleClient from '~/lib/db.$server'
+import stripeClient from '~/lib/stripe.$server'
 import type { Json } from '~/lib/supabase'
 import type { RequestHandler } from './session/$types'
 
