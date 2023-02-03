@@ -4,8 +4,8 @@
 	import type { PageLoad, Action, Actions } from './profile/$types'
 	import { error, redirect } from '@sveltejs/kit'
 	import { invalid, success } from '~/lib/actions'
-	import serviceRoleClient from '~/lib/db.$server'
-	import stripeClient from '~/lib/stripe.$server'
+	import serviceRoleClient from '~/lib/db.server'
+	import stripeClient from '~/lib/stripe.server'
 
 	export const getData = withLoadAuth(async (event) => {
 		const { supabaseClient } = await getSupabase(event)
