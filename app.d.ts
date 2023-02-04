@@ -5,7 +5,7 @@
 declare global {
 	namespace App {
 		interface Supabase {
-			Database: import('/types/supabase').Database
+			Database: import('~/lib/supabase').Database
 			SchemaName: 'public'
 		}
 		interface PageData {

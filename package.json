@@ -70,8 +70,10 @@
 		"marked": "^4.2.12",
 		"mdsvex": "^0.10.6",
 		"nodemailer": "^6.9.0",
+		"ska": "file:../ska/package",
 		"stripe": "^10.17.0",
-		"svelte-typed-context": "^1.0.1"
+		"svelte-typed-context": "^1.0.1",
+		"sveltemail": "file:../sveltemail"
 	},
 	"msw": {
 		"workerDirectory": "static"

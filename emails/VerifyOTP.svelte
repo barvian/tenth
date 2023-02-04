@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Layout from './components/Layout.svelte'
-	import { colors, fontFamily } from './theme'
+	import { colors } from './theme'
 
 	export let otp: string
 
